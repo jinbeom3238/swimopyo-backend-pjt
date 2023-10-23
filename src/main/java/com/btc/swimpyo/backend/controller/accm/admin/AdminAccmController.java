@@ -29,8 +29,6 @@ public class AdminAccmController {
     public void registFrom() {
         log.info("[AdminAccmController] registFrom()");
 
-
-
     }
 
     @PostMapping("/regist_confirm")
