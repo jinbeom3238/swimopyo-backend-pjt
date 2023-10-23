@@ -40,10 +40,10 @@ public class AdminAccmController {
         String saveFileName = "noImage";
 
         // SAVE FILE
-        for (MultipartFile file1 : files)
+        for (MultipartFile file1 : files) {
         if(file1 != null && !file1.isEmpty()) {
             saveFileName = uploadFileService.upload(file1);
-
+            }
         }
 
         adminAccmService.registConfirm(saveFileName, adminAccmDto);
