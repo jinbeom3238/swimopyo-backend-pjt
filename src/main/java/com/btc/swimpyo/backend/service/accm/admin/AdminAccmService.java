@@ -20,11 +20,13 @@ public class AdminAccmService implements IAdminAccmService {
 
     // 등록
     @Override
-    public void registConfirm(AdminAccmDto adminAccmDto) {
+    public void registConfirm(String a_acc_image, AdminAccmDto adminAccmDto) {
         log.info("[AdminAccmService] registConfirm()");
 
         /*adminAccmDto.setA_m_name((String) data.get("a_m_name"));
         adminAccmDto.setA_m_email((String) data.get("a_m_email"));*/
+
+        adminAccmDto.setA_acc_image(a_acc_image);
 
         Map<String, Object> msgData = new HashMap<>();
         msgData.put("registInfo", adminAccmDto);

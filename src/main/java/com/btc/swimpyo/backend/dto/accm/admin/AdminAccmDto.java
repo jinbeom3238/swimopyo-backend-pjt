@@ -25,4 +25,7 @@ public class AdminAccmDto {
 
     private String a_r_p_state;
     private String a_r_price;
+
+    private String fb_image;
+
 }

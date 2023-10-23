@@ -4,5 +4,22 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.room.admin.IAdminRoomDaoMapper">
 
-
+    <insert id="insertRoomInfo" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
+        INSERT INTO
+            tbl_admin_room(a_r_name, a_r_state, a_r_price, a_r_check_in, a_r_check_out, a_r_count, a_r_content, a_r_image, a_r_reg_date, a_r_mod_date, a_acc_no)
+        SELECT
+        #{a_r_name},
+        #{a_r_state},
+        #{a_r_price},
+        #{a_r_check_in},
+        #{a_r_check_out},
+        #{a_r_count},
+        #{a_r_content},
+        #{a_r_image},
+        NOW(),
+        NOW(),
+        a_acc_no
+        FROM tbl_admin_accommodation
+        WHERE a_acc_no = #{a_acc_no}
+    </insert>
 </mapper>

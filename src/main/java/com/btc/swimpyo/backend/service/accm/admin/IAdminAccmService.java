@@ -5,7 +5,7 @@ import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 public interface IAdminAccmService {
 
     // 등록
-    public void registConfirm(AdminAccmDto adminAccmDto);
+    public void registConfirm(String a_acc_image, AdminAccmDto adminAccmDto);
 
     //상세페이지 보기
     public AdminAccmDto showAccmDetail(int a_acc_no);
