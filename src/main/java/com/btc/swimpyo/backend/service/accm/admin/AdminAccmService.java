@@ -3,8 +3,11 @@ package com.btc.swimpyo.backend.service.accm.admin;
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import com.btc.swimpyo.backend.mappers.accm.admin.IAdminAccmDaoMapper;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +35,22 @@ public class AdminAccmService implements IAdminAccmService {
         msgData.put("registInfo", adminAccmDto);
         log.info("msgData : " + msgData);
 
-        iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
+        // 예외처리 - a_m_no 당 1개의 숙박시설만 등록할 수 있으므로 unique. 그러나 중복된 값을 넣는 경우 오류가 발생하므로 예외처리해주었음
+        try {
+            iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
+            log.info("a_m_no INSERT SUCCESS!!");
+            
+        } catch (Exception e) {
+            if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
+                log.info("a_m_no ALREADY EXISTS!!");
+                
+            } else {
+                e.printStackTrace();
+                log.info("a_m_no INSERT FAIL!!");
+                
+            }
+        }
+
 
     }
 

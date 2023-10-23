@@ -32,7 +32,7 @@ public class AdminAccmController {
     }
 
     @PostMapping("/regist_confirm")
-    public void registConfirm(@RequestPart AdminAccmDto adminAccmDto, @RequestPart(value = "file", required = false) MultipartFile file) {
+    public void registConfirm(@RequestPart AdminAccmDto adminAccmDto, @RequestPart(value = "file", required = false) MultipartFile[] files) {
         log.info("[AdminAccmController] registConfirm()");
 
         log.info("[AdminAccmController] dto : " + adminAccmDto);
@@ -40,8 +40,9 @@ public class AdminAccmController {
         String saveFileName = "noImage";
 
         // SAVE FILE
-        if(file != null && !file.isEmpty()) {
-            saveFileName = uploadFileService.upload(file);
+        for (MultipartFile file1 : files)
+        if(file1 != null && !file1.isEmpty()) {
+            saveFileName = uploadFileService.upload(file1);
 
         }
 
@@ -72,7 +73,7 @@ public class AdminAccmController {
     }
 
     // 삭제
-    @PostMapping("delete_accm")
+    @PostMapping("/delete_accm")
     public int deleteAccm(@RequestBody AdminAccmDto adminAccmDto) {
         log.info("[AdminAccmController] deleteAccm()");
 
