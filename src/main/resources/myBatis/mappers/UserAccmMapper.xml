@@ -4,6 +4,41 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.accm.user.IUserAccmDaoMapper">
 
-    // 리스트 조회
+    <!-- 리스트 조회 -->
+    <select id="selectAccmList" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+    SELECT
+        aa.a_acc_image,
+        aa.a_acc_name,
+        aa.a_acc_kind,
+        arp.a_r_p_state,
+        ar.a_r_check_in,
+        arp.a_r_price
+    FROM
+        tbl_admin_accommodation aa
+        JOIN
+            tbl_admin_room ar
+        ON
+            aa.a_acc_no = ar.a_acc_no
+        JOIN
+            tbl_admin_room_price arp
+        ON
+            ar.a_r_no = arp.a_r_no;
+    </select>
+
+    <!-- 상세페이지 보기 -->
+    <select id="selectAccmDetail" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+        SELECT
+            aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_image, aa.a_acc_reg_date
+        FROM
+            tbl_admin_accommodation aa
+        JOIN
+            tbl_admin_member am
+        ON
+            aa.a_m_no = am.a_m_no
+        WHERE
+            aa.a_acc_no = #{a_acc_no}
+        AND
+            aa.use_yn = 'Y'
+    </select>
 
 </mapper>

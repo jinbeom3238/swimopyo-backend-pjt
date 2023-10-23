@@ -4,5 +4,71 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.accm.admin.IAdminAccmDaoMapper">
 
+    <!-- 숙박시설 등록 -->
+    <insert id="insertAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+
+        INSERT INTO tbl_admin_accommodation(a_acc_name, a_acc_intro, a_acc_kind, a_acc_bn, a_acc_address, a_acc_phone, a_acc_image, a_acc_reg_date, a_acc_mod_date, a_m_no)
+        SELECT
+        #{a_acc_name},
+        #{a_acc_intro},
+        #{a_acc_kind},
+        #{a_acc_bn},
+        #{a_acc_address},
+        #{a_acc_phone},
+        #{a_acc_image},
+        NOW(),
+        NOW(),
+        a_m_no
+        FROM tbl_admin_member
+        WHERE a_m_email = #{a_m_email}
+    </insert>
+
+    <!-- 상세페이지 조회 -->
+    <select id="selectAccmInfo" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+        SELECT
+            aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_image, aa.a_acc_reg_date
+        FROM
+            tbl_admin_accommodation aa
+            JOIN
+                tbl_admin_member am
+            ON
+                aa.a_m_no = am.a_m_no
+        WHERE
+            am.a_m_no = #{a_m_no}
+        AND
+            aa.use_yn = 'Y'
+    </select>
+
+    <!-- 수정 -->
+    <update id="updataeAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+        UPDATE
+            tbl_admin_accommodation aa
+            JOIN
+                tbl_admin_member am
+            ON
+                aa.a_m_no = am.a_m_no
+        SET
+            aa.a_acc_name = #{a_acc_name},
+            am.a_m_name = #{a_m_name},
+            aa.a_acc_intro = #{a_acc_intro},
+            aa.a_acc_kind = #{a_acc_kind},
+            aa.a_m_no = #{a_m_no},
+            aa.a_acc_address = #{a_acc_address},
+            aa.a_acc_phone = #{a_acc_phone},
+            am.a_m_email = #{a_m_email},
+            aa.a_acc_image = #{a_acc_image}
+        WHERE
+            aa.a_m_no = #{a_m_no}
+    </update>
+
+    <!-- 삭제-->
+    <update id="deleteAccmInfo" parameterType="Integer">
+        UPDATE
+            tbl_admin_accommodation
+        SET
+            use_yn = 'N'
+        Where
+            a_m_no = #{a_m_no}
+    </update>
 
 </mapper>
