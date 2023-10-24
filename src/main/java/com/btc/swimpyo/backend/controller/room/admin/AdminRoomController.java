@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Log4j2
-@RequestMapping("/admin/room")
+@RequestMapping("/api/admin/room")
 @RequiredArgsConstructor
 public class AdminRoomController {
 

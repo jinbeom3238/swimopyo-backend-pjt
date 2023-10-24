@@ -12,7 +12,7 @@ import java.util.List;
 
 @RestController
 @Log4j2
-@RequestMapping("user_accm")
+@RequestMapping("/api/user_accm")
 public class UserAccmController {
 
     private UserAccmService userAccmService;

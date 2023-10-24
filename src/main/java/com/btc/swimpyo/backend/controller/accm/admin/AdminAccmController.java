@@ -6,6 +6,7 @@ import com.btc.swimpyo.backend.service.accm.admin.AdminAccmService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Log4j2
-@RequestMapping("/admin/accm")
+@RequestMapping("/api/admin/accm")
 @RequiredArgsConstructor
 public class AdminAccmController {
 
@@ -31,8 +32,8 @@ public class AdminAccmController {
 
     }
 
-    @PostMapping("/regist_confirm")
-    public void registConfirm(@RequestPart AdminAccmDto adminAccmDto, @RequestPart(value = "file", required = false) MultipartFile[] files) {
+    @PostMapping(value= "/regist_confirm")
+    public void registConfirm(@RequestPart(value = "adminAccmDto") AdminAccmDto adminAccmDto, @RequestPart(value = "file", required = true) MultipartFile[] files) {
         log.info("[AdminAccmController] registConfirm()");
 
         log.info("[AdminAccmController] dto : " + adminAccmDto);
@@ -41,9 +42,9 @@ public class AdminAccmController {
 
         // SAVE FILE
         for (MultipartFile file1 : files) {
-        if(file1 != null && !file1.isEmpty()) {
-            saveFileName = uploadFileService.upload(file1);
-            }
+            if(file1 != null && !file1.isEmpty()) {
+                saveFileName = uploadFileService.upload(file1);
+                }
         }
 
         adminAccmService.registConfirm(saveFileName, adminAccmDto);
