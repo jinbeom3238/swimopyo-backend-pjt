@@ -37,6 +37,7 @@ public class AdminAccmService implements IAdminAccmService {
 
         // 예외처리 - a_m_no 당 1개의 숙박시설만 등록할 수 있으므로 unique. 그러나 중복된 값을 넣는 경우 오류가 발생하므로 예외처리해주었음
         try {
+
             iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
             log.info("a_m_no INSERT SUCCESS!!");
             

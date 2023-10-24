@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @Log4j2
-@RequestMapping("/admin/accm")
+@RequestMapping("/api/admin/accm")
 @RequiredArgsConstructor
 public class AdminAccmController {
 
@@ -31,8 +31,9 @@ public class AdminAccmController {
 
     }
 
-    @PostMapping("/regist_confirm")
-    public void registConfirm(@RequestPart AdminAccmDto adminAccmDto, @RequestPart(value = "file", required = false) MultipartFile[] files) {
+
+    @PostMapping(value="/regist_confirm", consumes="multipart/form-data")
+    public void registConfirm(AdminAccmDto adminAccmDto, @RequestPart(value = "a_acc_image", required = false) MultipartFile[] files) {
         log.info("[AdminAccmController] registConfirm()");
 
         log.info("[AdminAccmController] dto : " + adminAccmDto);

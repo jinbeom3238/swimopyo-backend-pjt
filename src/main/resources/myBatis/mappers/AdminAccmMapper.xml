@@ -5,25 +5,42 @@
 <mapper namespace="com.btc.swimpyo.backend.mappers.accm.admin.IAdminAccmDaoMapper">
 
     <!-- 숙박시설 등록 -->
-    <insert id="insertAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+    <!--<insert id="insertAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
 
-        INSERT INTO tbl_admin_accommodation(a_acc_name, a_acc_intro, a_acc_kind, a_acc_bn, a_acc_address, a_acc_phone, a_acc_image, a_acc_reg_date, a_acc_mod_date, a_m_no)
+        INSERT INTO tbl_admin_accommodation(a_acc_name ,a_acc_intro, a_acc_kind, a_acc_bn, a_m_no, a_acc_address, a_acc_phone, a_acc_image, a_acc_reg_date, a_acc_mod_date)
         SELECT
         #{a_acc_name},
         #{a_acc_intro},
         #{a_acc_kind},
         #{a_acc_bn},
+        #{a_m_no},
         #{a_acc_address},
         #{a_acc_phone},
         #{a_acc_image},
         NOW(),
-        NOW(),
-        a_m_no
+        NOW()
+    <       FROM tbl_admin_member
+     WHERE a_m_no = #{a_m_no}
+</insert> !-->
+
+    <insert id="insertAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+        INSERT INTO tbl_admin_accommodation(a_acc_name, a_acc_intro, a_acc_kind, a_acc_bn, a_acc_address, a_acc_phone, a_acc_image, a_acc_reg_date, a_acc_mod_date, a_m_no)
+        SELECT
+            #{a_acc_name},
+            #{a_acc_intro},
+            #{a_acc_kind},
+            #{a_acc_bn},
+            #{a_acc_address},
+            #{a_acc_phone},
+            #{a_acc_image},
+            NOW(),
+            NOW(),
+            a_m_no
         FROM tbl_admin_member
         WHERE a_m_email = #{a_m_email}
     </insert>
 
-    <!-- 상세페이지 조회 -->
+<!-- 상세페이지 조회 -->
     <select id="selectAccmInfo" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
         SELECT
             aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_image, aa.a_acc_reg_date
