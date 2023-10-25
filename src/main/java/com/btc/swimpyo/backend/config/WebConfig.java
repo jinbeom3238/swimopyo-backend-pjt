@@ -1,3 +1,4 @@
+
 package com.btc.swimpyo.backend.config;
 
 import org.springframework.context.annotation.Configuration;
@@ -13,3 +14,4 @@ public class WebConfig implements WebMvcConfigurer {
         argumentResolvers.add(new AdminAccmDtoArgumentResolver());
     }
 }
+
