@@ -22,6 +22,9 @@ public class S3Config {
     @Value("${cloud.aws.region.static}")
     private String region;
 
+    @Value("${cloud.aws.s3.bucket}")
+    private String bucketName;
+
     @Bean
     public AmazonS3Client amazonS3Client() {
         BasicAWSCredentials awsCredentials = new BasicAWSCredentials(accessKey, secretKey);
@@ -30,5 +33,10 @@ public class S3Config {
                 .withCredentials(new AWSStaticCredentialsProvider(awsCredentials))
                 .build();
     }
+
+    /*@Bean
+    public String getThumbnailPath(String path) {
+        return amazonS3Client().getUrl(bucketName, path).toString();
+    }*/
 
 }

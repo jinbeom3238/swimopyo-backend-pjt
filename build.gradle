@@ -58,4 +58,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'com.h2database:h2'
 
+	implementation group: 'commons-io', name: 'commons-io', version: '2.11.0' // 최신 버전 사용 가능
+
+
 }

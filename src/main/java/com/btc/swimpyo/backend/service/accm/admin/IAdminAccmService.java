@@ -8,7 +8,7 @@ public interface IAdminAccmService {
 
     // 등록
 //    public void registConfirm(AdminAccmDto adminAccmDto);
-    public void registConfirm(AdminAccmDto adminAccmDto, MultipartFile a_acc_image);
+    public String registConfirm(AdminAccmDto adminAccmDto, MultipartFile a_acc_image);
 
     @Transactional
     void createS3(String a_acc_image, MultipartFile file);

@@ -68,11 +68,8 @@ public class AdminAccmService implements IAdminAccmService {
     }*/
 
     @Override
-    public void registConfirm(AdminAccmDto adminAccmDto, MultipartFile a_acc_image) {
+    public String registConfirm(AdminAccmDto adminAccmDto, MultipartFile a_acc_image) {
         log.info("[AdminAccmService] registConfirm()");
-
-        /*//*adminAccmDto.setA_m_name((String) data.get("a_m_name"));
-        adminAccmDto.setA_m_email((String) data.get("a_m_email"));**/
 
         // S3에 이미지 업로드하고 URL을 얻어옴
         String imageUrl = s3Uploader.uploadFileToS3(a_acc_image, "static/test");
@@ -80,14 +77,15 @@ public class AdminAccmService implements IAdminAccmService {
         // a_acc_image 필드에 URL 설정
         adminAccmDto.setA_acc_image(imageUrl);
 
-
         Map<String, Object> msgData = new HashMap<>();
         msgData.put("registInfo", adminAccmDto);
         log.info("msgData : " + msgData);
 
         iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
 
+        return imageUrl; // 업로드된 이미지의 URL 반환
     }
+
 
     @Override
     @Transactional

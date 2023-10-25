@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,14 +58,32 @@ public class AdminAccmController {
     }*/
 
     @PostMapping(value="/regist_confirm", consumes="multipart/form-data")
-    public void registConfirm(AdminAccmDto adminAccmDto, @RequestPart(value = "a_acc_image") MultipartFile a_acc_image) {
+    public String registConfirm(AdminAccmDto adminAccmDto, @RequestParam("a_acc_image") MultipartFile a_acc_image, Model model) {
         log.info("[AdminAccmController] registConfirm()");
 
         log.info("[AdminAccmController] dto : " + adminAccmDto);
 
-        adminAccmService.registConfirm(adminAccmDto, a_acc_image);
+        try {
+            InputStream inputStream = a_acc_image.getInputStream();
+            // 이제 inputStream을 사용하여 파일을 처리할 수 있습니다.
+        } catch (IOException e) {
+            log.error("Error getting InputStream from MultipartFile", e);
+            // 에러 처리 로직 추가
+        }
 
+        // S3에 이미지 업로드하고 URL을 얻어옴
+        String imageUrl = adminAccmService.registConfirm(adminAccmDto, a_acc_image);
+        log.info("[imageUrl] : " + imageUrl);
+
+        // View로 전달할 데이터를 Model에 추가
+        model.addAttribute("imageUrl", imageUrl);
+
+        // 적절한 View 이름으로 변경
+        return imageUrl;
     }
+
+
+
 
     // S3
     @PostMapping(path = "/S3", consumes="multipart/form-data")
