@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @Log4j2
 @RequestMapping("/api/admin/accm")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class AdminAccmController {
 
     private final AdminAccmService adminAccmService;
