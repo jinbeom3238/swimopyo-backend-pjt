@@ -4,5 +4,67 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.member.admin.IAdminMemberDaoMapper">
 
+    <insert id="insertMember" parameterType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto">
+        INSERT INTO
+            tbl_admin_member(a_m_email, a_m_pw, a_m_name, a_m_phone, a_m_oper_yn, a_m_br_yn, a_m_ar_yn, a_m_reg_date, a_m_mod_date)
+        VALUES
+            (
+             #{a_m_email},
+             #{a_m_pw},
+             #{a_m_name},
+             #{a_m_phone},
+             #{a_m_oper_yn},
+             #{a_m_br_yn},
+             #{a_m_ar_yn},
+             NOW(),
+             NOW()
+            )
+    </insert>
+
+    <select id="isMember" parameterType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto" resultType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto">
+        SELECT
+            *
+        FROM
+            tbl_admin_member
+        WHERE
+            a_m_email = #{a_m_email}
+    </select>
+
+    <insert id="insertRefToken" parameterType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity">
+        INSERT INTO
+            tokens(ref_token, t_reg_date)
+        VALUES
+            (
+                #{ref_token},
+                NOW()
+            )
+    </insert>
+
+<!--    <select id="selectRefToken" parameterType="com.jwtpratice.jwttutorial.entity.RefTokenEntity" resultType="com.jwtpratice.jwttutorial.entity.RefTokenEntity">-->
+<!--        SELECT-->
+<!--            *-->
+<!--        FROM-->
+<!--            tokens-->
+<!--        WHERE-->
+<!--            ref_token = #{ref_token}-->
+<!--    </select>-->
+
+<!--    <delete id="deleteDupRefToken" parameterType="com.jwtpratice.jwttutorial.entity.RefTokenEntity">-->
+<!--        DELETE FROM-->
+<!--            tokens-->
+<!--        WHERE-->
+<!--            ref_token = #{ref_token}-->
+
+<!--    </delete>-->
+
+<!--    <delete id="deleteMember" parameterType="com.jwtpratice.jwttutorial.entity.UserEntity">-->
+<!--        DELETE FROM-->
+<!--            user-->
+<!--        WHERE-->
+<!--            email = #{email}-->
+
+<!--    </delete>-->
+
+
 
 </mapper>
