@@ -86,7 +86,6 @@ public class AdminAccmService implements IAdminAccmService {
         return imageUrl; // 업로드된 이미지의 URL 반환
     }
 
-
     @Override
     @Transactional
     public void createS3(String a_acc_image, MultipartFile file) {
@@ -94,8 +93,6 @@ public class AdminAccmService implements IAdminAccmService {
         if(file != null)  url = s3Uploader.uploadFileToS3(file, "static/test");
 
     }
-
-
 
     // 상세페이지 보기
     @Override

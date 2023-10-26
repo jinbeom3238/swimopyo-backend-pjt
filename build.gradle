@@ -42,6 +42,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 	runtimeOnly 'com.mysql:mysql-connector-j'
 
+	/* spring-cloud-starter-aws 의존성 추가 */
 //	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.1.RELEASE'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 

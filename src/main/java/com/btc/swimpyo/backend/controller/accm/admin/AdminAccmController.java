@@ -37,7 +37,6 @@ public class AdminAccmController {
 
     }
 
-
     /*@PostMapping(value="/regist_confirm", consumes="multipart/form-data")
     public void registConfirm(AdminAccmDto adminAccmDto, @RequestPart(value = "a_acc_image", required = false) MultipartFile[] files) {
         log.info("[AdminAccmController] registConfirm()");
@@ -75,15 +74,12 @@ public class AdminAccmController {
         String imageUrl = adminAccmService.registConfirm(adminAccmDto, a_acc_image);
         log.info("[imageUrl] : " + imageUrl);
 
-        // View로 전달할 데이터를 Model에 추가
+        // View로 전달할 데이터를 Model에 추가0
         model.addAttribute("imageUrl", imageUrl);
 
         // 적절한 View 이름으로 변경
         return imageUrl;
     }
-
-
-
 
     // S3
     @PostMapping(path = "/S3", consumes="multipart/form-data")
