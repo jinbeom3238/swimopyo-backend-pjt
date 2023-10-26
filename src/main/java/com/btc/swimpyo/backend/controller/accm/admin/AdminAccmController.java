@@ -58,7 +58,7 @@ public class AdminAccmController {
     }*/
 
     @PostMapping(value="/regist_confirm", consumes="multipart/form-data")
-    public String registConfirm(AdminAccmDto adminAccmDto, @RequestParam("a_acc_image") MultipartFile a_acc_image, Model model) {
+    public String registConfirm(@RequestPart(value="adminAccmDto", required = false)AdminAccmDto adminAccmDto, @RequestPart(value="a_acc_image", required = false) MultipartFile a_acc_image, Model model) {
         log.info("[AdminAccmController] registConfirm()");
 
         log.info("[AdminAccmController] dto : " + adminAccmDto);
