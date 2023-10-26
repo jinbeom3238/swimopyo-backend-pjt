@@ -40,22 +40,22 @@
             )
     </insert>
 
-<!--    <select id="selectRefToken" parameterType="com.jwtpratice.jwttutorial.entity.RefTokenEntity" resultType="com.jwtpratice.jwttutorial.entity.RefTokenEntity">-->
-<!--        SELECT-->
-<!--            *-->
-<!--        FROM-->
-<!--            tokens-->
-<!--        WHERE-->
-<!--            ref_token = #{ref_token}-->
-<!--    </select>-->
+    <select id="selectRefToken" parameterType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity" resultType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity">
+        SELECT
+            *
+        FROM
+            tokens
+        WHERE
+            ref_token = #{ref_token}
+    </select>
 
-<!--    <delete id="deleteDupRefToken" parameterType="com.jwtpratice.jwttutorial.entity.RefTokenEntity">-->
-<!--        DELETE FROM-->
-<!--            tokens-->
-<!--        WHERE-->
-<!--            ref_token = #{ref_token}-->
+    <delete id="deleteDupRefToken" parameterType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity">
+        DELETE FROM
+            tokens
+        WHERE
+            ref_token = #{ref_token}
 
-<!--    </delete>-->
+    </delete>
 
 <!--    <delete id="deleteMember" parameterType="com.jwtpratice.jwttutorial.entity.UserEntity">-->
 <!--        DELETE FROM-->

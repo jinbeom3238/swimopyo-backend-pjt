@@ -73,9 +73,11 @@ public class AdminMemberService implements IAdminMemberService{
             HttpServletResponse response) {
         System.out.println("[AuthServiceImplement] signIn");
 
-        adminMemberDto.setA_m_email(msgMap.get("mail").toString());
-        adminMemberDto.setA_m_pw(passwordEncoder.encode(msgMap.get("pw").toString()));
+        adminMemberDto.setA_m_email(msgMap.get("email").toString());
+        adminMemberDto.setA_m_pw(msgMap.get("pw").toString());
 
+        log.info("1 = {}", adminMemberDto.getA_m_email());
+        log.info("2 = {}", adminMemberDto.getA_m_pw());
         Map<String, Object> map = new HashMap<>();
 
         // 동일한 username 없음
