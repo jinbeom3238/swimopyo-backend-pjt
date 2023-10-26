@@ -91,16 +91,17 @@ public class AdminAccmController {
     }*/
 
     @PostMapping(value="/regist_confirm", consumes="multipart/form-data")
-    public String registConfirm(@RequestPart(value="adminAccmDto", required = false)AdminAccmDto adminAccmDto, @RequestPart(value="a_acc_image", required = false) MultipartFile[] a_acc_images, Model model) {
+    public String registConfirm(@RequestPart(value="adminAccmDto", required = false)AdminAccmDto adminAccmDto, @RequestPart(value="a_i_image", required = false) MultipartFile[] a_i_images) {
         log.info("[AdminAccmController] registConfirm()");
 
-        log.info("[AdminAccmController] dto : " + adminAccmDto);
-
+//        log.info("[AdminAccmController] dto : " + adminAccmDto);
 
         try {
-            for (MultipartFile a_acc_image : a_acc_images) {
-                InputStream inputStream = a_acc_image.getInputStream();
+            for (MultipartFile a_i_image : a_i_images) {
+                InputStream inputStream = a_i_image.getInputStream();
                 // 이제 inputStream을 사용하여 파일을 처리할 수 있습니다.
+                log.info("[AdminAccmController] inputStream: " + inputStream);
+
             }
         } catch (IOException e){
             log.error("MultipartFile에서 InputStream을 가져오는 중 에러 발생", e);
@@ -108,11 +109,13 @@ public class AdminAccmController {
         }
 
         // S3에 이미지 업로드하고 URL을 얻어옴
-        String imageUrl = adminAccmService.registConfirm(adminAccmDto, a_acc_images);
+        String imageUrl = adminAccmService.registConfirm(adminAccmDto, a_i_images);
+
         log.info("[imageUrl] : " + imageUrl);
+        log.info("[AdminAccmController] dto : " + adminAccmDto);
 
         // View로 전달할 데이터를 Model에 추가0
-        model.addAttribute("imageUrl", imageUrl);
+//        model.addAttribute("imageUrl", imageUrl);
 
         // 적절한 View 이름으로 변경
         return imageUrl;
@@ -128,19 +131,19 @@ public class AdminAccmController {
 
 
 
-
     // 상세페이지 조회
-    @PostMapping("/show_accm_detail")
-    public AdminAccmDto showAccmDetail(@RequestParam("a_m_no") int a_m_no) {
-        log.info("[AdminAccmController] showAccmDetail()");
-
-        AdminAccmDto adminAccmDtos = adminAccmService.showAccmDetail(a_m_no);
-
-        log.info("adminAccmDtos: " + adminAccmDtos);
-
-        return adminAccmDtos;
-
-    }
+//    @PostMapping("/show_accm_detail")
+//    public AdminAccmDto showAccmDetail(@RequestParam("a_m_no") int a_m_no) {
+//        log.info("[AdminAccmController] showAccmDetail()");
+//
+//        AdminAccmDto adminAccmDtos = adminAccmService.showAccmDetail(a_m_no);
+//
+//        log.info("adminAccmDtos: " + adminAccmDtos);
+//        log.info("[AdminAccmController] adminAccmDtos: " + adminAccmDtos.getA_acc_image());
+//
+//        return adminAccmDtos;
+//
+//    }
 
     // 수정
     @PostMapping("modify_confirm")
@@ -151,7 +154,7 @@ public class AdminAccmController {
 
     }
 
-    // 삭제
+   /* // 삭제
     @PostMapping("/delete_accm")
     public int deleteAccm(@RequestBody AdminAccmDto adminAccmDto) {
         log.info("[AdminAccmController] deleteAccm()");
@@ -160,6 +163,6 @@ public class AdminAccmController {
 
         return adminAccmService.deleteAccm(a_m_no);
 
-    }
+    }*/
 
 }

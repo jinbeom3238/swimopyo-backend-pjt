@@ -1,22 +1,22 @@
 package com.btc.swimpyo.backend.service.accm.admin;
 
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
+import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto;
 import com.btc.swimpyo.backend.mappers.accm.admin.IAdminAccmDaoMapper;
 import com.btc.swimpyo.backend.utils.S3Uploader;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Log4j2
 @Service
+@Transactional
 public class AdminAccmService implements IAdminAccmService {
 
 
@@ -100,21 +100,21 @@ public class AdminAccmService implements IAdminAccmService {
 
 
 
-    @Override
-    public String registConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_acc_images) {
+    /*@Override
+    public String registConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_images) {
         log.info("[AdminAccmService] registConfirm()");
 
         List<String> imageUrls = new ArrayList<>(); // 여러 이미지의 URL을 저장할 리스트
 
         // 여러 이미지를 업로드하고 각각의 URL을 얻어옴
-        for (MultipartFile a_acc_image : a_acc_images) {
-            String imageUrl = s3Uploader.uploadFileToS3(a_acc_image, "static/test");
+        for (MultipartFile a_i_image : a_i_images) {
+            String imageUrl = s3Uploader.uploadFileToS3(a_i_image, "static/test");
             imageUrls.add(imageUrl); // 리스트에 추가
         }
 
         // 첫 번째 이미지 URL을 a_acc_image 필드에 설정 (예시로 첫 번째 이미지를 설정하도록 했습니다)
         if (!imageUrls.isEmpty()) {
-            adminAccmDto.setA_acc_image(imageUrls.get(0));
+            adminAccmDto.setA_i_image(imageUrls.get(0));
         }
 
         Map<String, Object> msgData = new HashMap<>();
@@ -124,7 +124,65 @@ public class AdminAccmService implements IAdminAccmService {
         iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
 
         return !imageUrls.isEmpty() ? imageUrls.get(0) : null; // 첫 번째 이미지의 URL 반환
+    }*/
+
+    public String registConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_images) {
+        log.info("[AdminAccmService] registConfirm()");
+        log.info("[AdminAccmService] dto : " + adminAccmDto);
+        log.info("[AdminAccmService] a_i_image : " + a_i_images);
+
+        try {
+            // 1. tbl_admin_accommodation 테이블에 데이터 등록
+            iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
+
+            // 2. 등록된 숙박시설의 번호 가져오기
+            int a_acc_no = iAdminAccmDaoMapper.selectAccmForAmNo(adminAccmDto.getA_m_no());
+            log.info("[AdminAccmService] a_acc_no: " + a_acc_no);
+
+            // AdminAccmImageDto 객체 생성
+            AdminAccmImageDto adminAccmImageDto = new AdminAccmImageDto();
+            adminAccmImageDto.setA_acc_no(a_acc_no);
+
+            // 3. tbl_accommodation_image 테이블에 이미지 정보 등록
+            for (MultipartFile a_i_image : a_i_images) {
+
+                log.info("[AdminAccmService] a_i_image: -----> {}", a_i_image);
+
+                String imageUrl = s3Uploader.uploadFileToS3(a_i_image, "static/test");
+
+                adminAccmImageDto.setA_i_image(imageUrl);
+
+                log.info("[AdminAccmService] imageUrl: " + imageUrl);
+
+//                int result = iAdminAccmDaoMapper.insertAccmImage(a_acc_no, imageUrl);
+                int result = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
+
+//                Map<String, Object> msgData = new HashMap<>();
+//                msgData.put("registInfo", adminAccmDto);
+//                log.info("msgData : " + msgData);
+
+                log.info("result: " + result);
+
+            }
+            // 4. 이미지 업로드가 완료되면 이미지 URL을 반환
+            return "이미지 업로드가 완료되었습니다.";
+
+        } catch (Exception e) {
+            if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
+                log.info("a_m_no ALREADY EXISTS!!");
+            } else {
+                e.printStackTrace();
+                log.info("a_m_no INSERT FAIL!!");
+            }
+
+            // 예외 발생 시 null 또는 예외 메시지 반환
+            return "이미지 업로드 중 오류가 발생했습니다.";
+        }
     }
+
+
+
+
 
     @Override
     @Transactional
@@ -144,19 +202,19 @@ public class AdminAccmService implements IAdminAccmService {
 
 
     // 상세페이지 보기
-    @Override
+    /*@Override
     public AdminAccmDto showAccmDetail(int a_m_no) {
         log.info("[AdminAccmService] showAccmDetail()");
 
         AdminAccmDto adminAccmDtos = iAdminAccmDaoMapper.selectAccmInfo(a_m_no);
 
         String imageUrl = adminAccmDtos.getA_acc_image();
-        log.info("[showAccmDetail] imageUrl: " + imageUrl);
+        log.info("[AdminAccmService] imageUrl: " + imageUrl);
 
         return adminAccmDtos;
 
     }
-
+*/
     // 수정
     @Override
     public int modifyConfirm(AdminAccmDto adminAccmDto) {
@@ -181,7 +239,7 @@ public class AdminAccmService implements IAdminAccmService {
     }
 
     // 삭제
-    @Override
+    /*@Override
     public int deleteAccm(int a_m_no) {
         log.info("[AdminAccmService] modifyConfirm()");
 
@@ -199,5 +257,34 @@ public class AdminAccmService implements IAdminAccmService {
 
         }
 
-    }
+    }*/
+
+
+
+
+   /* @Override
+    public int deleteAccm(int a_m_no) {
+        log.info("[AdminAccmService] deleteAccm()");
+
+        AdminAccmDto adminAccmDto = iAdminAccmDaoMapper.selectAccmInfo(a_m_no);
+        String imageUrl = adminAccmDto.getA_acc_image();
+
+        // S3에서 이미지 삭제
+        s3Uploader.deleteFileFromS3(imageUrl);
+
+        int result = iAdminAccmDaoMapper.deleteAccmInfo(a_m_no);
+
+        if(result > 0) {
+            log.info("[AdminAccmService] DELETE ACCM SUCCESS!!");
+            return result;
+        } else {
+            log.info("[AdminAccmService] DELETE ACCM FAIL!!");
+            return 0;
+        }
+    }*/
+
+
+
+
+
 }

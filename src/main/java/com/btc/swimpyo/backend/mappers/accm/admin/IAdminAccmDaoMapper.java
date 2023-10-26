@@ -1,6 +1,7 @@
 package com.btc.swimpyo.backend.mappers.accm.admin;
 
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
+import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -8,6 +9,10 @@ public interface IAdminAccmDaoMapper {
 
     // 등록
     public void insertAccmInfo(AdminAccmDto adminAccmDto);
+    public int selectAccmForAmNo(int a_m_no);
+//    public int insertAccmImage(int a_acc_no, String imageUrl);
+    public int insertAccmImage(AdminAccmImageDto adminAccmImageDto);
+
 
     // 상세페이지 조회
     public AdminAccmDto selectAccmInfo(int a_m_no);
@@ -17,5 +22,7 @@ public interface IAdminAccmDaoMapper {
 
     // 삭제
     public int deleteAccmInfo(int a_m_no);
+
+
 
 }

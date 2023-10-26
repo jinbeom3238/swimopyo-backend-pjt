@@ -32,6 +32,9 @@ public class S3Uploader {
     public String uploadFileToS3(MultipartFile multipartFile, String filePath) {
         // MultipartFile -> File 로 변환
         File uploadFile = null;
+
+        log.info("[uploadFileToS3] MultipartFile-------> {}",  multipartFile);
+
         try {
             uploadFile = convert(multipartFile)
                     .orElseThrow(() -> new IllegalArgumentException("[error]: MultipartFile -> 파일 변환 실패"));
@@ -51,7 +54,8 @@ public class S3Uploader {
     public String putS3(MultipartFile multipartFile, String fileName) {
         ObjectMetadata metadata = new ObjectMetadata();
         String contentType = multipartFile.getContentType();
-        metadata.setContentType(contentType);
+        metadata.setContentType("image/jpeg");
+//        metadata.setContentType(contentType);
         metadata.setContentLength(multipartFile.getSize());
 
         try {
@@ -73,6 +77,19 @@ public class S3Uploader {
         }
         log.info("[파일 업로드] : 파일 삭제 실패");
     }
+
+
+    public void deleteFileFromS3(String imageUrl) {
+        String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+
+        try {
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+            log.info("[S3Uploader] File deleted from S3: " + fileName);
+        } catch (AmazonServiceException e) {
+            log.error("[S3Uploader] Error deleting file from S3: " + fileName, e);
+        }
+    }
+
 
     public Optional<File> convert(MultipartFile file) throws IOException {
         // 임시 디렉토리에 파일을 생성합니다.

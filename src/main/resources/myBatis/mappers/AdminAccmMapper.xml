@@ -24,7 +24,7 @@
 </insert> !-->
 
     <insert id="insertAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
-        INSERT INTO tbl_admin_accommodation(a_acc_name, a_acc_intro, a_acc_kind, a_acc_bn, a_acc_address, a_acc_phone, a_acc_image, a_acc_reg_date, a_acc_mod_date, a_m_no)
+        INSERT INTO tbl_admin_accommodation(a_acc_name, a_acc_intro, a_acc_kind, a_acc_bn, a_acc_address, a_acc_phone, a_acc_reg_date, a_acc_mod_date, a_m_no)
         SELECT
             #{a_acc_name},
             #{a_acc_intro},
@@ -32,7 +32,6 @@
             #{a_acc_bn},
             #{a_acc_address},
             #{a_acc_phone},
-            #{a_acc_image},
             NOW(),
             NOW(),
             a_m_no
@@ -40,7 +39,24 @@
         WHERE a_m_email = #{a_m_email}
     </insert>
 
-<!-- 상세페이지 조회 -->
+    <select id="selectAccmForAmNo" parameterType="Integer" resultType="Integer">
+        SELECT
+            a_acc_no
+        FROM
+            tbl_admin_accommodation
+        WHERE
+            a_m_no = #{a_m_no}
+    </select>
+
+
+    <!-- IAdminAccmDaoMapper.xml -->
+    <insert id="insertAccmImage" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto">
+        INSERT INTO tbl_accommodation_image (a_acc_no, a_i_image, a_i_reg_date, a_i_mod_date)
+        VALUES (#{a_acc_no}, #{a_i_image}, NOW(), NOW())
+    </insert>
+
+
+    <!-- 상세페이지 조회 -->
     <select id="selectAccmInfo" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
         SELECT
             aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_image, aa.a_acc_reg_date
