@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Log4j2
@@ -66,7 +68,7 @@ public class AdminAccmService implements IAdminAccmService {
 
 
     }*/
-
+/*
     @Override
     public String registConfirm(AdminAccmDto adminAccmDto, MultipartFile a_acc_image) {
         log.info("[AdminAccmService] registConfirm()");
@@ -92,7 +94,54 @@ public class AdminAccmService implements IAdminAccmService {
         String url = "";
         if(file != null)  url = s3Uploader.uploadFileToS3(file, "static/test");
 
+    }*/
+
+
+
+
+
+    @Override
+    public String registConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_acc_images) {
+        log.info("[AdminAccmService] registConfirm()");
+
+        List<String> imageUrls = new ArrayList<>(); // 여러 이미지의 URL을 저장할 리스트
+
+        // 여러 이미지를 업로드하고 각각의 URL을 얻어옴
+        for (MultipartFile a_acc_image : a_acc_images) {
+            String imageUrl = s3Uploader.uploadFileToS3(a_acc_image, "static/test");
+            imageUrls.add(imageUrl); // 리스트에 추가
+        }
+
+        // 첫 번째 이미지 URL을 a_acc_image 필드에 설정 (예시로 첫 번째 이미지를 설정하도록 했습니다)
+        if (!imageUrls.isEmpty()) {
+            adminAccmDto.setA_acc_image(imageUrls.get(0));
+        }
+
+        Map<String, Object> msgData = new HashMap<>();
+        msgData.put("registInfo", adminAccmDto);
+        log.info("msgData : " + msgData);
+
+        iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
+
+        return !imageUrls.isEmpty() ? imageUrls.get(0) : null; // 첫 번째 이미지의 URL 반환
     }
+
+    @Override
+    @Transactional
+    public void createS3(MultipartFile[] files) {
+        for (MultipartFile file : files) {
+            if (file != null && !file.isEmpty()) {
+                // 파일이 존재하면 업로드하고 URL을 얻어옴
+                String url = s3Uploader.uploadFileToS3(file, "static/test");
+                // 여기서 url을 사용하는 로직 추가
+            }
+        }
+    }
+
+
+
+
+
 
     // 상세페이지 보기
     @Override
@@ -100,6 +149,9 @@ public class AdminAccmService implements IAdminAccmService {
         log.info("[AdminAccmService] showAccmDetail()");
 
         AdminAccmDto adminAccmDtos = iAdminAccmDaoMapper.selectAccmInfo(a_m_no);
+
+        String imageUrl = adminAccmDtos.getA_acc_image();
+        log.info("[showAccmDetail] imageUrl: " + imageUrl);
 
         return adminAccmDtos;
 
