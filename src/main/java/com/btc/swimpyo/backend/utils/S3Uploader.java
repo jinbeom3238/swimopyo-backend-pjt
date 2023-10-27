@@ -32,14 +32,15 @@ public class S3Uploader {
     public String uploadFileToS3(MultipartFile multipartFile, String filePath) {
         // MultipartFile -> File 로 변환
         File uploadFile = null;
-
         log.info("[uploadFileToS3] MultipartFile-------> {}",  multipartFile);
 
         try {
             uploadFile = convert(multipartFile)
                     .orElseThrow(() -> new IllegalArgumentException("[error]: MultipartFile -> 파일 변환 실패"));
+
         } catch (IOException e) {
             throw new RuntimeException(e);
+
         }
 
         // S3에 저장될 파일 이름을 UUID로 생성
@@ -48,10 +49,13 @@ public class S3Uploader {
         // s3로 업로드 후 로컬 파일 삭제
         String uploadImageUrl = putS3(multipartFile, fileName);
         removeNewFile(uploadFile);
+
         return uploadImageUrl;
     }
 
     public String putS3(MultipartFile multipartFile, String fileName) {
+
+        // 새로운 객체 메타데이터 생성(S3에 업로드할 파일의 속성을 나타냄)
         ObjectMetadata metadata = new ObjectMetadata();
         String contentType = multipartFile.getContentType();
         metadata.setContentType("image/jpeg");
@@ -61,9 +65,12 @@ public class S3Uploader {
         try {
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
+
         } catch (IOException e) {
             e.printStackTrace();
+
             return null;
+
         }
 
         return amazonS3Client.getUrl(bucket, fileName).toString();
@@ -91,6 +98,7 @@ public class S3Uploader {
     }
 
 
+    // MultipartFile을 받아서 로컬 파일로 변환하는 과정
     public Optional<File> convert(MultipartFile file) throws IOException {
         // 임시 디렉토리에 파일을 생성합니다.
         String dirPath = System.getProperty("java.io.tmpdir");

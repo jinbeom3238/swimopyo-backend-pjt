@@ -3,6 +3,10 @@ package com.btc.swimpyo.backend.mappers.accm.admin;
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface IAdminAccmDaoMapper {
@@ -16,9 +20,16 @@ public interface IAdminAccmDaoMapper {
 
     // 상세페이지 조회
     public AdminAccmDto selectAccmInfo(int a_m_no);
+    public List<String> selectAccmImg();
 
     // 수정
-    public int updataeAccmInfo(AdminAccmDto adminAccmDto);
+    public int updateAccmInfo(AdminAccmDto adminAccmDto);
+    public void updateAccmImg(Map<String, Object> msgData); // 새로운 이미지 update
+    public List<String> selectAccmImgForUpdate(int a_acc_no); // 기존 이미지 select
+    public AdminAccmDto selectAccmInfoForUpdate(int a_acc_no);  // 수정된 숙박시설 정보 select
+
+
+
 
     // 삭제
     public int deleteAccmInfo(int a_m_no);

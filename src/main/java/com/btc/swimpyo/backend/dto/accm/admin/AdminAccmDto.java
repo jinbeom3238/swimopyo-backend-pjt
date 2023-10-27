@@ -31,6 +31,7 @@ public class AdminAccmDto {
     private String a_r_price;
 
     private  String a_i_image;
+    private List<String> a_i_images;
 
 //    private List<String> a_acc_images; // 여러 장의 이미지 URL을 저장할 리스트
 

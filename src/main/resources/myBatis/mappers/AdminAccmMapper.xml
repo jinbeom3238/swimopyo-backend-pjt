@@ -39,6 +39,7 @@
         WHERE a_m_email = #{a_m_email}
     </insert>
 
+    <!-- a_acc_no를 가져오기 위함 -->
     <select id="selectAccmForAmNo" parameterType="Integer" resultType="Integer">
         SELECT
             a_acc_no
@@ -57,9 +58,9 @@
 
 
     <!-- 상세페이지 조회 -->
-    <select id="selectAccmInfo" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+    <select id="selectAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
         SELECT
-            aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_image, aa.a_acc_reg_date
+            aa.a_m_no, aa.a_acc_no, aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_reg_date
         FROM
             tbl_admin_accommodation aa
             JOIN
@@ -72,8 +73,30 @@
             aa.use_yn = 'Y'
     </select>
 
+    <!-- 숙박시설 이미지를 받아오기 위함 -->
+    <!--<select id="selectAccmImg" parameterType="Integer" resultType="java.util.List">
+        SELECT
+            a_i_image
+        FROM
+            tbl_accommodation_image
+        WHERE
+            a_acc_no = #{a_acc_no}
+    </select>-->
+
+    <select id="selectAccmImg" parameterType="Integer" resultType="String">
+
+        SELECT
+            ai.a_i_image
+        FROM
+            tbl_accommodation_image ai
+            JOIN
+                tbl_admin_accommodation aa
+            ON
+                ai.a_acc_no = aa.a_acc_no
+    </select>
+
     <!-- 수정 -->
-    <update id="updataeAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+    <update id="updateAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
         UPDATE
             tbl_admin_accommodation aa
             JOIN
@@ -85,14 +108,71 @@
             am.a_m_name = #{a_m_name},
             aa.a_acc_intro = #{a_acc_intro},
             aa.a_acc_kind = #{a_acc_kind},
-            aa.a_m_no = #{a_m_no},
             aa.a_acc_address = #{a_acc_address},
-            aa.a_acc_phone = #{a_acc_phone},
-            am.a_m_email = #{a_m_email},
-            aa.a_acc_image = #{a_acc_image}
+            aa.a_acc_phone = #{a_acc_phone}
         WHERE
             aa.a_m_no = #{a_m_no}
     </update>
+
+    <!-- 새로운 이미지 수정 -->
+    <update id="updateAccmImg" parameterType="hashMap">
+        UPDATE
+            tbl_accommodation_image
+        SET
+            a_i_image
+        WHERE
+            a_m_no = #{a_m_no}
+    </update>
+
+    <!-- 기존 이미지 보여주기 위함 -->
+    <!--<select id="selectAccmImgForUpdate" parameterType="Integer" resultType="String">
+        SELECT
+            ai.a_i_image
+        FROM
+            tbl_accommodation_image ai
+            JOIN
+                tbl_admin_accommodation aa
+            ON
+                ai.a_acc_no = aa.a_acc_no
+    </select>-->
+
+    <!--<select id="selectAccmInfoForUpdate" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+        SELECT
+            aa.a_acc_name,
+            am.a_m_name,
+            aa.a_acc_intro,
+            aa.a_acc_kind,
+            aa.a_acc_address,
+            aa.a_acc_phone,
+            ai.a_i_image
+        FROM
+            tbl_admin_accommodation aa
+            JOIN
+                tbl_accommodation_image ai
+            ON
+                ai.a_acc_no = aa.a_acc_no
+    </select>-->
+
+
+    <!--<select id="selectAccmInfoForUpdate" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+        SELECT
+            aa.a_acc_name,
+            am.a_m_name,
+            aa.a_acc_intro,
+            aa.a_acc_kind,
+            aa.a_acc_address,
+            aa.a_acc_phone,
+            (
+            SELECT
+                ai.a_i_image
+            FROM
+                tbl_accommodation_image ai
+            WHERE
+                ai.a_acc_no = aa.a_acc_no
+            )
+        FROM
+            tbl_admin_accommodation aa
+    </select>-->
 
     <!-- 삭제-->
     <update id="deleteAccmInfo" parameterType="Integer">
