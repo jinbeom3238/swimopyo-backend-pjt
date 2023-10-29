@@ -183,8 +183,8 @@ public class AdminAccmController {
 
     }
 
-   /* // 삭제
-    @PostMapping("/delete_accm")
+   // 삭제
+    @PostMapping("/delete_confirm")
     public int deleteAccm(@RequestBody AdminAccmDto adminAccmDto) {
         log.info("[AdminAccmController] deleteAccm()");
 
@@ -192,6 +192,6 @@ public class AdminAccmController {
 
         return adminAccmService.deleteAccm(a_m_no);
 
-    }*/
+    }
 
 }

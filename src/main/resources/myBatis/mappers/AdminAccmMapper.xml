@@ -108,8 +108,6 @@
             aa.a_acc_mod_date = NOW()
         WHERE
             aa.a_m_no = #{a_m_no}
-
-
     </update>
 
     <!-- 기존 이미지 삭제 -->
@@ -119,14 +117,14 @@
     </delete>
 
     <!-- 새로운 이미지 수정 -->
-    <update id="updateAccmImg" parameterType="hashMap" >
+    <!--<update id="updateAccmImg" parameterType="hashMap" >
         UPDATE
             tbl_accommodation_image
         SET
             a_i_image
         WHERE
             a_m_no = #{a_m_no}
-    </update>
+    </update>-->
 
     <!-- 기존 이미지 보여주기 위함 -->
     <!--<select id="selectAccmImgForUpdate" parameterType="Integer" resultType="String">

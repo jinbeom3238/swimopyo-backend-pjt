@@ -419,25 +419,32 @@ public class AdminAccmService implements IAdminAccmService {
 
     }*/
 
-   /* @Override
+    @Override
     public int deleteAccm(int a_m_no) {
         log.info("[AdminAccmService] deleteAccm()");
 
         AdminAccmDto adminAccmDto = iAdminAccmDaoMapper.selectAccmInfo(a_m_no);
-        String imageUrl = adminAccmDto.getA_acc_image();
+//        String imageUrl = adminAccmDto.getA_i_image();
+        int a_acc_no = adminAccmDto.getA_acc_no();
 
         // S3에서 이미지 삭제
-        s3Uploader.deleteFileFromS3(imageUrl);
+//        s3Uploader.deleteFileFromS3(imageUrl);
 
+        // 이미지를 제외한 숙박시설 정보 삭제(UPDATE)
         int result = iAdminAccmDaoMapper.deleteAccmInfo(a_m_no);
 
         if(result > 0) {
             log.info("[AdminAccmService] DELETE ACCM SUCCESS!!");
+
+            iAdminAccmDaoMapper.deleteAccmImg(a_acc_no);
+
             return result;
+
         } else {
             log.info("[AdminAccmService] DELETE ACCM FAIL!!");
             return 0;
+
         }
-    }*/
+    }
 
 }

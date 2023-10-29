@@ -30,5 +30,5 @@ public interface IAdminAccmService {
     public String modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image);
 
     // 삭제
-//    public int deleteAccm(int a_m_no);
+    public int deleteAccm(int a_m_no);
 }
