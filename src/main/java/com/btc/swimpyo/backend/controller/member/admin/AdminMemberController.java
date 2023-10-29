@@ -26,7 +26,6 @@ import java.util.Map;
 public class AdminMemberController {
 
     private final IAdminMemberService iAdminMemberService;
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @PostMapping("/signup")
     public String signUp(@RequestBody Map<String, Object> msgMap, AdminMemberDto adminMemberDto) {

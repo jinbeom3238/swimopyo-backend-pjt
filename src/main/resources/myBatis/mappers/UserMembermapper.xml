@@ -4,5 +4,20 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.member.user.IUserMemberDaoMapper">
 
+    <insert id="insertMemberUser" parameterType="com.btc.swimpyo.backend.dto.member.user.UserMemberDto">
+        INSERT INTO
+            tbl_user_member(u_m_id, u_m_pw, u_m_name, u_m_phone, u_m_email, u_m_nickname, u_m_reg_date, u_m_mod_date)
+        VALUES
+            (
+                #{u_m_id},
+                #{u_m_pw},
+                #{u_m_name},
+                #{u_m_phone},
+                #{u_m_email},
+                #{u_m_nickname},
+                NOW(),
+                NOW()
+            )
+    </insert>
 
 </mapper>
