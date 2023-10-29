@@ -102,7 +102,7 @@ public class S3Uploader {
     public Optional<File> convert(MultipartFile file) throws IOException {
         // 임시 디렉토리에 파일을 생성합니다.
         String dirPath = System.getProperty("java.io.tmpdir");
-        String fileName = file.getOriginalFilename();
+        String fileName = file.getOriginalFilename() + UUID.randomUUID();
         File convertFile = new File(dirPath + File.separator + fileName);
 
         if (convertFile.createNewFile()) {

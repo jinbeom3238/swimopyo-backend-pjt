@@ -19,7 +19,7 @@ public interface IAdminAccmDaoMapper {
 
     // 상세페이지 조회
     public AdminAccmDto selectAccmInfo(int a_m_no);
-    public List<String> selectAccmImg();
+    public List<String> selectAccmImg(int a_acc_no);
 
     // 수정
     public int updateAccmInfo(AdminAccmDto adminAccmDto);
