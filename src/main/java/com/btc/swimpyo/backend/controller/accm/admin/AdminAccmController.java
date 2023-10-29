@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -156,7 +157,7 @@ public class AdminAccmController {
 
 
     // 수정
-    /*@PostMapping(value = "modify_confirm", consumes="multipart/form-data")
+    @PostMapping(value = "modify_confirm", consumes="multipart/form-data")
     public void modifyConfirm(@RequestPart(value="adminAccmDto", required = false) AdminAccmDto adminAccmDto, @RequestPart(value="a_i_image", required = false) MultipartFile[] a_i_images) {
         log.info("[AdminAccmController] modifyConfirm()");
 
@@ -180,7 +181,7 @@ public class AdminAccmController {
         log.info("[AdminAccmController] dto : " + adminAccmDto);
 
 
-    }*/
+    }
 
    /* // 삭제
     @PostMapping("/delete_accm")

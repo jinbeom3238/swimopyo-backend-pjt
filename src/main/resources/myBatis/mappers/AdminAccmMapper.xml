@@ -99,23 +99,27 @@
     <update id="updateAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
         UPDATE
             tbl_admin_accommodation aa
-            JOIN
-                tbl_admin_member am
-            ON
-                aa.a_m_no = am.a_m_no
         SET
             aa.a_acc_name = #{a_acc_name},
-            am.a_m_name = #{a_m_name},
             aa.a_acc_intro = #{a_acc_intro},
             aa.a_acc_kind = #{a_acc_kind},
             aa.a_acc_address = #{a_acc_address},
-            aa.a_acc_phone = #{a_acc_phone}
+            aa.a_acc_phone = #{a_acc_phone},
+            aa.a_acc_mod_date = NOW()
         WHERE
             aa.a_m_no = #{a_m_no}
+
+
     </update>
 
+    <!-- 기존 이미지 삭제 -->
+    <delete id="deleteAccmImg" parameterType="Integer">
+        DELETE FROM tbl_accommodation_image
+        WHERE a_acc_no = #{a_acc_no}
+    </delete>
+
     <!-- 새로운 이미지 수정 -->
-    <update id="updateAccmImg" parameterType="hashMap">
+    <update id="updateAccmImg" parameterType="hashMap" >
         UPDATE
             tbl_accommodation_image
         SET

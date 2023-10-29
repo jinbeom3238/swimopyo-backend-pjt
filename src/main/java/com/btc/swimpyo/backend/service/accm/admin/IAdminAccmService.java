@@ -4,7 +4,6 @@ import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Map;
 
 public interface IAdminAccmService {
@@ -28,6 +27,7 @@ public interface IAdminAccmService {
     // 수정
 //    public int modifyConfirm(AdminAccmDto adminAccmDto);
 //    public int modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_images);
+    public String modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image);
 
     // 삭제
 //    public int deleteAccm(int a_m_no);

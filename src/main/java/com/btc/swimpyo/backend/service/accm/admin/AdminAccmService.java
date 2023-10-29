@@ -124,13 +124,13 @@ public class AdminAccmService implements IAdminAccmService {
 
     public String registConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_images) {
         log.info("[AdminAccmService] registConfirm()");
-        log.info("[AdminAccmService] dto : " + adminAccmDto);
+        log.info("[AdminAccmService] dto : " + adminAccmDto.getA_m_no());
         log.info("[AdminAccmService] a_i_image : " + a_i_images);
 
         try {
             // 1. tbl_admin_accommodation 테이블에 데이터 등록
-            iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
-
+            int result = iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
+            log.info("reuslt: " + result);
             // 2. 등록된 숙박시설의 번호 가져오기
             int a_acc_no = iAdminAccmDaoMapper.selectAccmForAmNo(adminAccmDto.getA_m_no());
             log.info("[AdminAccmService] a_acc_no: " + a_acc_no);
@@ -151,7 +151,7 @@ public class AdminAccmService implements IAdminAccmService {
                 log.info("[AdminAccmService] imageUrl: " + imageUrl);
 
 //                int result = iAdminAccmDaoMapper.insertAccmImage(a_acc_no, imageUrl);
-                int result = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
+                result = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
 
 //                Map<String, Object> msgData = new HashMap<>();
 //                msgData.put("registInfo", adminAccmDto);
@@ -166,7 +166,7 @@ public class AdminAccmService implements IAdminAccmService {
         } catch (Exception e) {
             // 중복된 a_m_no가 이미 존재할 때, 해당 예외를 처리함
             if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
-                log.info("a_m_no ALREADY EXISTS!!");
+                log.info("a_m_no ALREADY EXISTS!! : " + e);
 
             } else {
                 e.printStackTrace();
@@ -214,7 +214,7 @@ public class AdminAccmService implements IAdminAccmService {
                 a_i_images = iAdminAccmDaoMapper.selectAccmImg();
                 log.info("[AdminAccmService] selectAccmImg: " + a_acc_no);
                 log.info("[AdminAccmService] selectAccmImg: " + a_m_no);
-                log.info("[AdminAccmService] a_i_images: " +  a_i_images);
+                log.info("[AdminAccmService] a_i_images: " + a_i_images);
 
                 /*AdminAccmImageDto entity = sqlSession.selectOne("yourQuery", ...);
                 String imageValue = entity.getImage();*/
@@ -252,85 +252,150 @@ public class AdminAccmService implements IAdminAccmService {
 
     }*/
 
+//   @Override
+//    public int modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image) {
+//        log.info("[AdminAccmService] modifyConfirm()");
+//        List<String> a_i_images = new ArrayList<>();
+//        AdminAccmImageDto adminAccmImageDto = new AdminAccmImageDto();
+//
+//        try {
+//            int result = iAdminAccmDaoMapper.updateAccmInfo(adminAccmDto);
+//            log.info("[AdminAccmService] updateAccmInfo()");
+//
+//            // update가 되면
+//            if(result > 0) {
+//                log.info("[AdminAccmService] updateAccmInfo() SUCCESS!! GOGO UPDATE IMAGE~!!");
+//                Map<String, Object> msgData = new HashMap<>();
+//                msgData.put("a_i_image", a_i_image);
+//                msgData.put("a_m_no", adminAccmDto.getA_m_no());
+//
+//                // 새로운 이미지!!!~~
+//                if(a_i_image != null) {
+//
+//                    for (MultipartFile file : a_i_image) {
+//
+//                        log.info("[AdminAccmService] a_i_image: -----> {}", a_i_image);
+//
+//                        String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+//
+//                        adminAccmImageDto.setA_i_image(imageUrl);
+//
+//                        log.info("[AdminAccmService] imageUrl: " + imageUrl);
+//
+////                    iAdminAccmDaoMapper.updateAccmImg(a_i_image, adminAccmDto.getA_m_no());
+//                        iAdminAccmDaoMapper.updateAccmImg(msgData);
+//
+//                    }
+//                } else {
+//                    // 기존의 값 들고 오기 위함
+//                    int a_acc_no = adminAccmDto.getA_acc_no();
+//                    a_i_images = iAdminAccmDaoMapper.selectAccmImgForUpdate(a_acc_no);
+//
+//                }
+//
+//               // 수정된 dto 가지고 오기 위함
+//                adminAccmDto = iAdminAccmDaoMapper.selectAccmInfoForUpdate(adminAccmDto.getA_acc_no());*//*
+//            }
+//
+//        } catch (Exception e) {
+//            // 중복된 a_m_no가 이미 존재할 때, 해당 예외를 처리함
+//            if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
+//                log.info("a_m_no ALREADY EXISTS!!");
+//
+//            } else {
+//                e.printStackTrace();
+//                log.info("a_m_no INSERT FAIL!!");
+//
+//            }
+//
+//        }
+//
+////        if(adminAccmDto != null){
+////            log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
+////            log.info("[AdminAccmService]: " + adminAccmDto);
+////
+////            return adminAccmDto;
+////
+////        } else {
+////            log.info("[AdminAccmService] MODIFY ACCM FAIL!!");
+////
+////            return null;
+////
+////        }
+//
+//      }
 
 
-
-   /* @Override
-    public int modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image) {
+    @Override
+    public String modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image) {
         log.info("[AdminAccmService] modifyConfirm()");
+
         List<String> a_i_images = new ArrayList<>();
         AdminAccmImageDto adminAccmImageDto = new AdminAccmImageDto();
+        int a_acc_no = adminAccmDto.getA_acc_no();
+        log.info("a_acc_no: " + a_acc_no);
+        adminAccmImageDto.setA_acc_no(a_acc_no);
 
-        try {
-            int result = iAdminAccmDaoMapper.updateAccmInfo(adminAccmDto);
-            log.info("[AdminAccmService] updateAccmInfo()");
+        log.info("[AdminAccmService] adminAccmDto.getA_acc_address() : " + adminAccmDto.getA_acc_address());
+        log.info("[AdminAccmService] adminAccmDto.getA_acc_address() : " + adminAccmDto.getA_acc_name());
+        log.info("[AdminAccmService]  a_m_no.getA_m_no() : " + adminAccmDto.getA_m_no());
+        log.info("[AdminAccmService]  a_m_no.getA_acc_no() : " + adminAccmDto.getA_acc_no());
+        log.info("[AdminAccmService] ");
 
-            // update가 되면
-            if(result > 0) {
-                log.info("[AdminAccmService] updateAccmInfo() SUCCESS!! GOGO UPDATE IMAGE~!!");
-                Map<String, Object> msgData = new HashMap<>();
-                msgData.put("a_i_image", a_i_image);
-                msgData.put("a_m_no", adminAccmDto.getA_m_no());
+        int result = iAdminAccmDaoMapper.updateAccmInfo(adminAccmDto);
+        log.info("[AdminAccmService] updateAccmInfo()");
+        log.info("result : " + result);
 
-                // 새로운 이미지!!!~~
-                if(a_i_image != null) {
+        // update가 되면
+        if (result > 0) {
+            log.info("[AdminAccmService] updateAccmInfo() SUCCESS!! GOGO UPDATE IMAGE~!!");
+//            Map<String, Object> msgData = new HashMap<>();
+//            msgData.put("a_i_image", a_i_image);
+//            msgData.put("a_acc_no", a_acc_no);
 
-                    for (MultipartFile file : a_i_image) {
+            // 새로운 이미지!!!~~
+            if (a_i_image != null) {
 
-                        log.info("[AdminAccmService] a_i_image: -----> {}", a_i_image);
+                // 새로운 사진 업데이트(추가) 전 삭제해주는 작업
+                int isDelete = iAdminAccmDaoMapper.deleteAccmImg(a_acc_no);
 
-                        String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+                    if (isDelete > 0) {
+                        log.info("deleteAccmImg() SUCCESS!! ");
 
-                        adminAccmImageDto.setA_i_image(imageUrl);
+                        for (MultipartFile file : a_i_image) {
 
-                        log.info("[AdminAccmService] imageUrl: " + imageUrl);
+                            log.info("[AdminAccmService] a_i_image: -----> {}", file);
+
+                            String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+
+                            adminAccmImageDto.setA_i_image(imageUrl);
+
+                            log.info("[AdminAccmService] imageUrl: " + imageUrl);
 
 //                    iAdminAccmDaoMapper.updateAccmImg(a_i_image, adminAccmDto.getA_m_no());
-                        iAdminAccmDaoMapper.updateAccmImg(msgData);
+//                            iAdminAccmDaoMapper.updateAccmImg(msgData);
+
+                            // 필요없는 사진 삭제 후 새로운 사진 등록
+                            int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
+                            log.info("isInsert: " + isInsert);
+
+                        }
 
                     }
-                } *//*else {
-                    // 기존의 값 들고 오기 위함
-                    int a_acc_no = adminAccmDto.getA_acc_no();
-                    a_i_images = iAdminAccmDaoMapper.selectAccmImgForUpdate(a_acc_no);
 
-                }*//*
+                    log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
+                    log.info("[AdminAccmService]: " + adminAccmDto);
 
-               *//* // 수정된 dto 가지고 오기 위함
-                adminAccmDto = iAdminAccmDaoMapper.selectAccmInfoForUpdate(adminAccmDto.getA_acc_no());*//*
-            }
 
-        } catch (Exception e) {
-            // 중복된 a_m_no가 이미 존재할 때, 해당 예외를 처리함
-            if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
-                log.info("a_m_no ALREADY EXISTS!!");
+                }
 
-            } else {
-                e.printStackTrace();
-                log.info("a_m_no INSERT FAIL!!");
+                return "해쩡";
 
             }
 
-        }*/
-
-        /*if(adminAccmDto != null){
-            log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
-            log.info("[AdminAccmService]: " + adminAccmDto);
-
-            return adminAccmDto;
-
-        } else {
-            log.info("[AdminAccmService] MODIFY ACCM FAIL!!");
-
-            return null;
-
-        }*/
+            return "못해쩡";
 
     }
-
-
-
-
 
 
     // 삭제
@@ -375,4 +440,4 @@ public class AdminAccmService implements IAdminAccmService {
         }
     }*/
 
-//}
+}
