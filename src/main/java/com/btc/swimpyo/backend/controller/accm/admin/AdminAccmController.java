@@ -21,12 +21,6 @@ public class AdminAccmController {
     private final AdminAccmService adminAccmService;
 
     // 등록
-    @GetMapping("/regist_form")
-    public void registFrom() {
-        log.info("[AdminAccmController] registFrom()");
-
-    }
-
     @PostMapping(value="/regist_confirm", consumes="multipart/form-data")
     public String registConfirm(@RequestPart(value="adminAccmDto", required = false)AdminAccmDto adminAccmDto, @RequestPart(value="a_i_image", required = false) MultipartFile[] a_i_images) {
         log.info("[AdminAccmController] registConfirm()");
@@ -64,7 +58,7 @@ public class AdminAccmController {
         adminAccmDto.setA_i_image(adminAccmImageDto.getA_i_image());
 
         log.info("[AdminAccmController] a_m_no : " + a_m_no);
-        // DTO, IMAGE를 같이 보여주기 위해 Map에 담음
+        // DTO, IMAGE를 같이 보여주기 위해 Map에 담음, image가 배열이기 때문에 map으로 반환
         Map<String, Object> msgData = adminAccmService.showAccmDetail(a_m_no);
         log.info("[AdminAccmController] msgData : " + msgData.get("adminAccmDto"));
         log.info("[AdminAccmController] msgData : " + msgData.get("a_i_images"));

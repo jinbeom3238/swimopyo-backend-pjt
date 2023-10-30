@@ -31,6 +31,7 @@ public class AdminAccmService implements IAdminAccmService {
         this.s3Uploader = s3Uploader;
     }
 
+    @Override
     public String registConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_images) {
         log.info("[AdminAccmService] registConfirm()");
         log.info("[AdminAccmService] dto : " + adminAccmDto.getA_m_no());
@@ -39,7 +40,7 @@ public class AdminAccmService implements IAdminAccmService {
         try {
             // 1. tbl_admin_accommodation 테이블에 데이터 등록
             int result = iAdminAccmDaoMapper.insertAccmInfo(adminAccmDto);
-            log.info("reuslt: " + result);
+            log.info("[insertAccmInfo] reuslt: " + result);
             // 2. 등록된 숙박시설의 번호 가져오기
             int a_acc_no = iAdminAccmDaoMapper.selectAccmForAmNo(adminAccmDto.getA_m_no());
             log.info("[AdminAccmService] a_acc_no: " + a_acc_no);
@@ -65,7 +66,7 @@ public class AdminAccmService implements IAdminAccmService {
 //                msgData.put("registInfo", adminAccmDto);
 //                log.info("msgData : " + msgData);
 
-                log.info("result: " + result);
+                log.info("[insertAccmImage] result: " + result);
 
             }
             // 4. 이미지 업로드가 완료되면 이미지 URL을 반환
@@ -103,7 +104,8 @@ public class AdminAccmService implements IAdminAccmService {
         log.info("[AdminAccmService] adminAccmDto.getA_m_no() :" + adminAccmDto.getA_m_no());
 
         // a_acc_name이 있다면 true
-        // StringUtils.hasText => 빈칸, null 등등 일 때 false값을 주므로 오류 발생률을 줄여줌
+        // 문자열 유효성 체크할 경우. true인데 false로 반환하는 경우가 있음.
+        // StringUtils.hasText => 공백, null, 길이 0일 때 false값을 주므로 오류 발생률을 줄여줌
         if (StringUtils.hasText(adminAccmDto.getA_acc_name())) {
             
             // a_acc_no를 가져와서 image를 보여줌
@@ -144,7 +146,7 @@ public class AdminAccmService implements IAdminAccmService {
 
         int result = iAdminAccmDaoMapper.updateAccmInfo(adminAccmDto);
         log.info("[AdminAccmService] updateAccmInfo()");
-        log.info("result : " + result);
+        log.info("[updateAccmInfo] result : " + result);
 
         // update가 되면
         if (result > 0) {
@@ -173,6 +175,9 @@ public class AdminAccmService implements IAdminAccmService {
 
                             // 필요없는 사진 삭제 후 새로운 사진 등록
                             int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
+                            adminAccmDto.setA_i_image(adminAccmImageDto.getA_i_image());
+                            log.info("[insertAccmImage] adminAccmDto.getA_i_image(): " + adminAccmDto.getA_i_image());
+
                             log.info("isInsert: " + isInsert);
 
                         }

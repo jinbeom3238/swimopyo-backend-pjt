@@ -6,20 +6,41 @@
 
     <insert id="insertRoomInfo" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
         INSERT INTO
-            tbl_admin_room(a_r_name, a_r_state, a_r_price, a_r_check_in, a_r_check_out, a_r_count, a_r_content, a_r_image, a_r_reg_date, a_r_mod_date, a_acc_no)
+            tbl_admin_room(a_acc_no, a_r_name, a_r_state, a_r_price, a_r_check_in, a_r_check_out, a_r_count, a_r_content, a_r_reg_date, a_r_mod_date, a_m_no)
         SELECT
-        #{a_r_name},
-        #{a_r_state},
-        #{a_r_price},
-        #{a_r_check_in},
-        #{a_r_check_out},
-        #{a_r_count},
-        #{a_r_content},
-        #{a_r_image},
-        NOW(),
-        NOW(),
-        a_acc_no
-        FROM tbl_admin_accommodation
-        WHERE a_acc_no = #{a_acc_no}
+            #{a_acc_no},
+            #{a_r_name},
+            #{a_r_state},
+            #{a_r_price},
+            #{a_r_check_in},
+            #{a_r_check_out},
+            #{a_r_count},
+            #{a_r_content},
+            NOW(),
+            NOW(),
+            a_m_no
+        FROM
+            tbl_admin_accommodation
+        WHERE
+            a_acc_no = #{a_acc_no}
     </insert>
+
+    <!-- a_acc_no를 가져오기 위함 -->
+    <select id="selectRoomForArNo" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto" resultType="Integer">
+        SELECT
+            a_r_no
+        FROM
+            tbl_admin_room
+        WHERE
+            a_m_no = #{a_m_no}
+        and
+            a_acc_no = #{a_acc_no}
+    </select>
+
+    <!-- Room 이미지 등록 -->
+    <insert id="insertRoomImage" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomImageDto">
+        insert into tbl_room_image (a_r_no, r_i_image, r_i_reg_date)
+        values (#{a_r_no}, #{r_i_image}, NOW())
+    </insert>
+
 </mapper>
