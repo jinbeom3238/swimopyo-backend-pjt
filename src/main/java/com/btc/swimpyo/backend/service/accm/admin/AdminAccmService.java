@@ -74,11 +74,11 @@ public class AdminAccmService implements IAdminAccmService {
         } catch (Exception e) {
             // 중복된 a_m_no가 이미 존재할 때, 해당 예외를 처리함
             if (e.getCause() instanceof SQLIntegrityConstraintViolationException) {
-                log.info("a_m_no ALREADY EXISTS!! : " + e);
+                log.info("숙박시설이 등록되어 있습니다. 확인해주세요. " + e);
 
             } else {
                 e.printStackTrace();
-                log.info("a_m_no INSERT FAIL!!");
+                log.info("숙박시설 등록에 실패하였습니다.");
 
             }
 
@@ -96,12 +96,17 @@ public class AdminAccmService implements IAdminAccmService {
         Map<String, Object> msgData = new HashMap<>();
         List<String> a_i_images = new ArrayList<>();
 
+        // 숙박시설 정보(이미지 제외) 들을 가지고 옴
         AdminAccmDto adminAccmDto = iAdminAccmDaoMapper.selectAccmInfo(a_m_no);
         log.info("adminAccDto : " + adminAccmDto);
         log.info("[AdminAccmService] a_m_no :" + a_m_no);
         log.info("[AdminAccmService] adminAccmDto.getA_m_no() :" + adminAccmDto.getA_m_no());
 
+        // a_acc_name이 있다면 true
+        // StringUtils.hasText => 빈칸, null 등등 일 때 false값을 주므로 오류 발생률을 줄여줌
         if (StringUtils.hasText(adminAccmDto.getA_acc_name())) {
+            
+            // a_acc_no를 가져와서 image를 보여줌
             int a_acc_no = iAdminAccmDaoMapper.selectAccmForAmNo(a_m_no);
             log.info("[AdminAccmService] a_acc_no: " + a_acc_no);
 
@@ -133,7 +138,7 @@ public class AdminAccmService implements IAdminAccmService {
         adminAccmImageDto.setA_acc_no(a_acc_no);
 
         log.info("[AdminAccmService] adminAccmDto.getA_acc_address() : " + adminAccmDto.getA_acc_address());
-        log.info("[AdminAccmService] adminAccmDto.getA_acc_address() : " + adminAccmDto.getA_acc_name());
+        log.info("[AdminAccmService] adminAccmDto.getA_acc_name() : " + adminAccmDto.getA_acc_name());
         log.info("[AdminAccmService]  a_m_no.getA_m_no() : " + adminAccmDto.getA_m_no());
         log.info("[AdminAccmService]  a_m_no.getA_acc_no() : " + adminAccmDto.getA_acc_no());
 
@@ -148,9 +153,8 @@ public class AdminAccmService implements IAdminAccmService {
 //            msgData.put("a_i_image", a_i_image);
 //            msgData.put("a_acc_no", a_acc_no);
 
-            // 새로운 이미지!!!~~
+            // 새로운 이미지 추가(Insert)
             if (a_i_image != null) {
-
                 // 새로운 사진 업데이트(추가) 전 삭제해주는 작업
                 int isDelete = iAdminAccmDaoMapper.deleteAccmImg(a_acc_no);
 

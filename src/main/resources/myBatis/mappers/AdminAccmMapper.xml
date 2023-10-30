@@ -32,7 +32,7 @@
     </select>
 
 
-    <!-- IAdminAccmDaoMapper.xml -->
+    <!-- 숙박시설 Image 등록 -->
     <insert id="insertAccmImage" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto">
         INSERT INTO tbl_accommodation_image (a_acc_no, a_i_image, a_i_reg_date, a_i_mod_date)
         VALUES (#{a_acc_no}, #{a_i_image}, NOW(), NOW())

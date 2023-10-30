@@ -63,6 +63,7 @@ public class S3Uploader {
         metadata.setContentLength(multipartFile.getSize());
 
         try {
+            // ACL 설정 -  S3 객체를 공개 읽기 권한으로 설정(모든 사용자가 읽기 액세스를 할 수 있음)
             amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, multipartFile.getInputStream(), metadata)
                     .withCannedAcl(CannedAccessControlList.PublicRead));
 
@@ -102,12 +103,18 @@ public class S3Uploader {
     public Optional<File> convert(MultipartFile file) throws IOException {
         // 임시 디렉토리에 파일을 생성합니다.
         String dirPath = System.getProperty("java.io.tmpdir");
+        // getOriginalFilename() -> 업로드되는 파일에서 확장자를 포함한 파일의 이름을 반환
         String fileName = file.getOriginalFilename() + UUID.randomUUID();
         File convertFile = new File(dirPath + File.separator + fileName);
 
+        // FileOutputStream을 사용하여 데이터를 파일에 바이트 스트림으로 저장한다.
         if (convertFile.createNewFile()) {
-            // FileOutputStream을 사용하여 데이터를 파일에 바이트 스트림으로 저장합니다.
+            // FileOutputStream은 파일을 작성하기 위해서 사용한다.
+            // 주어진 File 객체가 가리키는 파일을 쓰기 위한 객체를 생성
+            //기존의 파일이 존재할 때는 그 내용을 지우고 새로운 파일을 생성.
             try (FileOutputStream fos = new FileOutputStream(convertFile)) {
+                // 문자열을 바이트배열로 변환해서 파일에 저장한다.
+                // write()은 내용을 추가해 주는 역할을 한다.
                 fos.write(file.getBytes());
             }
             return Optional.of(convertFile);

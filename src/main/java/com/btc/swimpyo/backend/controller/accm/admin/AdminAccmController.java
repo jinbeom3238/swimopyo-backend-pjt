@@ -32,7 +32,9 @@ public class AdminAccmController {
         log.info("[AdminAccmController] registConfirm()");
 
         try {
+            // a_i_images의 값을 토대로, 차례대로 data를 뽑아낼 수 있다.
             for (MultipartFile a_i_image : a_i_images) {
+                // InputStream은 데이터를 byte 단위로 읽어들이는 통로 (읽어들인 데이터를 byte로 돌려줌)
                 InputStream inputStream = a_i_image.getInputStream();
                 // 이제 inputStream을 사용하여 파일을 처리할 수 있습니다.
                 log.info("[AdminAccmController] inputStream: " + inputStream);
@@ -49,7 +51,6 @@ public class AdminAccmController {
         log.info("[imageUrl] : " + imageUrl);
         log.info("[AdminAccmController] dto : " + adminAccmDto);
 
-        // 적절한 View 이름으로 변경
         return imageUrl;
     }
 
@@ -63,6 +64,7 @@ public class AdminAccmController {
         adminAccmDto.setA_i_image(adminAccmImageDto.getA_i_image());
 
         log.info("[AdminAccmController] a_m_no : " + a_m_no);
+        // DTO, IMAGE를 같이 보여주기 위해 Map에 담음
         Map<String, Object> msgData = adminAccmService.showAccmDetail(a_m_no);
         log.info("[AdminAccmController] msgData : " + msgData.get("adminAccmDto"));
         log.info("[AdminAccmController] msgData : " + msgData.get("a_i_images"));
@@ -72,6 +74,7 @@ public class AdminAccmController {
     }
 
     // 수정
+    // consumes는 들어오는 데이터 타입을 정의할때 이용
     @PostMapping(value = "modify_confirm", consumes="multipart/form-data")
     public void modifyConfirm(@RequestPart(value="adminAccmDto", required = false) AdminAccmDto adminAccmDto, @RequestPart(value="a_i_image", required = false) MultipartFile[] a_i_images) {
         log.info("[AdminAccmController] modifyConfirm()");
