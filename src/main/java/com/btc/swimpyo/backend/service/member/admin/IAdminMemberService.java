@@ -10,7 +10,7 @@ import java.util.Map;
 public interface IAdminMemberService {
 
     // super는 SignUpResponseDto에 대한 부모 타입도 같이 반환
-    String signUp(Map<String, Object> msgMap, AdminMemberDto adminMemberDto);
+    int signUp(Map<String, Object> msgMap, AdminMemberDto adminMemberDto);
 
     Map<String,Object> signIn(Map<String, Object> msgMap, AdminMemberDto adminMemberDto, RefTokenEntity refTokenEntity, HttpServletRequest request, HttpServletResponse response);
 

@@ -1,6 +1,7 @@
 package com.btc.swimpyo.backend.service.member.admin;
 
 
+import com.btc.swimpyo.backend.config.Constant;
 import com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto;
 import com.btc.swimpyo.backend.mappers.member.admin.IAdminMemberDaoMapper;
 import com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity;
@@ -24,7 +25,7 @@ import java.util.Map;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-public class AdminMemberService implements IAdminMemberService{
+public class AdminMemberService implements IAdminMemberService {
 
     @Value("${secret-key}")
     private String secretKey;
@@ -41,8 +42,8 @@ public class AdminMemberService implements IAdminMemberService{
 
     //
     @Override
-    public String signUp(Map<String, Object> msgMap, AdminMemberDto adminMemberDto) {
-        System.out.println("[AuthServiceImplement] signUp");
+    public int signUp(Map<String, Object> msgMap, AdminMemberDto adminMemberDto) {
+        log.info("signUp");
 
         adminMemberDto.setA_m_email(msgMap.get("mail").toString());
         adminMemberDto.setA_m_pw(passwordEncoder.encode(msgMap.get("pw").toString()));
@@ -52,15 +53,21 @@ public class AdminMemberService implements IAdminMemberService{
         adminMemberDto.setA_m_br_yn(msgMap.get("a_m_br_yn").toString());
         adminMemberDto.setA_m_ar_yn(msgMap.get("a_m_ar_yn").toString());
 
-        int result = -1;
+        int result = Constant.ADMIN_SIGNUP_FAIL;
+        AdminMemberDto idVerifiedadminMemberDto = iAdminMemberDaoMapper.isMember(adminMemberDto);
+        if (idVerifiedadminMemberDto != null) {
+            return result;
+        }
+
         result = iAdminMemberDaoMapper.insertMember(adminMemberDto);
         if (result > 0) {
             System.out.println("SIGN UP SUCCESS");
-            return "SIGN UP SUCCESS";
+            result = Constant.ADMIN_SIGNUP_SUCCESS;
         } else {
             System.out.println("SIGN UP FAIL");
-            return "SIGN UP FAIL";
+            result = Constant.ADMIN_DUP_MEMBER;
         }
+        return result;
 
     }
 
@@ -71,20 +78,17 @@ public class AdminMemberService implements IAdminMemberService{
             RefTokenEntity refTokenEntity,
             HttpServletRequest request,
             HttpServletResponse response) {
-        System.out.println("[AuthServiceImplement] signIn");
+        log.info("signIn");
 
         adminMemberDto.setA_m_email(msgMap.get("email").toString());
         adminMemberDto.setA_m_pw(msgMap.get("pw").toString());
 
-        log.info("1 = {}", adminMemberDto.getA_m_email());
-        log.info("2 = {}", adminMemberDto.getA_m_pw());
         Map<String, Object> map = new HashMap<>();
 
         // 동일한 username 없음
         AdminMemberDto idVerifiedadminMemberDto = iAdminMemberDaoMapper.isMember(adminMemberDto);
-        log.info("tp1");
+
         if (idVerifiedadminMemberDto != null && passwordEncoder.matches(adminMemberDto.getA_m_pw(), idVerifiedadminMemberDto.getA_m_pw())) {
-            log.info("tp2");
             /*
                 로그인 시
                 동일한 refresh token 명의 행이 있다면 delete 후
@@ -93,47 +97,39 @@ public class AdminMemberService implements IAdminMemberService{
             final String authHeader = request.getHeader(HttpHeaders.COOKIE);
             final String checkingRefToken;
             if (authHeader != null) {
-                log.info("tp3");
                 String cookieToken = authHeader.substring(7);
                 checkingRefToken = cookieToken.split("=")[1];
                 refTokenEntity.setRef_token(checkingRefToken);
-                log.info("checkingRefToken = {}", checkingRefToken);
                 RefTokenEntity checkedRefToken = iAdminMemberDaoMapper.selectRefToken(refTokenEntity);
-                if(checkedRefToken != null){
+                if (checkedRefToken != null) {
                     int result = iAdminMemberDaoMapper.deleteDupRefToken(checkedRefToken);
-                    if(result > 0){
+                    if (result > 0) {
                         log.info("중복 refToken 삭제 완료");
                     } else {
                         log.info("중복 refToken 삭제 실패");
                     }
                 }
-//                map.put("result", HttpStatus.NOT_FOUND);
-//                return map;
             }
-            log.info("tp4");
             String accessToken = jwtProvider.createAccessToken(adminMemberDto.getA_m_email(), secretKey);
             String refreshToken = jwtProvider.createRefreshToken(adminMemberDto.getA_m_email(), secretKey);
 
             refTokenEntity.setRef_token(refreshToken);
-            log.info("tp : "+ refTokenEntity.getRef_token());
             // refresh token -> tbl_tokens에 저장
             int result = iAdminMemberDaoMapper.insertRefToken(refTokenEntity);
-            if(result <= 0){
+            if (result <= 0) {
                 log.info("Ref Token 등록 실패");
             } else {
                 log.info("Ref Token 등록 성공");
-
             }
 
             map.put("accessToken", accessToken);
             map.put("refreshToken", refreshToken);
-            return map;
 
         } else {
-            map.put("result", HttpStatus.NOT_FOUND);
-            return map;
+            map.put("result", "incorrectIdOrPw");
 
         }
+        return map;
 
     }
 
@@ -146,7 +142,7 @@ public class AdminMemberService implements IAdminMemberService{
         final String refreshToken;
         final String userEmail;
         if (authHeader == null) {
-            map.put("result", HttpStatus.NOT_FOUND);
+            map.put("result", "RefTokenNullInCookie");
             return map;
         }
         String cookieToken = authHeader.substring(7);
@@ -157,50 +153,45 @@ public class AdminMemberService implements IAdminMemberService{
         // 없으면 이미 로그아웃 또는 회원 탈퇴를 진행한 회원이라고 판단했기 때문에 오류 코드 발생.
         refTokenEntity.setRef_token(refreshToken);
         RefTokenEntity checkRefToken = iAdminMemberDaoMapper.selectRefToken(refTokenEntity);
-        log.info("tp : {}", checkRefToken);
-        if(checkRefToken == null) {
-            map.put("result", "nullCheckRefToken");
+        if (checkRefToken == null) {
+            map.put("result", "RefTokenNullInDB");
             return map;
         }
 
         // 중복 ref token delete
         refTokenEntity.setRef_token(checkRefToken.getRef_token());
-        log.info("checkRefToken = {}", checkRefToken);
-        if(checkRefToken != null){
-            int result = iAdminMemberDaoMapper.deleteDupRefToken(checkRefToken);
-            if(result > 0){
-                log.info("중복 refToken 삭제 완료");
-            } else {
-                log.info("중복 refToken 삭제 실패");
-            }
+        int result = iAdminMemberDaoMapper.deleteDupRefToken(checkRefToken);
+        if (result > 0) {
+            log.info("중복 refToken 삭제 완료");
+        } else {
+            log.info("중복 refToken 삭제 실패");
         }
 
         userEmail = jwtAuthenticationFilter.getUserEmail(secretKey, refreshToken);
         if (userEmail != null) {
             if (jwtAuthenticationFilter.validate(secretKey, refreshToken)) {
                 log.error("refreshToken이 만료되었습니다.");
-//                jwtExceptionHandler(response, ErrorType.NOT_VALID_TOKEN);
-            } else {
+                map.put("result", "RefTokenExpired");
+                return map;
 
+            } else {
 
                 // 재발급 받은 Ref Token insert
                 String ReAccessToken = jwtProvider.createAccessToken(userEmail, secretKey);
                 String ReRefreshToken = jwtProvider.createRefreshToken(userEmail, secretKey);
 
                 refTokenEntity.setRef_token(ReRefreshToken);
-                log.info("tp : "+ refTokenEntity.getRef_token());
                 // refresh token -> tbl_tokens에 저장
-                int result = iAdminMemberDaoMapper.insertRefToken(refTokenEntity);
-                if(result <= 0){
+                result = iAdminMemberDaoMapper.insertRefToken(refTokenEntity);
+                if (result <= 0) {
                     log.info("Ref Token 등록 실패");
                 } else {
                     log.info("Ref Token 등록 성공");
-
                 }
 
                 map.put("ReAccessToken", ReAccessToken);
                 map.put("ReRefreshToken", ReRefreshToken);
-                return map;
+
             }
         }
         return map;
@@ -235,7 +226,7 @@ public class AdminMemberService implements IAdminMemberService{
     }
 
     @Override
-    public String signOut(HttpServletRequest request, HttpServletResponse response,AdminMemberDto adminMemberDto, RefTokenEntity refTokenEntity) {
+    public String signOut(HttpServletRequest request, HttpServletResponse response, AdminMemberDto adminMemberDto, RefTokenEntity refTokenEntity) {
         log.info("signOut");
 
 //        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
