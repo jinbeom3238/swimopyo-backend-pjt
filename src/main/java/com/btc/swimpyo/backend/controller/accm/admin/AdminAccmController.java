@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -71,8 +73,11 @@ public class AdminAccmController {
     // 수정
     // consumes는 들어오는 데이터 타입을 정의할때 이용
     @PostMapping(value = "modify_confirm", consumes="multipart/form-data")
-    public void modifyConfirm(@RequestPart(value="adminAccmDto", required = false) AdminAccmDto adminAccmDto, @RequestPart(value="a_i_image", required = false) MultipartFile[] a_i_images) {
+    public void modifyConfirm(@RequestPart(value="adminAccmDto", required = false) AdminAccmDto adminAccmDto, @RequestPart(value="a_i_image", required = false) MultipartFile[] a_i_images, List<String> deleteImgs) {
         log.info("[AdminAccmController] modifyConfirm()");
+
+        // front에서 삭제한 image 배열을 담을 List
+        deleteImgs = new ArrayList<>();
 
         try {
             for (MultipartFile a_i_image : a_i_images) {
@@ -86,7 +91,7 @@ public class AdminAccmController {
 
         }
         // S3에 이미지 업로드하고 URL을 얻어옴
-        String imageUrl = adminAccmService.modifyConfirm(adminAccmDto, a_i_images);
+        String imageUrl = adminAccmService.modifyConfirm(adminAccmDto, a_i_images, deleteImgs);
 
         log.info("[imageUrl] : " + imageUrl);
         log.info("[AdminAccmController] dto : " + adminAccmDto);

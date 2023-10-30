@@ -80,9 +80,9 @@
     </update>
 
     <!-- 기존 이미지 삭제 -->
-    <delete id="deleteAccmImg" parameterType="Integer">
+    <delete id="deleteAccmImgs" parameterType="String">
         DELETE FROM tbl_accommodation_image
-        WHERE a_acc_no = #{a_acc_no}
+        WHERE a_i_no = #{a_i_no}
     </delete>
 
     <!-- String a_i_image 등록 -->

@@ -130,7 +130,7 @@ public class AdminAccmService implements IAdminAccmService {
     }
 
     @Override
-    public String modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image) {
+    public String modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image, List<String> deleteImgs) {
         log.info("[AdminAccmService] modifyConfirm()");
 
         List<String> a_i_images = new ArrayList<>();
@@ -158,10 +158,11 @@ public class AdminAccmService implements IAdminAccmService {
             // 새로운 이미지 추가(Insert)
             if (a_i_image != null) {
                 // 새로운 사진 업데이트(추가) 전 삭제해주는 작업
-                int isDelete = iAdminAccmDaoMapper.deleteAccmImg(a_acc_no);
+//                int isDelete = iAdminAccmDaoMapper.deleteAccmImg(a_acc_no);
+                int isDelete = iAdminAccmDaoMapper.deleteAccmImgs(deleteImgs);
 
                 if (isDelete > 0) {
-                    log.info("deleteAccmImg() SUCCESS!! ");
+                    log.info("deleteAccmImgs() SUCCESS!! ");
 
                     for (MultipartFile file : a_i_image) {
 
