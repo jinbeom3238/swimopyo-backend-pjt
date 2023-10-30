@@ -57,7 +57,7 @@
 
     <select id="selectAccmImg" parameterType="Integer" resultType="String">
         SELECT
-            a_i_image
+            a_i_no, a_i_image
         FROM
             tbl_accommodation_image
         where
@@ -84,6 +84,12 @@
         DELETE FROM tbl_accommodation_image
         WHERE a_acc_no = #{a_acc_no}
     </delete>
+
+    <!-- String a_i_image 등록 -->
+    <insert id="insertAccmAiImage" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto">
+        INSERT INTO tbl_accommodation_image (a_acc_no, a_i_image, a_i_reg_date, a_i_mod_date)
+        VALUES (#{a_acc_no}, #{a_i_image}, NOW(), NOW())
+    </insert>
 
     <!-- 삭제-->
     <update id="deleteAccmInfo" parameterType="Integer">

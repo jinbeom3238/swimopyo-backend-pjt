@@ -2,6 +2,7 @@ package com.btc.swimpyo.backend.controller.accm.admin;
 
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto;
+import com.btc.swimpyo.backend.mappers.accm.admin.IAdminAccmDaoMapper;
 import com.btc.swimpyo.backend.service.accm.admin.AdminAccmService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -92,7 +93,7 @@ public class AdminAccmController {
 
     }
 
-   // 삭제
+    // 삭제
     @PostMapping("/delete_confirm")
     public int deleteAccm(@RequestBody AdminAccmDto adminAccmDto) {
         log.info("[AdminAccmController] deleteAccm()");

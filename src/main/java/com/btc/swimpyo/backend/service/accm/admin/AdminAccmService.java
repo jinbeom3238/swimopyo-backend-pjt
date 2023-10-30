@@ -146,7 +146,7 @@ public class AdminAccmService implements IAdminAccmService {
 
         int result = iAdminAccmDaoMapper.updateAccmInfo(adminAccmDto);
         log.info("[AdminAccmService] updateAccmInfo()");
-        log.info("[updateAccmInfo] result : " + result);
+        log.info("result : " + result);
 
         // update가 되면
         if (result > 0) {
@@ -160,43 +160,42 @@ public class AdminAccmService implements IAdminAccmService {
                 // 새로운 사진 업데이트(추가) 전 삭제해주는 작업
                 int isDelete = iAdminAccmDaoMapper.deleteAccmImg(a_acc_no);
 
-                    if (isDelete > 0) {
-                        log.info("deleteAccmImg() SUCCESS!! ");
+                if (isDelete > 0) {
+                    log.info("deleteAccmImg() SUCCESS!! ");
 
-                        for (MultipartFile file : a_i_image) {
+                    for (MultipartFile file : a_i_image) {
 
-                            log.info("[AdminAccmService] a_i_image: -----> {}", file);
+                        log.info("[AdminAccmService] a_i_image: -----> {}", file);
 
-                            String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+                        String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
 
-                            adminAccmImageDto.setA_i_image(imageUrl);
+                        adminAccmImageDto.setA_i_image(imageUrl);
 
-                            log.info("[AdminAccmService] imageUrl: " + imageUrl);
+                        log.info("[AdminAccmService] imageUrl: " + imageUrl);
 
-                            // 필요없는 사진 삭제 후 새로운 사진 등록
-                            int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
-                            adminAccmDto.setA_i_image(adminAccmImageDto.getA_i_image());
-                            log.info("[insertAccmImage] adminAccmDto.getA_i_image(): " + adminAccmDto.getA_i_image());
-
-                            log.info("isInsert: " + isInsert);
-
-                        }
+                        // 필요없는 사진 삭제 후 새로운 사진 등록
+                        int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
+                        log.info("isInsert: " + isInsert);
 
                     }
 
-                    log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
-                    log.info("[AdminAccmService]: " + adminAccmDto);
-
-
                 }
 
-                return "숙박시설 정보 수정 완료";
+                log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
+                log.info("[AdminAccmService]: " + adminAccmDto);
+
 
             }
 
-            return "숙박시설 정보 수정 실패";
+            return "숙박시설 정보 수정 완료";
+
+        }
+
+        return "숙박시설 정보 수정 실패";
 
     }
+
+
 
     @Override
     public int deleteAccm(int a_m_no) {
