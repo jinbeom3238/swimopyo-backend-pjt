@@ -172,10 +172,10 @@ public class AdminAccmService implements IAdminAccmService {
                 log.info("deleteImgs NOT NULL!!");
 
                 // s3 삭제
-                for (String imageUrl : images) {
-                    s3Uploader.deleteFileFromS3(imageUrl);
-
-                }
+//                for (String imageUrl : images) {
+//                    s3Uploader.deleteFileFromS3(imageUrl);
+//
+//                }
 
                 // db 삭제
                 for(int i = 0; i < deleteImgs.size(); i++) {
@@ -184,9 +184,11 @@ public class AdminAccmService implements IAdminAccmService {
                     log.info("a_i_no: " + deleteNo);
 
                     int isdelete = iAdminAccmDaoMapper.selectAccmImgForDelete(deleteNo);
-                    log.info("[selectAccmImgForDelete] isdelete-----> {}", isdelete) ;
+                    log.info("[selectAccmImgForDelete] isdelete-----> {}", isdelete);
+                }
 
-                    if (isdelete > 0) {
+//                    if (isdelete > 0) {
+                        if(a_i_image != null) {
                         log.info("isdelete SUCCESS!!");
 
                         // s3 파일 업로드
@@ -201,7 +203,7 @@ public class AdminAccmService implements IAdminAccmService {
                             log.info("isInsert: " + isInsert);
                         }
 
-                    }
+
 
                 }
 
