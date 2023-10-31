@@ -19,4 +19,7 @@ public interface IAdminMemberDaoMapper {
 
     int deleteMember(String userEmail);
 
+    int updateAdmin(AdminMemberDto adminMemberDto);
+
+    AdminMemberDto selectAdminByEmail(AdminMemberDto adminMemberDto);
 }

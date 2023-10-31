@@ -75,6 +75,21 @@ public class AdminMemberController {
 
     }
 
+    @PostMapping("/modify")
+    public Object modify(@RequestBody Map<String, Object> msgMap, AdminMemberDto adminMemberDto){
+        log.info("modify");
+
+        int result = -1;
+        result = iAdminMemberService.modify(msgMap, adminMemberDto);
+        if(result == 0){
+            return "MemberAdminModifyFail";
+        } else if (result == 1) {
+            return "MemberAdminModifySuccess";
+        }
+
+        return result;
+    }
+
     @PostMapping("/refreshToken")
     public Object refreshToken(HttpServletRequest request, HttpServletResponse response, RefTokenEntity refTokenEntity) {
         log.info("refreshToken in");
@@ -145,4 +160,14 @@ public class AdminMemberController {
         return "signOut success";
     }
 
+    @PostMapping("/adminInfo")
+    public Object adminInfo(HttpServletRequest request,AdminMemberDto adminMemberDto){
+        log.info("adminInfo");
+
+        AdminMemberDto adminInfo = iAdminMemberService.adminInfo(request, adminMemberDto);
+        if(adminInfo == null){
+            return null;
+        }
+        return adminInfo;
+    }
 }

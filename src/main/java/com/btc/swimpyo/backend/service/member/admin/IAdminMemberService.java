@@ -20,5 +20,7 @@ public interface IAdminMemberService {
 
     String signOut(HttpServletRequest request, HttpServletResponse response, AdminMemberDto adminMemberDto, RefTokenEntity refTokenEntity);
 
+    int modify(Map<String, Object> msgMap, AdminMemberDto adminMemberDto);
 
+    AdminMemberDto adminInfo(HttpServletRequest request, AdminMemberDto adminMemberDto);
 }

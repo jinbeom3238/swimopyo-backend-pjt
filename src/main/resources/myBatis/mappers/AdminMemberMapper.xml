@@ -66,5 +66,29 @@
 <!--    </delete>-->
 
 
+    <update id="updateAdmin" parameterType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto" >
+
+        UPDATE
+            tbl_admin_member
+        SET
+            a_m_name = #{a_m_name},
+            a_m_phone = #{a_m_phone}
+        WHERE
+            a_m_email = #{a_m_email}
+    </update>
+
+    <select id="selectAdminByEmail" parameterType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto" resultType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto">
+
+        SELECT
+            *
+        FROM
+            tbl_admin_member
+        WHERE
+            a_m_email = #{a_m_email}
+        AND
+            use_yn = "Y"
+    </select>
+
+
 
 </mapper>

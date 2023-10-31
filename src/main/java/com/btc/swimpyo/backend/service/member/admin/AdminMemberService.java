@@ -30,6 +30,8 @@ public class AdminMemberService implements IAdminMemberService {
     @Value("${secret-key}")
     private String secretKey;
 
+
+
     @Autowired
     IAdminMemberDaoMapper iAdminMemberDaoMapper;
 
@@ -270,6 +272,46 @@ public class AdminMemberService implements IAdminMemberService {
 //
 //
         return null;
+    }
+
+    @Override
+    public int modify(Map<String, Object> msgMap, AdminMemberDto adminMemberDto) {
+        log.info("modify");
+        adminMemberDto.setA_m_email(msgMap.get("email").toString());
+        adminMemberDto.setA_m_name(msgMap.get("name").toString());
+        adminMemberDto.setA_m_phone(msgMap.get("phone").toString());
+
+        int result = iAdminMemberDaoMapper.updateAdmin(adminMemberDto);
+        if(result == 0){
+            return 0;
+        }
+
+
+
+        return 1;
+    }
+
+    @Override
+    public AdminMemberDto adminInfo(HttpServletRequest request,AdminMemberDto adminMemberDto) {
+        log.info("adminInfo");
+        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
+        final String checkingRefToken;
+
+        if (authHeader != null) {
+            String cookieToken = authHeader.substring(7);
+            checkingRefToken = cookieToken.split("=")[1];
+            adminMemberDto.setA_m_email(jwtAuthenticationFilter.getUserEmail(secretKey, checkingRefToken));
+
+            AdminMemberDto adminInfo = iAdminMemberDaoMapper.selectAdminByEmail(adminMemberDto);
+
+            adminInfo.setA_m_pw("******");
+
+            return adminInfo;
+
+        }
+        return null;
+
+
     }
 
 
