@@ -21,5 +21,5 @@ public interface IAdminMemberDaoMapper {
 
     int updateAdmin(AdminMemberDto adminMemberDto);
 
-    AdminMemberDto selectAdminByEmail(AdminMemberDto adminMemberDto);
+    int updateAdminForPw(AdminMemberDto adminMemberDto);
 }

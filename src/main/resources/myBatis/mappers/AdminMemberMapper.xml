@@ -28,6 +28,8 @@
             tbl_admin_member
         WHERE
             a_m_email = #{a_m_email}
+        AND
+            use_yn = "Y"
     </select>
 
     <insert id="insertRefToken" parameterType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity">
@@ -77,17 +79,16 @@
             a_m_email = #{a_m_email}
     </update>
 
-    <select id="selectAdminByEmail" parameterType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto" resultType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto">
+    <update id="updateAdminForPw" parameterType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto" >
 
-        SELECT
-            *
-        FROM
+        UPDATE
             tbl_admin_member
+        SET
+            a_m_pw = #{a_m_pw}
         WHERE
             a_m_email = #{a_m_email}
-        AND
-            use_yn = "Y"
-    </select>
+    </update>
+
 
 
 

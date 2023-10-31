@@ -23,4 +23,6 @@ public interface IAdminMemberService {
     int modify(Map<String, Object> msgMap, AdminMemberDto adminMemberDto);
 
     AdminMemberDto adminInfo(HttpServletRequest request, AdminMemberDto adminMemberDto);
+
+    String changePw(Map<String, Object> msgMap, HttpServletRequest request, AdminMemberDto adminMemberDto);
 }

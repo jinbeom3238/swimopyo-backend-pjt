@@ -302,7 +302,7 @@ public class AdminMemberService implements IAdminMemberService {
             checkingRefToken = cookieToken.split("=")[1];
             adminMemberDto.setA_m_email(jwtAuthenticationFilter.getUserEmail(secretKey, checkingRefToken));
 
-            AdminMemberDto adminInfo = iAdminMemberDaoMapper.selectAdminByEmail(adminMemberDto);
+            AdminMemberDto adminInfo = iAdminMemberDaoMapper.isMember(adminMemberDto);
 
             adminInfo.setA_m_pw("******");
 
@@ -312,6 +312,35 @@ public class AdminMemberService implements IAdminMemberService {
         return null;
 
 
+    }
+
+    @Override
+    public String changePw(Map<String, Object> msgMap, HttpServletRequest request, AdminMemberDto adminMemberDto) {
+        log.info("changePw");
+
+        adminMemberDto.setA_m_pw(msgMap.get("beforePw").toString());
+
+        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
+        final String checkingRefToken;
+
+        if (authHeader != null) {
+            String cookieToken = authHeader.substring(7);
+            checkingRefToken = cookieToken.split("=")[1];
+            adminMemberDto.setA_m_email(jwtAuthenticationFilter.getUserEmail(secretKey, checkingRefToken));
+            AdminMemberDto idVerifiedAdminMemberDto = iAdminMemberDaoMapper.isMember(adminMemberDto);
+
+            if (idVerifiedAdminMemberDto != null && passwordEncoder.matches(adminMemberDto.getA_m_pw(), idVerifiedAdminMemberDto.getA_m_pw())) {
+                adminMemberDto.setA_m_pw(passwordEncoder.encode(msgMap.get("afterPw").toString()));
+                int result = iAdminMemberDaoMapper.updateAdminForPw(adminMemberDto);
+                if(result > 0){
+                    return "AdminChangePwSuccess";
+                } else {
+                    return "AdminChangePwFail";
+                }
+            }
+        }
+
+        return null;
     }
 
 

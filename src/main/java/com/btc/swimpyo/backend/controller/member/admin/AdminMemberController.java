@@ -144,7 +144,10 @@ public class AdminMemberController {
     }
 
     @PostMapping("/sign_out")
-    public Object signOut(HttpServletRequest request, HttpServletResponse response,AdminMemberDto adminMemberDto, RefTokenEntity refTokenEntity) {
+    public Object signOut(HttpServletRequest request,
+                          HttpServletResponse response,
+                          AdminMemberDto adminMemberDto,
+                          RefTokenEntity refTokenEntity) {
         log.info("signOut");
 
         String result = iAdminMemberService.signOut(request, response, adminMemberDto, refTokenEntity);
@@ -170,4 +173,21 @@ public class AdminMemberController {
         }
         return adminInfo;
     }
+
+    @PostMapping("/changePw")
+    public Object changePw(@RequestBody Map<String, Object> msgMap,HttpServletRequest request,AdminMemberDto adminMemberDto){
+        log.info("changePw");
+
+        String result = iAdminMemberService.changePw(msgMap, request, adminMemberDto);
+
+        if(result == "AdminChangePwSuccess") {
+            return "AdminChangePwSuccess";
+        }
+        if(result == "AdminChangePwFail"){
+            return "AdminChangePwFail";
+        }
+
+        return "AdminChangePwFail";
+    }
+
 }
