@@ -10,34 +10,35 @@ import java.util.Map;
 @Mapper
 public interface IAdminAccmDaoMapper {
 
-    // 등록
+    /*
+     * 등록
+     */
     public int insertAccmInfo(AdminAccmDto adminAccmDto);
     public int selectAccmForAmNo(int a_m_no);
-//    public int insertAccmImage(int a_acc_no, String imageUrl);
     public int insertAccmImage(AdminAccmImageDto adminAccmImageDto);
 
-
-    // 상세페이지 조회
+    /*
+     * 상세페이지 조회
+     */
     public AdminAccmDto selectAccmInfo(int a_m_no);
     public List<String> selectAccmImg(int a_acc_no);
-
-    // 수정
-    public int updateAccmInfo(AdminAccmDto adminAccmDto);
-    public int deleteAccmImg(int a_acc_no);  // 새로운 사진 추가 전 delete
-    public int insertAccmAiImage(AdminAccmImageDto adminAccmImageDto);
-    public int deleteAccmImgs(List<Integer> deleteImgs);
-    public void updateAccmImg(Map<String, Object> msgData); // 새로운 이미지 update
-    public List<String> selectAccmImgForUpdate(int a_acc_no); // 기존 이미지 select
-    public AdminAccmDto selectAccmInfoForUpdate(int a_acc_no);  // 수정된 숙박시설 정보 select
-
-
-    // 삭제
-    public int deleteAccmInfo(int a_m_no);
-
-
+    // 숙박시설 a_i_no front에 보내주기 위해 추가
     public List<Integer> selectAccmImgNo(int a_acc_no);
 
-    public int selectAccmImgForDelete(int deleteNo);
+    /*
+     * 수정
+     */
+    // 이미지를 제외한 숙박시설 정보 update
+    public int updateAccmInfo(AdminAccmDto adminAccmDto);
+    // front에서 넘어온 삭제할 a_i_no 리스트들에 대한 image 값들을 들고 오기 위함
+    public List<String> selectAccmImgs(int deleteNo);
+    // deleteNo를 통해 기존 이미지 삭제
+    public int deleteAccmdelImgs(int deleteNo);
 
-//    public String selectAccmImgForDelete(Integer integer);  // a_i_no
+    /*
+     * 삭제
+     */
+    public int deleteAccmInfo(int a_m_no);
+    public int deleteAccmImg(int a_acc_no);  // 새로운 사진 추가 전 delete
+
 }

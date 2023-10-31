@@ -76,12 +76,9 @@ public class AdminAccmController {
     public void modifyConfirm(@RequestPart(value="adminAccmDto", required = false) AdminAccmDto adminAccmDto, @RequestPart(value="a_i_image", required = false) MultipartFile[] a_i_images, @RequestParam(value = "deleteImg", required = false) List<Integer> deleteImgs) {
         log.info("[AdminAccmController] modifyConfirm()");
 
-
-        // front에서 삭제한 image 배열을 담을 List
-//        deleteImgs = new ArrayList<>();
-
         log.info("deleteImgs: {}", deleteImgs);
 
+        // 추가된 이미지가 있다면
         if(a_i_images != null) {
             try {
                 for (MultipartFile a_i_image : a_i_images) {
@@ -96,9 +93,9 @@ public class AdminAccmController {
             }
         }
         // S3에 이미지 업로드하고 URL을 얻어옴
-        String imageUrl = adminAccmService.modifyConfirm(adminAccmDto, a_i_images, deleteImgs);
+        adminAccmService.modifyConfirm(adminAccmDto, a_i_images, deleteImgs);
 
-        log.info("[imageUrl] : " + imageUrl);
+//        log.info("[imageUrl] : " + imageUrl);
         log.info("[AdminAccmController] dto : " + adminAccmDto);
 
     }

@@ -1,5 +1,6 @@
 package com.btc.swimpyo.backend.utils;
 
+import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,12 @@ public class S3Uploader {
 
     @Value("${cloud.aws.s3.bucket}")
     private String bucket;
+
+    /*@Value("${cloud.aws.credentials.access-key}")
+    private String accessKey;
+
+    @Value("${cloud.aws.credentials.secret-key}")
+    private String secretKey;*/
 
     public String uploadFileToS3(MultipartFile multipartFile, String filePath) {
         // MultipartFile -> File 로 변환
@@ -91,14 +98,33 @@ public class S3Uploader {
 
     public void deleteFileFromS3(String imageUrl) {
         String fileName = imageUrl.substring(imageUrl.lastIndexOf("/") + 1);
+        log.info("fileName --> {} ", fileName);
 
         try {
-            amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, fileName));
+            amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, "static/test/" + fileName)); // "static/test/"를 추가하여 경로를 지정
             log.info("[S3Uploader] File deleted from S3: " + fileName);
         } catch (AmazonServiceException e) {
             log.error("[S3Uploader] Error deleting file from S3: " + fileName, e);
         }
     }
+
+    /*public void deleteFileFromS3(String key) {
+        try {
+            //Delete 객체 생성
+            DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest(this.bucket, key);
+            //Delete
+            log.info("deleteObject 호출 전: bucket={}, key={}", this.bucket, key);
+            this.amazonS3Client.deleteObject(deleteObjectRequest);
+            log.info("deleteObject 호출 후: bucket={}, key={}", this.bucket, key);
+
+            log.info(String.format("[%s] deletion complete", key));
+
+        } catch (AmazonServiceException e) {
+            e.printStackTrace();
+        } catch (SdkClientException e) {
+            e.printStackTrace();
+        }
+    }*/
 
     // MultipartFile을 받아서 로컬 파일로 변환하는 과정
     public Optional<File> convert(MultipartFile file) throws IOException {
