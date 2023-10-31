@@ -105,6 +105,7 @@ public class AdminAccmService implements IAdminAccmService {
         log.info("adminAccDto : " + adminAccmDto);
         log.info("[AdminAccmService] a_m_no :" + a_m_no);
 //        log.info("[AdminAccmService] adminAccmDto.getA_m_no() :" + adminAccmDto.getA_m_no());
+        List<Integer> a_i_nos = adminAccmDto.getA_i_nos();
 
 
         // a_acc_name이 있다면 true
@@ -125,7 +126,8 @@ public class AdminAccmService implements IAdminAccmService {
 
 
                 // 숙박시설 이미지 받아오기
-                List<Integer> a_i_nos = iAdminAccmDaoMapper.selectAccmImgNo(a_acc_no);
+//                List<Integer> a_i_nos = iAdminAccmDaoMapper.selectAccmImgNo(a_acc_no);
+                a_i_nos = iAdminAccmDaoMapper.selectAccmImgNo(a_acc_no);
                 log.info("[AdminAccmService] [selectAccmImg] a_i_nos : " + a_i_nos);
 //                adminAccmDto.getA_i_nos(a_i_nos);
 
@@ -139,6 +141,7 @@ public class AdminAccmService implements IAdminAccmService {
         }
         msgData.put("adminAccmDto", adminAccmDto);
         msgData.put("a_i_images", a_i_images);
+        msgData.put("a_i_nos", a_i_nos);
 
         return msgData;
 
