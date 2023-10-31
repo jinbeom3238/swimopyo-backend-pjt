@@ -97,9 +97,6 @@ public class AdminAccmService implements IAdminAccmService {
         Map<String, Object> msgData = new HashMap<>();
         List<String> a_i_images = new ArrayList<>();
 
-
-        AdminAccmImageDto adminAccmImageDto = new AdminAccmImageDto();
-
         // 숙박시설 정보(이미지 제외) 들을 가지고 옴
         AdminAccmDto adminAccmDto = iAdminAccmDaoMapper.selectAccmInfo(a_m_no);
         log.info("adminAccDto : " + adminAccmDto);
@@ -126,10 +123,8 @@ public class AdminAccmService implements IAdminAccmService {
 
 
                 // 숙박시설 이미지 받아오기
-//                List<Integer> a_i_nos = iAdminAccmDaoMapper.selectAccmImgNo(a_acc_no);
                 a_i_nos = iAdminAccmDaoMapper.selectAccmImgNo(a_acc_no);
                 log.info("[AdminAccmService] [selectAccmImg] a_i_nos : " + a_i_nos);
-//                adminAccmDto.getA_i_nos(a_i_nos);
 
                 a_i_images = iAdminAccmDaoMapper.selectAccmImg(a_acc_no);
                 log.info("[AdminAccmService] [selectAccmImg] a_acc_no : " + a_acc_no);
