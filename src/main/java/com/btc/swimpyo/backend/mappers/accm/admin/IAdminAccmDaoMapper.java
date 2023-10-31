@@ -35,4 +35,5 @@ public interface IAdminAccmDaoMapper {
     public int deleteAccmInfo(int a_m_no);
 
 
+    public List<Integer> selectAccmImgNo(int a_acc_no);
 }

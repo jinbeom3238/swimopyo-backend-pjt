@@ -97,11 +97,15 @@ public class AdminAccmService implements IAdminAccmService {
         Map<String, Object> msgData = new HashMap<>();
         List<String> a_i_images = new ArrayList<>();
 
+
+        AdminAccmImageDto adminAccmImageDto = new AdminAccmImageDto();
+
         // 숙박시설 정보(이미지 제외) 들을 가지고 옴
         AdminAccmDto adminAccmDto = iAdminAccmDaoMapper.selectAccmInfo(a_m_no);
         log.info("adminAccDto : " + adminAccmDto);
         log.info("[AdminAccmService] a_m_no :" + a_m_no);
-        log.info("[AdminAccmService] adminAccmDto.getA_m_no() :" + adminAccmDto.getA_m_no());
+//        log.info("[AdminAccmService] adminAccmDto.getA_m_no() :" + adminAccmDto.getA_m_no());
+
 
         // a_acc_name이 있다면 true
         // 문자열 유효성 체크할 경우. true인데 false로 반환하는 경우가 있음.
@@ -109,11 +113,22 @@ public class AdminAccmService implements IAdminAccmService {
         if (StringUtils.hasText(adminAccmDto.getA_acc_name())) {
             
             // a_acc_no를 가져와서 image를 보여줌
+
             int a_acc_no = iAdminAccmDaoMapper.selectAccmForAmNo(a_m_no);
+
             log.info("[AdminAccmService] a_acc_no: " + a_acc_no);
 
             if (a_acc_no > 0) {
+                log.info("selectAccmForAmNo success!!");
+
+                log.info("[AdminAccmService] a_acc_no: " + a_acc_no);
+
+
                 // 숙박시설 이미지 받아오기
+                List<Integer> a_i_nos = iAdminAccmDaoMapper.selectAccmImgNo(a_acc_no);
+                log.info("[AdminAccmService] [selectAccmImg] a_i_nos : " + a_i_nos);
+//                adminAccmDto.getA_i_nos(a_i_nos);
+
                 a_i_images = iAdminAccmDaoMapper.selectAccmImg(a_acc_no);
                 log.info("[AdminAccmService] [selectAccmImg] a_acc_no : " + a_acc_no);
                 log.info("[AdminAccmService] [selectAccmImg] a_m_no : " + a_m_no);

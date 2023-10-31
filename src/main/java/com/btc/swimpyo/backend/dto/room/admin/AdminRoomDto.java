@@ -2,6 +2,8 @@ package com.btc.swimpyo.backend.dto.room.admin;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class AdminRoomDto {
 
@@ -18,5 +20,9 @@ public class AdminRoomDto {
     private String a_r_content;
     private String a_r_reg_date;
     private String a_r_mod_date;
+
+    private int r_i_no;
+    private String r_i_image;
+    private List<String> r_i_images;
 
 }

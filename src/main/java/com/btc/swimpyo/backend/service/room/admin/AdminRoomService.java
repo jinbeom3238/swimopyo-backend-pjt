@@ -3,14 +3,18 @@ package com.btc.swimpyo.backend.service.room.admin;
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto;
 import com.btc.swimpyo.backend.dto.room.admin.AdminRoomImageDto;
-import com.btc.swimpyo.backend.mappers.accm.admin.IAdminAccmDaoMapper;
 import com.btc.swimpyo.backend.mappers.room.admin.IAdminRoomDaoMapper;
 import com.btc.swimpyo.backend.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @Service
@@ -73,6 +77,44 @@ public class AdminRoomService implements IAdminRoomService{
 
         // 예외 발생 시 null 또는 예외 메시지 반환
         return "이미지 업로드 중 오류가 발생했습니다.";
+    }
+
+    /*
+     * 상세 페이지 조회
+     */
+    // 숙박시설 정보 조회(이미지 제외)
+    @Override
+    public Map<String, Object> showRoomDetail(int a_m_no) {
+        log.info("[AdminRoomService] showRoomDetail()");
+
+        Map<String, Object> msgData = new HashMap<>();
+        List<String> r_i_images = new ArrayList<>();
+
+        // Room 정보(이미지)들을 가지고 옴
+        AdminRoomDto adminRoomDto = iAdminRoomDaoMapper.selectRoomInfo(a_m_no);
+        log.info("[selectRoomInfo] adminRoomDto: " + adminRoomDto);
+        log.info("[selectRoomInfo] a_m_no: " + a_m_no);
+        int a_acc_no = adminRoomDto.getA_acc_no();
+
+        if(StringUtils.hasText(adminRoomDto.getA_r_name())) {
+            int a_r_no = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
+            log.info("[selectRoomForArNo] a_r_no: " + a_r_no);
+
+            if (a_r_no > 0) {
+                // Room 이미지 받아오기
+                r_i_images = iAdminRoomDaoMapper.selectRoomImg(a_r_no);
+                log.info("[selectRoomImg] a_r_no: " + a_r_no);
+                log.info("[selectRoomImg] a_m_no: " + a_m_no);
+                log.info("[selectRoomImg] r_i_images: " + r_i_images);
+
+            }
+
+        }
+        msgData.put("adminRoomDto", adminRoomDto);
+        msgData.put("r_i_images", r_i_images);
+
+        return msgData;
+
     }
 }
 

@@ -55,12 +55,23 @@
             aa.use_yn = 'Y'
     </select>
 
-    <select id="selectAccmImg" parameterType="Integer" resultType="String">
+
+
+    <select id="selectAccmImgNo" parameterType="Integer" resultType="Integer">
         SELECT
-            a_i_no, a_i_image
+            a_i_no
         FROM
             tbl_accommodation_image
         where
+            a_acc_no = #{a_acc_no}
+    </select>
+
+    <select id="selectAccmImg" parameterType="Integer" resultType="String">
+        SELECT
+            a_i_image
+        FROM
+            tbl_accommodation_image
+        WHERE
             a_acc_no = #{a_acc_no}
     </select>
 

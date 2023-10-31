@@ -1,7 +1,7 @@
 package com.btc.swimpyo.backend.controller.room.admin;
 
-import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto;
+import com.btc.swimpyo.backend.dto.room.admin.AdminRoomImageDto;
 import com.btc.swimpyo.backend.service.room.admin.AdminRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
 @RestController
 @Log4j2
@@ -49,6 +50,22 @@ public class AdminRoomController {
     }
 
     // 상세 페이지 조회
+    @PostMapping("/showRoomDetail")
+    public Map<String, Object> showRoomDetail(@RequestParam("a_m_no") int a_m_no) {
+        log.info("[AdminAccmController] showRoomDetail()");
+
+        AdminRoomDto adminRoomDto = new AdminRoomDto();
+        AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
+        adminRoomDto.setR_i_image(adminRoomImageDto.getR_i_image());
+
+        log.info("[AdminAccmController] a_m_no : " + a_m_no);
+        Map<String, Object> msgData = adminRoomService.showRoomDetail(a_m_no);
+
+        return msgData;
+
+    }
+
+
 
 
     // 수정

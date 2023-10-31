@@ -43,4 +43,28 @@
         values (#{a_r_no}, #{r_i_image}, NOW())
     </insert>
 
+    <!-- 상세페이지 조회 - Room 정보(이미지 제외) -->
+    <select id="selectRoomInfo" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto" resultType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
+        select
+            a_r_no, a_acc_no, a_m_no, a_r_name, a_r_state, a_r_price, a_r_check_in, a_r_check_out, a_r_count, a_r_content, a_r_reg_date, a_r_mod_date
+        from
+            tbl_admin_room
+        where
+            a_m_no = #{a_m_no}
+        and
+            a_acc_no = #{a_acc_no}
+        and
+            use_yn = 'Y'
+    </select>
+
+    <!-- 상세페이지 조회 - Room 이미지 -->
+    <select id="selectRoomImg" parameterType="Integer" resultType="String">
+        select
+            r_i_no, r_i_image
+        from
+            tbl_room_image
+        where
+            a_r_no = #{a_r_no}
+    </select>
+
 </mapper>
