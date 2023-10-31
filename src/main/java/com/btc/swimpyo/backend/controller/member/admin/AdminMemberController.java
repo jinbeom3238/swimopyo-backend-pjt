@@ -22,7 +22,7 @@ import java.util.Map;
 
 @Log4j2
 @RestController
-@RequestMapping("/api/member/admin")
+@RequestMapping("/api/admin/member")
 @RequiredArgsConstructor
 public class AdminMemberController {
 
