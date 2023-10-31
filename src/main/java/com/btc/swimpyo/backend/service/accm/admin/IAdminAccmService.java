@@ -15,7 +15,7 @@ public interface IAdminAccmService {
     //상세페이지 보기
     public Map<String, Object> showAccmDetail(int a_m_no);
     // 수정
-    public String modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_images, List<String> deleteImgs);
+    public String modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image, List<Integer> deleteImgs);
 
     // 삭제
     public int deleteAccm(int a_m_no);

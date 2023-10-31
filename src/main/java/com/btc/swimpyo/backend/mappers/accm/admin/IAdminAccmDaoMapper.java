@@ -25,7 +25,7 @@ public interface IAdminAccmDaoMapper {
     public int updateAccmInfo(AdminAccmDto adminAccmDto);
     public int deleteAccmImg(int a_acc_no);  // 새로운 사진 추가 전 delete
     public int insertAccmAiImage(AdminAccmImageDto adminAccmImageDto);
-    public int deleteAccmImgs(List<String> deleteImgs);
+    public int deleteAccmImgs(List<Integer> deleteImgs);
     public void updateAccmImg(Map<String, Object> msgData); // 새로운 이미지 update
     public List<String> selectAccmImgForUpdate(int a_acc_no); // 기존 이미지 select
     public AdminAccmDto selectAccmInfoForUpdate(int a_acc_no);  // 수정된 숙박시설 정보 select
@@ -36,4 +36,8 @@ public interface IAdminAccmDaoMapper {
 
 
     public List<Integer> selectAccmImgNo(int a_acc_no);
+
+    public int selectAccmImgForDelete(int deleteNo);
+
+//    public String selectAccmImgForDelete(Integer integer);  // a_i_no
 }

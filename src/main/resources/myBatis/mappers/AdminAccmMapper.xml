@@ -31,7 +31,6 @@
             a_m_no = #{a_m_no}
     </select>
 
-
     <!-- 숙박시설 Image 등록 -->
     <insert id="insertAccmImage" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto">
         INSERT INTO tbl_accommodation_image (a_acc_no, a_i_image, a_i_reg_date, a_i_mod_date)
@@ -54,8 +53,6 @@
         AND
             aa.use_yn = 'Y'
     </select>
-
-
 
     <select id="selectAccmImgNo" parameterType="Integer" resultType="Integer">
         SELECT
@@ -91,7 +88,7 @@
     </update>
 
     <!-- 기존 이미지 삭제 -->
-    <delete id="deleteAccmImgs" parameterType="String">
+    <delete id="deleteAccmImgs" parameterType="Integer">
         DELETE FROM tbl_accommodation_image
         WHERE a_i_no = #{a_i_no}
     </delete>
@@ -101,6 +98,23 @@
         INSERT INTO tbl_accommodation_image (a_acc_no, a_i_image, a_i_reg_date, a_i_mod_date)
         VALUES (#{a_acc_no}, #{a_i_image}, NOW(), NOW())
     </insert>
+
+    <!-- img url  -->
+   <!--<select id="selectAccmImgForDelete" parameterType="Integer" resultType="String">
+        SELECT
+            a_i_image
+        FROM
+            tbl_accommodation_image
+        WHERE
+        deleteNo = #{deleteNo}
+    </select>-->
+
+    <delete id="selectAccmImgForDelete" parameterType="Integer">
+        delete from
+            tbl_accommodation_image
+        where
+            a_i_no = #{deleteNo}
+    </delete>
 
     <!-- 삭제-->
     <update id="deleteAccmInfo" parameterType="Integer">

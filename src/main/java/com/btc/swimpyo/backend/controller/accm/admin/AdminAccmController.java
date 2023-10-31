@@ -73,22 +73,27 @@ public class AdminAccmController {
     // 수정
     // consumes는 들어오는 데이터 타입을 정의할때 이용
     @PostMapping(value = "modify_confirm", consumes="multipart/form-data")
-    public void modifyConfirm(@RequestPart(value="adminAccmDto", required = false) AdminAccmDto adminAccmDto, @RequestPart(value="a_i_image", required = false) MultipartFile[] a_i_images, List<String> deleteImgs) {
+    public void modifyConfirm(@RequestPart(value="adminAccmDto", required = false) AdminAccmDto adminAccmDto, @RequestPart(value="a_i_image", required = false) MultipartFile[] a_i_images, @RequestParam(value = "deleteImg", required = false) List<Integer> deleteImgs) {
         log.info("[AdminAccmController] modifyConfirm()");
 
-        // front에서 삭제한 image 배열을 담을 List
-        deleteImgs = new ArrayList<>();
 
-        try {
-            for (MultipartFile a_i_image : a_i_images) {
-                InputStream inputStream = a_i_image.getInputStream();
-                // 이제 inputStream을 사용하여 파일을 처리할 수 있습니다.
-                log.info("[AdminAccmController] inputStream: " + inputStream);
+        // front에서 삭제한 image 배열을 담을 List
+//        deleteImgs = new ArrayList<>();
+
+        log.info("deleteImgs: {}", deleteImgs);
+
+        if(a_i_images != null) {
+            try {
+                for (MultipartFile a_i_image : a_i_images) {
+                    InputStream inputStream = a_i_image.getInputStream();
+                    // 이제 inputStream을 사용하여 파일을 처리할 수 있습니다.
+                    log.info("[AdminAccmController] inputStream: " + inputStream);
+
+                }
+            } catch (IOException e) {
+                log.error("MultipartFile에서 InputStream을 가져오는 중 에러 발생", e);
 
             }
-        } catch (IOException e){
-            log.error("MultipartFile에서 InputStream을 가져오는 중 에러 발생", e);
-
         }
         // S3에 이미지 업로드하고 URL을 얻어옴
         String imageUrl = adminAccmService.modifyConfirm(adminAccmDto, a_i_images, deleteImgs);

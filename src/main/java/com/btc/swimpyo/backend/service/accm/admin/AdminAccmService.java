@@ -109,7 +109,7 @@ public class AdminAccmService implements IAdminAccmService {
         // 문자열 유효성 체크할 경우. true인데 false로 반환하는 경우가 있음.
         // StringUtils.hasText => 공백, null, 길이 0일 때 false값을 주므로 오류 발생률을 줄여줌
         if (StringUtils.hasText(adminAccmDto.getA_acc_name())) {
-            
+
             // a_acc_no를 가져와서 image를 보여줌
 
             int a_acc_no = iAdminAccmDaoMapper.selectAccmForAmNo(a_m_no);
@@ -123,9 +123,11 @@ public class AdminAccmService implements IAdminAccmService {
 
 
                 // 숙박시설 이미지 받아오기
+                // 숙박시설 a_i_no front에 보내주기 위해 추가
                 a_i_nos = iAdminAccmDaoMapper.selectAccmImgNo(a_acc_no);
                 log.info("[AdminAccmService] [selectAccmImg] a_i_nos : " + a_i_nos);
 
+                // 위에서 받은 a_i_no를 통해 a_i_image를 받아옴
                 a_i_images = iAdminAccmDaoMapper.selectAccmImg(a_acc_no);
                 log.info("[AdminAccmService] [selectAccmImg] a_acc_no : " + a_acc_no);
                 log.info("[AdminAccmService] [selectAccmImg] a_m_no : " + a_m_no);
@@ -142,11 +144,12 @@ public class AdminAccmService implements IAdminAccmService {
 
     }
 
+    // 수정
     @Override
-    public String modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image, List<String> deleteImgs) {
+    public String modifyConfirm(AdminAccmDto adminAccmDto, MultipartFile[] a_i_image, List<Integer> deleteImgs) {
         log.info("[AdminAccmService] modifyConfirm()");
 
-        List<String> a_i_images = new ArrayList<>();
+        List<String> images = new ArrayList<>();
         AdminAccmImageDto adminAccmImageDto = new AdminAccmImageDto();
         int a_acc_no = adminAccmDto.getA_acc_no();
         log.info("a_acc_no: " + a_acc_no);
@@ -162,52 +165,71 @@ public class AdminAccmService implements IAdminAccmService {
         log.info("result : " + result);
 
         // update가 되면
-        if (result > 0) {
+//        if (result > 0) {
             log.info("[AdminAccmService] updateAccmInfo() SUCCESS!! GOGO UPDATE IMAGE~!!");
-//            Map<String, Object> msgData = new HashMap<>();
-//            msgData.put("a_i_image", a_i_image);
-//            msgData.put("a_acc_no", a_acc_no);
 
-            // 새로운 이미지 추가(Insert)
-            if (a_i_image != null) {
-                // 새로운 사진 업데이트(추가) 전 삭제해주는 작업
-//                int isDelete = iAdminAccmDaoMapper.deleteAccmImg(a_acc_no);
-                int isDelete = iAdminAccmDaoMapper.deleteAccmImgs(deleteImgs);
+            if(deleteImgs != null) {
+                log.info("deleteImgs NOT NULL!!");
 
-                if (isDelete > 0) {
-                    log.info("deleteAccmImgs() SUCCESS!! ");
+                // s3 삭제
+                for (String imageUrl : images) {
+                    s3Uploader.deleteFileFromS3(imageUrl);
 
-                    for (MultipartFile file : a_i_image) {
+                }
 
-                        log.info("[AdminAccmService] a_i_image: -----> {}", file);
+                // db 삭제
+                for(int i = 0; i < deleteImgs.size(); i++) {
+                    adminAccmDto.setA_i_no(deleteImgs.get(i));
+                    int deleteNo = adminAccmDto.getA_i_no();
+                    log.info("a_i_no: " + deleteNo);
 
-                        String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+                    int isdelete = iAdminAccmDaoMapper.selectAccmImgForDelete(deleteNo);
+                    log.info("[selectAccmImgForDelete] isdelete-----> {}", isdelete) ;
 
-                        adminAccmImageDto.setA_i_image(imageUrl);
+                    if (isdelete > 0) {
+                        log.info("isdelete SUCCESS!!");
 
-                        log.info("[AdminAccmService] imageUrl: " + imageUrl);
+                        // s3 파일 업로드
+                        for (MultipartFile file : a_i_image) {
+                            log.info("[AdminAccmService] a_i_image: -----> {}", file);
+                            String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+                            adminAccmImageDto.setA_i_image(imageUrl);
+                            log.info("[AdminAccmService] imageUrl: " + imageUrl);
 
-                        // 필요없는 사진 삭제 후 새로운 사진 등록
-                        int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
-                        log.info("isInsert: " + isInsert);
+                            // 필요없는 사진 삭제 후 새로운 사진 등록
+                            int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
+                            log.info("isInsert: " + isInsert);
+                        }
 
                     }
 
                 }
 
-                log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
-                log.info("[AdminAccmService]: " + adminAccmDto);
+//                }
+            } else if(deleteImgs == null) {
+                log.info("deleteImgs NULL!!");
 
+                // s3 파일 업로드
+                for (MultipartFile file : a_i_image) {
+                    log.info("[AdminAccmService] a_i_image: -----> {}", file);
+                    String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+                    adminAccmImageDto.setA_i_image(imageUrl);
+                    log.info("[AdminAccmService] imageUrl: " + imageUrl);
 
+                    // 필요없는 사진 삭제 후 새로운 사진 등록
+                    int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
+                    log.info("isInsert: " + isInsert);
+                }
             }
 
+            log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
+            log.info("[AdminAccmService]: " + adminAccmDto);
             return "숙박시설 정보 수정 완료";
 
         }
 
-        return "숙박시설 정보 수정 실패";
 
-    }
+
 
 
 

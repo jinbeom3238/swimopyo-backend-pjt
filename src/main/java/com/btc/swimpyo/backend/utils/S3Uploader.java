@@ -13,9 +13,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -98,7 +100,6 @@ public class S3Uploader {
         }
     }
 
-
     // MultipartFile을 받아서 로컬 파일로 변환하는 과정
     public Optional<File> convert(MultipartFile file) throws IOException {
         // 임시 디렉토리에 파일을 생성합니다.
@@ -122,6 +123,7 @@ public class S3Uploader {
 
         return Optional.empty();
     }
+
 
 
 }

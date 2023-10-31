@@ -36,6 +36,7 @@ public class AdminAccmDto {
     private int a_i_no;
     private List<Integer> a_i_nos;
 
+
 //    private List<String> a_acc_images; // 여러 장의 이미지 URL을 저장할 리스트
 
 }
