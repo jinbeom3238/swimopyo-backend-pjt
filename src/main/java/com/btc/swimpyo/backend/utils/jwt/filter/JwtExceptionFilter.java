@@ -1,6 +1,6 @@
 package com.btc.swimpyo.backend.utils.jwt.filter;
 
-import com.btc.swimpyo.backend.utils.jwt.entity.ErrorMessage;
+import com.btc.swimpyo.backend.utils.jwt.entity.ErrorCode;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -19,29 +19,29 @@ public class JwtExceptionFilter extends OncePerRequestFilter {
             filterChain.doFilter(request, response);
         } catch (JwtException ex) {
             String message = ex.getMessage();
-            if(ErrorMessage.UNKNOWN_ERROR.getMsg().equals(message)) {
-                setResponse(response, ErrorMessage.UNKNOWN_ERROR);
+            if(ErrorCode.UNKNOWN_ERROR.getMessage().equals(message)) {
+                setResponse(response, ErrorCode.UNKNOWN_ERROR);
             }
             //잘못된 타입의 토큰인 경우
-            else if(ErrorMessage.WRONG_TYPE_TOKEN.getMsg().equals(message)) {
-                setResponse(response, ErrorMessage.WRONG_TYPE_TOKEN);
+            else if(ErrorCode.WRONG_TYPE_TOKEN.getMessage().equals(message)) {
+                setResponse(response, ErrorCode.WRONG_TYPE_TOKEN);
             }
             //토큰 만료된 경우
-            else if(ErrorMessage.EXPIRED_TOKEN.getMsg().equals(message)) {
-                setResponse(response, ErrorMessage.EXPIRED_TOKEN);
+            else if(ErrorCode.EXPIRED_TOKEN.getMessage().equals(message)) {
+                setResponse(response, ErrorCode.EXPIRED_TOKEN);
             }
             //지원되지 않는 토큰인 경우
-            else if(ErrorMessage.UNSUPPORTED_TOKEN.getMsg().equals(message)) {
-                setResponse(response, ErrorMessage.UNSUPPORTED_TOKEN);
+            else if(ErrorCode.UNSUPPORTED_TOKEN.getMessage().equals(message)) {
+                setResponse(response, ErrorCode.UNSUPPORTED_TOKEN);
             }
             else {
-                setResponse(response, ErrorMessage.ACCESS_DENIED);
+                setResponse(response, ErrorCode.ACCESS_DENIED);
             }
         }
     }
-    private void setResponse(HttpServletResponse response, ErrorMessage errorMessage) throws RuntimeException, IOException {
+    private void setResponse(HttpServletResponse response, ErrorCode errorCode) throws RuntimeException, IOException {
         response.setContentType("application/json;charset=UTF-8");
-        response.setStatus(errorMessage.getCode());
-        response.getWriter().print(errorMessage.getMsg());
+        response.setStatus(errorCode.getStatus());
+        response.getWriter().print(errorCode.getMessage());
     }
 }

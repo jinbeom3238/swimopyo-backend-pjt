@@ -1,6 +1,6 @@
 package com.btc.swimpyo.backend.utils.jwt.filter;
 
-import com.btc.swimpyo.backend.utils.jwt.entity.ErrorMessage;
+import com.btc.swimpyo.backend.utils.jwt.entity.ErrorCode;
 import io.jsonwebtoken.*;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -83,16 +83,16 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return expiredDate.before(new Date());
         } catch (SignatureException e) {
             log.info("SignatureException");
-            throw new JwtException(ErrorMessage.WRONG_TYPE_TOKEN.getMsg());
+            throw new JwtException(ErrorCode.WRONG_TYPE_TOKEN.getMessage());
         } catch (MalformedJwtException e) {
             log.info("MalformedJwtException");
-            throw new JwtException(ErrorMessage.UNSUPPORTED_TOKEN.getMsg());
+            throw new JwtException(ErrorCode.UNSUPPORTED_TOKEN.getMessage());
         } catch (ExpiredJwtException e) {
             log.info("ExpiredJwtException");
-            throw new JwtException(ErrorMessage.EXPIRED_TOKEN.getMsg());
+            throw new JwtException(ErrorCode.EXPIRED_TOKEN.getMessage());
         } catch (IllegalArgumentException e) {
             log.info("IllegalArgumentException");
-            throw new JwtException(ErrorMessage.UNKNOWN_ERROR.getMsg());
+            throw new JwtException(ErrorCode.UNKNOWN_ERROR.getMessage());
         }
 
     }
