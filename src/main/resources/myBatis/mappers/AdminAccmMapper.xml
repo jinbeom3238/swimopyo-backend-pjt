@@ -5,26 +5,8 @@
 <mapper namespace="com.btc.swimpyo.backend.mappers.accm.admin.IAdminAccmDaoMapper">
 
     <!-- 숙박시설 등록 -->
-    <!--<insert id="insertAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
-
-        INSERT INTO tbl_admin_accommodation(a_acc_name ,a_acc_intro, a_acc_kind, a_acc_bn, a_m_no, a_acc_address, a_acc_phone, a_acc_image, a_acc_reg_date, a_acc_mod_date)
-        SELECT
-        #{a_acc_name},
-        #{a_acc_intro},
-        #{a_acc_kind},
-        #{a_acc_bn},
-        #{a_m_no},
-        #{a_acc_address},
-        #{a_acc_phone},
-        #{a_acc_image},
-        NOW(),
-        NOW()
-    <       FROM tbl_admin_member
-     WHERE a_m_no = #{a_m_no}
-</insert> !-->
-
     <insert id="insertAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
-        INSERT INTO tbl_admin_accommodation(a_acc_name, a_acc_intro, a_acc_kind, a_acc_bn, a_acc_address, a_acc_phone, a_acc_image, a_acc_reg_date, a_acc_mod_date, a_m_no)
+        INSERT INTO tbl_admin_accommodation(a_acc_name, a_acc_intro, a_acc_kind, a_acc_bn, a_acc_address, a_acc_phone, a_acc_reg_date, a_acc_mod_date, a_m_no)
         SELECT
             #{a_acc_name},
             #{a_acc_intro},
@@ -32,7 +14,6 @@
             #{a_acc_bn},
             #{a_acc_address},
             #{a_acc_phone},
-            #{a_acc_image},
             NOW(),
             NOW(),
             a_m_no
@@ -40,10 +21,27 @@
         WHERE a_m_email = #{a_m_email}
     </insert>
 
-<!-- 상세페이지 조회 -->
-    <select id="selectAccmInfo" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+    <!-- a_acc_no를 가져오기 위함 -->
+    <select id="selectAccmForAmNo" parameterType="Integer" resultType="Integer">
         SELECT
-            aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_image, aa.a_acc_reg_date
+            a_acc_no
+        FROM
+            tbl_admin_accommodation
+        WHERE
+            a_m_no = #{a_m_no}
+    </select>
+
+    <!-- 숙박시설 Image 등록 -->
+    <insert id="insertAccmImage" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto">
+        INSERT INTO tbl_accommodation_image (a_acc_no, a_i_image, a_i_reg_date, a_i_mod_date)
+        VALUES (#{a_acc_no}, #{a_i_image}, NOW(), NOW())
+    </insert>
+
+
+    <!-- 상세페이지 조회 -->
+    <select id="selectAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto">
+        SELECT
+            aa.a_m_no, aa.a_acc_no, aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_reg_date
         FROM
             tbl_admin_accommodation aa
             JOIN
@@ -56,29 +54,58 @@
             aa.use_yn = 'Y'
     </select>
 
-    <!-- 수정 -->
-    <update id="updataeAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+    <select id="selectAccmImgNo" parameterType="Integer" resultType="Integer">
+        SELECT
+            a_i_no
+        FROM
+            tbl_accommodation_image
+        where
+            a_acc_no = #{a_acc_no}
+    </select>
+
+    <select id="selectAccmImg" parameterType="Integer" resultType="String">
+        SELECT
+            a_i_image
+        FROM
+            tbl_accommodation_image
+        WHERE
+            a_acc_no = #{a_acc_no}
+    </select>
+
+    <!-- 수정 - 이미지를 제외한 숙박시설 정보 update -->
+    <update id="updateAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
         UPDATE
             tbl_admin_accommodation aa
-            JOIN
-                tbl_admin_member am
-            ON
-                aa.a_m_no = am.a_m_no
         SET
             aa.a_acc_name = #{a_acc_name},
-            am.a_m_name = #{a_m_name},
             aa.a_acc_intro = #{a_acc_intro},
             aa.a_acc_kind = #{a_acc_kind},
-            aa.a_m_no = #{a_m_no},
             aa.a_acc_address = #{a_acc_address},
             aa.a_acc_phone = #{a_acc_phone},
-            am.a_m_email = #{a_m_email},
-            aa.a_acc_image = #{a_acc_image}
+            aa.a_acc_mod_date = NOW()
         WHERE
             aa.a_m_no = #{a_m_no}
     </update>
 
-    <!-- 삭제-->
+    <!-- deleteNo를 통해 기존 이미지 삭제 -->
+    <delete id="deleteAccmdelImgs" parameterType="Integer">
+        DELETE FROM
+            tbl_accommodation_image
+        WHERE
+            a_i_no = #{deleteNo}
+    </delete>
+
+    <!-- front에서 넘어온 삭제할 a_i_no 리스트들에 대한 image 값들을 들고 오기 위함 -->
+    <select id="selectAccmImgs" parameterType="Integer" resultType="String">
+        SELECT
+            a_i_image
+        FROM
+            tbl_accommodation_image
+        WHERE
+            a_i_no = #{deleteNo}
+    </select>
+
+    <!-- 삭제 - 숙박시설 정보(이미지x)-->
     <update id="deleteAccmInfo" parameterType="Integer">
         UPDATE
             tbl_admin_accommodation
@@ -87,5 +114,14 @@
         Where
             a_m_no = #{a_m_no}
     </update>
+
+    <!-- 삭제 - 이미지 삭제 -->
+    <delete id="deleteAccmImg" parameterType="Integer">
+        DELETE FROM
+            tbl_accommodation_image
+        WHERE
+            a_acc_no = #{a_acc_no}
+    </delete>
+
 
 </mapper>

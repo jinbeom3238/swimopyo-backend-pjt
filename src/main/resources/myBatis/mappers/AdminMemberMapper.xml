@@ -59,13 +59,16 @@
 
     </delete>
 
-<!--    <delete id="deleteMember" parameterType="com.jwtpratice.jwttutorial.entity.UserEntity">-->
-<!--        DELETE FROM-->
-<!--            user-->
-<!--        WHERE-->
-<!--            email = #{email}-->
-
-<!--    </delete>-->
+    <update id="deleteMember" parameterType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto">
+        UPDATE
+            tbl_admin_member
+        SET
+            use_yn = "N"
+        WHERE
+            a_m_email = #{a_m_email}
+        AND
+            use_yn = "Y"
+    </update>
 
 
     <update id="updateAdmin" parameterType="com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto" >

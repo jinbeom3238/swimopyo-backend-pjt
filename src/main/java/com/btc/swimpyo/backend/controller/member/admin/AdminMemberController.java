@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -51,7 +52,7 @@ public class AdminMemberController {
         log.info("map ==> {}", map);
         if (map != null) {
             if (map.get("result") == "incorrectIdOrPw") {
-                return "incorrectIdOrPw";
+                return "IncorrectIdOrPw";
             }
             if (map.get("result") == "MemberAdminNull") {
                 return "MemberAdminLoginNull";
@@ -139,6 +140,7 @@ public class AdminMemberController {
         Cookie myCookie = new Cookie("authorization", null);
         myCookie.setMaxAge(0); // 쿠키의 expiration 타임을 0으로 하여 없앤다.
         myCookie.setPath("/"); // 모든 경로에서 삭제 됬음을 알린다.
+        response.addCookie(myCookie);
 
         return "logout success";
     }
@@ -164,6 +166,7 @@ public class AdminMemberController {
         Cookie myCookie = new Cookie("authorization", null);
         myCookie.setMaxAge(0); // 쿠키의 expiration 타임을 0으로 하여 없앤다.
         myCookie.setPath("/"); // 모든 경로에서 삭제 됬음을 알린다.
+        response.addCookie(myCookie);
 
         return "signOutSuccess";
     }
@@ -193,6 +196,14 @@ public class AdminMemberController {
         }
 
         return "AdminChangePwFail";
+    }
+
+    @PostMapping("/hello")
+    public ResponseEntity<String> hello(@RequestBody Map<String, Object> msgMap) {
+        log.info("hello()");
+        log.info("tp : {}", msgMap);
+        return ResponseEntity.ok("hello");
+
     }
 
 }
