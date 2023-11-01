@@ -17,7 +17,7 @@ public interface IAdminMemberDaoMapper {
 
     int deleteDupRefToken(RefTokenEntity checkedRefToken);
 
-    int deleteMember(String userEmail);
+    int deleteMember(AdminMemberDto adminMemberDto);
 
     int updateAdmin(AdminMemberDto adminMemberDto);
 

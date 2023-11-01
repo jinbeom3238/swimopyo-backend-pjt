@@ -143,7 +143,7 @@ public class AdminMemberController {
         return "logout success";
     }
 
-    @PostMapping("/sign_out")
+    @PostMapping("/signout")
     public Object signOut(HttpServletRequest request,
                           HttpServletResponse response,
                           AdminMemberDto adminMemberDto,
@@ -153,14 +153,19 @@ public class AdminMemberController {
         String result = iAdminMemberService.signOut(request, response, adminMemberDto, refTokenEntity);
         if(result == "중복 refToken 삭제 실패"){
             log.info("중복 refToken 삭제 실패");
-            return "signOut fail";
+            return "signOutFail";
         }
-        if(result == "token 값이 잘못되었습니다."){
-            log.info("token 값이 잘못되었습니다.");
-            return "token 값이 잘못되었습니다.";
+        if(result == "refresh token is null"){
+            log.info("refresh token is null");
+            return "RefTokenNullInCookie";
         }
 
-        return "signOut success";
+        // Cookie 삭제
+        Cookie myCookie = new Cookie("authorization", null);
+        myCookie.setMaxAge(0); // 쿠키의 expiration 타임을 0으로 하여 없앤다.
+        myCookie.setPath("/"); // 모든 경로에서 삭제 됬음을 알린다.
+
+        return "signOutSuccess";
     }
 
     @PostMapping("/adminInfo")
