@@ -75,9 +75,9 @@ public class AdminRoomController {
 
     // 수정
     @PostMapping(value = "modifyConfirm", consumes="multipart/form-data")
-    public void modifyConfirm(@RequestPart(value = "adminRoomDto", required = false) AdminRoomDto adminRoomDto,
-                              @RequestPart(value = "r_i_image", required = false) MultipartFile[] r_i_images,
-                              @RequestParam(value = "deleteNo", required = false) List<Integer> deleteNos) {
+    public String modifyConfirm(@RequestPart(value = "adminRoomDto", required = false) AdminRoomDto adminRoomDto,
+                                @RequestPart(value = "r_i_image", required = false) MultipartFile[] r_i_images,
+                                @RequestParam(value = "deleteNo", required = false) List<Integer> deleteNos) {
         log.info("[AdminRoomController] modifyConfirm()");
 
         log.info("[AdminRoomController] deleteNos : {}", deleteNos);
@@ -111,6 +111,7 @@ public class AdminRoomController {
             log.info("Room 수정 실패!!");
 
         }
+        return isModify;
 
     }
 
