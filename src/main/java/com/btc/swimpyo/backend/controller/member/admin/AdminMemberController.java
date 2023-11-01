@@ -51,7 +51,7 @@ public class AdminMemberController {
         log.info("map ==> {}", map);
         if (map != null) {
             if (map.get("result") == "incorrectIdOrPw") {
-                return "incorrectIdOrPw";
+                return "IncorrectIdOrPw";
             }
             if (map.get("result") == "MemberAdminNull") {
                 return "MemberAdminLoginNull";
@@ -139,6 +139,7 @@ public class AdminMemberController {
         Cookie myCookie = new Cookie("authorization", null);
         myCookie.setMaxAge(0); // 쿠키의 expiration 타임을 0으로 하여 없앤다.
         myCookie.setPath("/"); // 모든 경로에서 삭제 됬음을 알린다.
+        response.addCookie(myCookie);
 
         return "logout success";
     }
@@ -164,6 +165,7 @@ public class AdminMemberController {
         Cookie myCookie = new Cookie("authorization", null);
         myCookie.setMaxAge(0); // 쿠키의 expiration 타임을 0으로 하여 없앤다.
         myCookie.setPath("/"); // 모든 경로에서 삭제 됬음을 알린다.
+        response.addCookie(myCookie);
 
         return "signOutSuccess";
     }

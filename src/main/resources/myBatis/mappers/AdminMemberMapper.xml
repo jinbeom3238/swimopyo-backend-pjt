@@ -63,11 +63,11 @@
         UPDATE
             tbl_admin_member
         SET
-            user_yn = "N"
+            use_yn = "N"
         WHERE
             a_m_email = #{a_m_email}
         AND
-            user_yn = "Y"
+            use_yn = "Y"
     </update>
 
 

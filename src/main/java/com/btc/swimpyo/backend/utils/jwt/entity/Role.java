@@ -7,8 +7,8 @@ import lombok.Getter;
 @Getter
 public class Role {
 
-    USER("ROLE_USER"),
-    ADMIN("ROLE_ADMIN");
+//    USER("ROLE_USER"),
+//    ADMIN("ROLE_ADMIN");
 
     private String value;
 
