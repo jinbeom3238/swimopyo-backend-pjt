@@ -39,7 +39,7 @@
 
 
     <!-- 상세페이지 조회 -->
-    <select id="selectAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+    <select id="selectAccmInfo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto">
         SELECT
             aa.a_m_no, aa.a_acc_no, aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_reg_date
         FROM

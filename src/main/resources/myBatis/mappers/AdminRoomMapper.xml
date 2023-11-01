@@ -33,8 +33,6 @@
         FROM
             tbl_admin_room
         WHERE
-            a_m_no = #{a_m_no}
-        and
             a_acc_no = #{a_acc_no}
     </select>
 
@@ -51,8 +49,6 @@
         from
             tbl_admin_room
         where
-            a_m_no = #{a_m_no}
-        and
             a_acc_no = #{a_acc_no}
         and
             use_yn = 'Y'
@@ -92,7 +88,7 @@
             a_r_content = #{a_r_content},
             a_r_mod_date = NOW()
         WHERE
-            a_m_no = #{a_m_no}
+            a_acc_no = #{a_acc_no}
     </update>
 
     <!-- front에서 요청받은 r_i_no 리스트들에 대한 image 값들을 들고 오기 위함 -->
@@ -120,7 +116,7 @@
         SET
             use_yn = 'N'
         Where
-            a_m_no = #{a_m_no}
+            a_acc_no = #{a_acc_no}
     </update>
 
     <!-- 삭제 - Room 이미지 삭제 -->
@@ -130,4 +126,25 @@
         WHERE
             a_r_no = #{a_r_no}
     </delete>
+
+    <!-- Room 리스트 조회 - 이미지를 제외한 룸 정보 -->
+    <select id="selectRoomInfoForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
+        SELECT
+            a_r_name, a_r_state, a_r_price
+        FROM
+            tbl_admin_room
+        WHERE
+            a_acc_no = #{a_acc_no}
+    </select>
+
+    <!-- Room 리스트 조회 - 이미지 -->
+    <select id="selectRoomImgForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
+        SELECT
+            r_i_image
+        FROM
+            tbl_room_image
+        WHERE
+            a_r_no = #{a_r_no}
+    </select>
+
 </mapper>

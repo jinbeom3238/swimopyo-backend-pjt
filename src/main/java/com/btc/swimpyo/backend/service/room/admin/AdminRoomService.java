@@ -24,12 +24,6 @@ public class AdminRoomService implements IAdminRoomService {
     private final IAdminRoomDaoMapper iAdminRoomDaoMapper;
     private final S3Uploader s3Uploader;
 
-    /*@Autowired
-    public AdminAccmService(IAdminAccmDaoMapper iAdminAccmDaoMapper, S3Uploader s3Uploader) {
-        this.iAdminAccmDaoMapper = iAdminAccmDaoMapper;
-        this.s3Uploader = s3Uploader;
-    }*/
-
     /*
      * 등록
      */
@@ -232,15 +226,15 @@ public class AdminRoomService implements IAdminRoomService {
      * 삭제
      */
     @Override
-    public int deleteConfirm(int a_m_no) {
+    public int deleteConfirm(int a_acc_no) {
         log.info("[AdminRoomService] deleteConfirm() ");
 
         // 숙박시설 정보 조회(이미지 제외)
-        AdminRoomDto adminRoomDto = iAdminRoomDaoMapper.selectRoomInfo(a_m_no);
+        AdminRoomDto adminRoomDto = iAdminRoomDaoMapper.selectRoomInfo(a_acc_no);
         int a_r_no = adminRoomDto.getA_r_no();
 
         // 이미지를 제외한 숙박시설 정보 삭제(UPDATE)
-        iAdminRoomDaoMapper.deleteRoomInfo(a_m_no);
+        iAdminRoomDaoMapper.deleteRoomInfo(a_acc_no);
 
         // Room 이미지 조회
         List<String> deleteImg = iAdminRoomDaoMapper.selectRoomImg(a_r_no);
@@ -253,11 +247,38 @@ public class AdminRoomService implements IAdminRoomService {
 
         }
 
-        log.info("[AdminAccmService] DELETE ACCM SUCCESS!!");
+        log.info("[AdminRoomService] DELETE ACCM SUCCESS!!");
 
         // DB에서 이미지 삭제
         int result = iAdminRoomDaoMapper.deleteRoomImg(a_r_no);
 
         return result;
     }
+
+    /*
+     * Room 리스트 조회 - 숙박시설 상세 페이지에서 보여지는 부분
+     */
+    /*@Override
+    public void showRoomList(int a_acc_no) {
+        log.info("[AdminRoomService] showRoomList()");
+
+        AdminRoomDto adminRoomDto= new AdminRoomDto();
+        AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
+
+        // Room 리스트 조회(이미지 제외)
+//        AdminRoomDto adminRoomDto = iAdminRoomDaoMapper.selectRoomInfoForList(a_acc_no);
+        List<AdminRoomDto> adminRoomDtos = iAdminRoomDaoMapper.selectRoomInfoForList(a_acc_no);
+
+        for (int i = 0; i < adminRoomDtos.size(); i++) {
+
+
+            int a_r_no = adminRoomDtos.getA_r_no();
+
+
+        }
+
+        // a_r_no를 가지고 Room 이미지 가져오기
+        List<AdminRoomImageDto> roomImageDtos = iAdminRoomDaoMapper.selectRoomImgForList(a_r_no);
+
+    }*/
 }

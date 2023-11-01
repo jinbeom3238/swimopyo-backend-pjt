@@ -19,4 +19,8 @@ public interface IAdminRoomService {
 
     // 삭제
     public int deleteConfirm(int a_m_no);
+
+    // Room 리스트 조회 - 숙박시설 상세 페이지에서 보여지는 부분
+//    public void showRoomList(int a_acc_no);
+
 }
