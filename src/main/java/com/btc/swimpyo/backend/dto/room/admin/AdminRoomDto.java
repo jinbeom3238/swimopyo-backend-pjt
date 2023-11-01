@@ -22,6 +22,7 @@ public class AdminRoomDto {
     private String a_r_mod_date;
 
     private int r_i_no;
+    private List<Integer> r_i_nos;
     private String r_i_image;
     private List<String> r_i_images;
 

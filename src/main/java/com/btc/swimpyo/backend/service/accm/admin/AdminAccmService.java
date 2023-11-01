@@ -121,7 +121,6 @@ public class AdminAccmService implements IAdminAccmService {
 
                 log.info("[AdminAccmService] a_acc_no: " + a_acc_no);
 
-
                 // 숙박시설 이미지 받아오기
                 // 숙박시설 a_i_no front에 보내주기 위해 추가
                 a_i_nos = iAdminAccmDaoMapper.selectAccmImgNo(a_acc_no);

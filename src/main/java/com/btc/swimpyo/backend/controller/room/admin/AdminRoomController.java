@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -65,10 +66,39 @@ public class AdminRoomController {
 
     }
 
-
-
-
     // 수정
+    @PostMapping(value = "modifyConfirm", consumes="multipart/form-data")
+    public void modifyConfirm(@RequestPart(value = "adminRoomDto", required = false) AdminRoomDto adminRoomDto,
+                              @RequestPart(value = "r_i_image", required = false) MultipartFile[] r_i_images,
+                              @RequestParam(value = "deleteNo", required = false) List<Integer> deleteNos) {
+        log.info("[AdminAccmController] modifyConfirm()");
+
+        log.info("[AdminAccmController] deleteNos : {}", deleteNos);
+
+        // 추가된 이미지가 있다면
+        if(r_i_images != null) {
+            try{
+                log.info("추가할 이미지가 존재합니다.");
+                for (MultipartFile r_i_image : r_i_images) {
+                    InputStream inputStream = r_i_image.getInputStream();
+                    // 이제 inputStream을 사용하여 파일을 처리할 수 있습니다.
+                    log.info("[AdminAccmController] inputStream: " + inputStream);
+                }
+
+            }
+            catch (IOException e) {
+                log.error("MultipartFile에서 InputStream을 가져오는 중 에러 발생", e);
+
+            }
+
+        }
+        // S3에 이미지를 업로드하고 url을 얻어옴
+        adminRoomService.modifyConfirm(adminRoomDto, r_i_images, deleteNos);
+
+        log.info("[AdminAccmController] adminRoomDto: {}", adminRoomDto);
+
+    }
+
     
     // 삭제
     
