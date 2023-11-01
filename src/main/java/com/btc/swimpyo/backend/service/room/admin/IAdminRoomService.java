@@ -16,4 +16,7 @@ public interface IAdminRoomService {
 
     // 수정
     public String modifyConfirm(AdminRoomDto adminRoomDto, MultipartFile[] r_i_image, List<Integer> deleteNos);
+
+    // 삭제
+    public int deleteConfirm(int a_m_no);
 }

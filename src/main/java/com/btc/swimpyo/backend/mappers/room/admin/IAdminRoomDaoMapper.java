@@ -36,11 +36,12 @@ public interface IAdminRoomDaoMapper {
     // deleteNo를 통해 기존 이미지 삭제
     public int deleteRoomImgs(int deleteNo);
 
-
-
-
     /*
      * 삭제
      */
+    // 이미지를 제외한 Room 정보 삭제
+    public void deleteRoomInfo(int a_m_no);
+    // 이미지 삭제
+    public int deleteRoomImg(int a_r_no);
 
 }

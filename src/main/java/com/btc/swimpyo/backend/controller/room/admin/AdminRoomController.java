@@ -71,9 +71,9 @@ public class AdminRoomController {
     public void modifyConfirm(@RequestPart(value = "adminRoomDto", required = false) AdminRoomDto adminRoomDto,
                               @RequestPart(value = "r_i_image", required = false) MultipartFile[] r_i_images,
                               @RequestParam(value = "deleteNo", required = false) List<Integer> deleteNos) {
-        log.info("[AdminAccmController] modifyConfirm()");
+        log.info("[AdminRoomController] modifyConfirm()");
 
-        log.info("[AdminAccmController] deleteNos : {}", deleteNos);
+        log.info("[AdminRoomController] deleteNos : {}", deleteNos);
 
         // 추가된 이미지가 있다면
         if(r_i_images != null) {
@@ -82,7 +82,7 @@ public class AdminRoomController {
                 for (MultipartFile r_i_image : r_i_images) {
                     InputStream inputStream = r_i_image.getInputStream();
                     // 이제 inputStream을 사용하여 파일을 처리할 수 있습니다.
-                    log.info("[AdminAccmController] inputStream: " + inputStream);
+                    log.info("[AdminRoomController] inputStream: " + inputStream);
                 }
 
             }
@@ -95,11 +95,21 @@ public class AdminRoomController {
         // S3에 이미지를 업로드하고 url을 얻어옴
         adminRoomService.modifyConfirm(adminRoomDto, r_i_images, deleteNos);
 
-        log.info("[AdminAccmController] adminRoomDto: {}", adminRoomDto);
+        log.info("[AdminRoomController] adminRoomDto: {}", adminRoomDto);
 
     }
 
-    
     // 삭제
-    
+    @PostMapping("/deleteConfirm")
+    public int deleteConfirm(@RequestBody AdminRoomDto adminRoomDto) {
+        log.info("[AdminRoomController] deleteConfirm()");
+
+        int a_m_no = adminRoomDto.getA_m_no();
+
+        return adminRoomService.deleteConfirm(a_m_no);
+
+    }
+
+
+
 }

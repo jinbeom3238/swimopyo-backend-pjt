@@ -221,10 +221,43 @@ public class AdminRoomService implements IAdminRoomService {
 
         }
 
-        log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
-        log.info("[AdminAccmService] adminRoomDto: " + adminRoomDto);
+        log.info("[AdminRoomService] MODIFY ACCM SUCCESS!!");
+        log.info("[AdminRoomService] adminRoomDto: " + adminRoomDto);
 
         return "숙박시설 정보 수정 완료";
 
+    }
+
+    /*
+     * 삭제
+     */
+    @Override
+    public int deleteConfirm(int a_m_no) {
+        log.info("[AdminRoomService] deleteConfirm() ");
+
+        // 숙박시설 정보 조회(이미지 제외)
+        AdminRoomDto adminRoomDto = iAdminRoomDaoMapper.selectRoomInfo(a_m_no);
+        int a_r_no = adminRoomDto.getA_r_no();
+
+        // 이미지를 제외한 숙박시설 정보 삭제(UPDATE)
+        iAdminRoomDaoMapper.deleteRoomInfo(a_m_no);
+
+        // Room 이미지 조회
+        List<String> deleteImg = iAdminRoomDaoMapper.selectRoomImg(a_r_no);
+
+        // S3에서 이미지 삭제
+        // s3 삭제
+        // deleteImg 리스트에 있는 모든 이미지 파일을 S3에서 삭제
+        for (String imageUrl : deleteImg) {
+            s3Uploader.deleteFileFromS3(imageUrl);
+
+        }
+
+        log.info("[AdminAccmService] DELETE ACCM SUCCESS!!");
+
+        // DB에서 이미지 삭제
+        int result = iAdminRoomDaoMapper.deleteRoomImg(a_r_no);
+
+        return result;
     }
 }

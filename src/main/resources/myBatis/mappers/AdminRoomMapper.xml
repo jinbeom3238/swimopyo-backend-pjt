@@ -4,6 +4,7 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.room.admin.IAdminRoomDaoMapper">
 
+    <!-- Room(이미지x)등록 -->
     <insert id="insertRoomInfo" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
         INSERT INTO
             tbl_admin_room(a_acc_no, a_r_name, a_r_state, a_r_price, a_r_check_in, a_r_check_out, a_r_count, a_r_content, a_r_reg_date, a_r_mod_date, a_m_no)
@@ -112,4 +113,21 @@
             r_i_no = #{deleteNo}
     </delete>
 
+    <!-- 삭제 - Room (이미지x) 삭제 -->
+    <update id="deleteRoomInfo" parameterType="Integer">
+        UPDATE
+            tbl_admin_room
+        SET
+            use_yn = 'N'
+        Where
+            a_m_no = #{a_m_no}
+    </update>
+
+    <!-- 삭제 - Room 이미지 삭제 -->
+    <delete id="deleteRoomImg" parameterType="Integer">
+        DELETE FROM
+            tbl_room_image
+        WHERE
+            a_r_no = #{a_r_no}
+    </delete>
 </mapper>
