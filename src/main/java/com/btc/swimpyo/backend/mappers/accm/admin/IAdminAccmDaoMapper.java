@@ -30,7 +30,7 @@ public interface IAdminAccmDaoMapper {
      */
     // 이미지를 제외한 숙박시설 정보 update
     public int updateAccmInfo(AdminAccmDto adminAccmDto);
-    // front에서 넘어온 삭제할 a_i_no 리스트들에 대한 image 값들을 들고 오기 위함
+    // front에서 요청받은 삭제할 a_i_no 리스트들에 대한 image 값들을 들고 오기 위함
     public List<String> selectAccmImgs(int deleteNo);
     // deleteNo를 통해 기존 이미지 삭제
     public int deleteAccmdelImgs(int deleteNo);

@@ -103,6 +103,7 @@ public class S3Uploader {
         try {
             amazonS3Client.deleteObject(new DeleteObjectRequest(bucket, "static/test/" + fileName)); // "static/test/"를 추가하여 경로를 지정
             log.info("[S3Uploader] File deleted from S3: " + fileName);
+
         } catch (AmazonServiceException e) {
             log.error("[S3Uploader] Error deleting file from S3: " + fileName, e);
         }
@@ -126,15 +127,16 @@ public class S3Uploader {
         }
     }*/
 
-    // MultipartFile을 받아서 로컬 파일로 변환하는 과정
+    // MultipartFile을 받아서 file 객체로 변환하는 과정
     public Optional<File> convert(MultipartFile file) throws IOException {
-        // 임시 디렉토리에 파일을 생성합니다.
+        // 임시 디렉토리에 파일을 생성
         String dirPath = System.getProperty("java.io.tmpdir");
         // getOriginalFilename() -> 업로드되는 파일에서 확장자를 포함한 파일의 이름을 반환
         String fileName = file.getOriginalFilename() + UUID.randomUUID();
         File convertFile = new File(dirPath + File.separator + fileName);
 
         // FileOutputStream을 사용하여 데이터를 파일에 바이트 스트림으로 저장한다.
+        // createNewFile() => 새로운 파일을 생성 메서드, 이미 존재하는 경우 false를 반환
         if (convertFile.createNewFile()) {
             // FileOutputStream은 파일을 작성하기 위해서 사용한다.
             // 주어진 File 객체가 가리키는 파일을 쓰기 위한 객체를 생성
@@ -149,7 +151,5 @@ public class S3Uploader {
 
         return Optional.empty();
     }
-
-
 
 }

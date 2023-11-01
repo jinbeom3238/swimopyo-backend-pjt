@@ -89,9 +89,9 @@
 
     <!-- deleteNo를 통해 기존 이미지 삭제 -->
     <delete id="deleteAccmdelImgs" parameterType="Integer">
-        delete from
+        DELETE FROM
             tbl_accommodation_image
-        where
+        WHERE
             a_i_no = #{deleteNo}
     </delete>
 
@@ -105,7 +105,7 @@
             a_i_no = #{deleteNo}
     </select>
 
-    <!-- 삭제-->
+    <!-- 삭제 - 숙박시설 정보(이미지x)-->
     <update id="deleteAccmInfo" parameterType="Integer">
         UPDATE
             tbl_admin_accommodation
@@ -114,5 +114,14 @@
         Where
             a_m_no = #{a_m_no}
     </update>
+
+    <!-- 삭제 - 이미지 삭제 -->
+    <delete id="deleteAccmImg" parameterType="Integer">
+        DELETE FROM
+            tbl_accommodation_image
+        WHERE
+            a_acc_no = #{a_acc_no}
+    </delete>
+
 
 </mapper>
