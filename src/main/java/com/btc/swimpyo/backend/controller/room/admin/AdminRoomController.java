@@ -45,14 +45,7 @@ public class AdminRoomController {
 
         log.info("[imageUrl] : " + imageUrl);
         log.info("[AdminAccmController] dto : " + adminRoomDto);
-        
-        if(imageUrl != null) {
-            log.info("Room 등록 성공!!");
-            
-        } else {
-            log.info("Room 등록 실패!!");
 
-        }
         return imageUrl;
 
     }
@@ -75,9 +68,9 @@ public class AdminRoomController {
 
     // 수정
     @PostMapping(value = "modifyConfirm", consumes="multipart/form-data")
-    public String modifyConfirm(@RequestPart(value = "adminRoomDto", required = false) AdminRoomDto adminRoomDto,
-                                @RequestPart(value = "r_i_image", required = false) MultipartFile[] r_i_images,
-                                @RequestParam(value = "deleteNo", required = false) List<Integer> deleteNos) {
+    public void modifyConfirm(@RequestPart(value = "adminRoomDto", required = false) AdminRoomDto adminRoomDto,
+                              @RequestPart(value = "r_i_image", required = false) MultipartFile[] r_i_images,
+                              @RequestParam(value = "deleteNo", required = false) List<Integer> deleteNos) {
         log.info("[AdminRoomController] modifyConfirm()");
 
         log.info("[AdminRoomController] deleteNos : {}", deleteNos);
@@ -100,18 +93,9 @@ public class AdminRoomController {
 
         }
         // S3에 이미지를 업로드하고 url을 얻어옴
-        String isModify = adminRoomService.modifyConfirm(adminRoomDto, r_i_images, deleteNos);
+        adminRoomService.modifyConfirm(adminRoomDto, r_i_images, deleteNos);
 
         log.info("[AdminRoomController] adminRoomDto: {}", adminRoomDto);
-
-        if(isModify != null) {
-            log.info("Room 수정 성공!!");
-
-        } else {
-            log.info("Room 수정 실패!!");
-
-        }
-        return isModify;
 
     }
 
@@ -120,20 +104,20 @@ public class AdminRoomController {
     public int deleteConfirm(@RequestBody AdminRoomDto adminRoomDto) {
         log.info("[AdminRoomController] deleteConfirm()");
 
-        int a_acc_no = adminRoomDto.getA_acc_no();
+        int a_m_no = adminRoomDto.getA_m_no();
 
-        return adminRoomService.deleteConfirm(a_acc_no);
+        return adminRoomService.deleteConfirm(a_m_no);
 
     }
 
     // Room 리스트 조회 - 숙박시설 상세 페이지에서 보여지는 부분
-    /*@PostMapping("/showRoomList")
+    @PostMapping("/showRoomList")
     public void showRoomList(@RequestParam("a_acc_no") int a_acc_no) {
         log.info("[AdminAccmController] showRoomList()");
 
         adminRoomService.showRoomList(a_acc_no);
 
-    }*/
+    }
     
 
 

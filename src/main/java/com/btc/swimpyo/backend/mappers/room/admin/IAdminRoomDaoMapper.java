@@ -51,5 +51,5 @@ public interface IAdminRoomDaoMapper {
     // Room 정보 조회(이미지 제외)
     public List<AdminRoomDto> selectRoomInfoForList(int a_acc_no);
     // Room 이미지 조회
-    public AdminRoomImageDto selectRoomImgForList(int a_r_no);
+    public List<AdminRoomImageDto> selectRoomImgForList(int a_r_no);
 }
