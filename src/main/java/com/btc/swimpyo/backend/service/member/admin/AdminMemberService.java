@@ -146,7 +146,7 @@ public class AdminMemberService implements IAdminMemberService {
 
     @Override
     public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, RefTokenEntity refTokenEntity) {
-        System.out.println("[AuthServiceImplement] refreshToken");
+        log.info("refreshToken");
 
         Map<String, Object> map = new HashMap<>();
         final String authHeader = request.getHeader(HttpHeaders.COOKIE);

@@ -67,7 +67,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 .map(role -> new SimpleGrantedAuthority(role))
                 .collect(Collectors.toList());
 
-        log.info("tp10");
         AbstractAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(email, null, authorities);
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); // 인증 요청에 대한 세부정보 작성 가능
@@ -77,7 +76,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.setContext(securityContext);
 
-        log.info("tp10");
         filterChain.doFilter(request, response); // 다음 필터로
 
     }

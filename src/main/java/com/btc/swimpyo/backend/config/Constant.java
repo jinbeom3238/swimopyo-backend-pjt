@@ -10,4 +10,8 @@ public class Constant {
     public static final int USER_SIGNUP_FAIL = -1;
     public static final int USER_DUP_MEMBER = 0;
 
+    public static final int USER_MODIFY_SUCCESS = 1;
+    public static final int USER_MODIFY_FAIL = 0;
+
+
 }
