@@ -34,10 +34,7 @@ public class AdminMemberService implements IAdminMemberService {
     @Value("${secret-key}")
     private String secretKey;
 
-
-
-    @Autowired
-    IAdminMemberDaoMapper iAdminMemberDaoMapper;
+    private final IAdminMemberDaoMapper iAdminMemberDaoMapper;
 
     // @RequiredArgsConstructor을 이용하면 final로 지정된 것은 필수 생성자로 여긴다
     private final JwtProvider jwtProvider;
@@ -78,12 +75,11 @@ public class AdminMemberService implements IAdminMemberService {
     }
 
     @Override
-    public Map<String, Object> signIn(
-            Map<String, Object> msgMap,
-            AdminMemberDto adminMemberDto,
-            RefTokenEntity refTokenEntity,
-            HttpServletRequest request,
-            HttpServletResponse response) {
+    public Map<String, Object> signIn(Map<String, Object> msgMap,
+                                      AdminMemberDto adminMemberDto,
+                                      RefTokenEntity refTokenEntity,
+                                      HttpServletRequest request,
+                                      HttpServletResponse response) {
         log.info("signIn");
 
         adminMemberDto.setA_m_email(msgMap.get("email").toString());
@@ -268,7 +264,7 @@ public class AdminMemberService implements IAdminMemberService {
         log.info("userEmail = {}", userEmail);
         adminMemberDto.setA_m_email(userEmail);
         int deleteMemberResult = iAdminMemberDaoMapper.deleteMember(adminMemberDto);
-        if(deleteMemberResult <= 0) {
+        if (deleteMemberResult <= 0) {
             log.info("delete Member fail");
             return "회원탈퇴 실패";
         }
@@ -297,17 +293,16 @@ public class AdminMemberService implements IAdminMemberService {
         adminMemberDto.setA_m_phone(msgMap.get("phone").toString());
 
         int result = iAdminMemberDaoMapper.updateAdmin(adminMemberDto);
-        if(result == 0){
+        if (result == 0) {
             return 0;
         }
-
 
 
         return 1;
     }
 
     @Override
-    public AdminMemberDto adminInfo(HttpServletRequest request,AdminMemberDto adminMemberDto) {
+    public AdminMemberDto adminInfo(HttpServletRequest request, AdminMemberDto adminMemberDto) {
         log.info("adminInfo");
         final String authHeader = request.getHeader(HttpHeaders.COOKIE);
         final String checkingRefToken;
@@ -347,7 +342,7 @@ public class AdminMemberService implements IAdminMemberService {
             if (idVerifiedAdminMemberDto != null && passwordEncoder.matches(adminMemberDto.getA_m_pw(), idVerifiedAdminMemberDto.getA_m_pw())) {
                 adminMemberDto.setA_m_pw(passwordEncoder.encode(msgMap.get("afterPw").toString()));
                 int result = iAdminMemberDaoMapper.updateAdminForPw(adminMemberDto);
-                if(result > 0){
+                if (result > 0) {
                     return "AdminChangePwSuccess";
                 } else {
                     return "AdminChangePwFail";

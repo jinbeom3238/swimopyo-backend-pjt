@@ -1,6 +1,7 @@
 package com.btc.swimpyo.backend.controller.member.user;
 
 
+import com.btc.swimpyo.backend.config.Constant;
 import com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto;
 import com.btc.swimpyo.backend.dto.member.user.UserMemberDto;
 import com.btc.swimpyo.backend.service.member.admin.IAdminMemberService;
@@ -28,31 +29,34 @@ public class UserMemberController {
 
     private final IUserMemberService iUserMemberService;
 
-    @PostMapping("/hello")
-    public ResponseEntity<String> hello(@RequestBody Map<String, Object> msgMap) {
-        log.info("hello()");
-        log.info("tp : {}", msgMap);
-        return ResponseEntity.ok("user hello");
 
-    }
 
     @PostMapping("/signUp")
     public String signUp(@RequestBody Map<String, Object> msgMap, UserMemberDto userMemberDto) {
-        System.out.println("[AuthController] signUp");
-        String response = iUserMemberService.signUp(msgMap, userMemberDto);
-        return response;
-//        return "hi";
+        log.info("signUp");
+        int response = iUserMemberService.signUp(msgMap, userMemberDto);
+        log.info("response : {}", response);
+
+        if(response == Constant.ADMIN_SIGNUP_SUCCESS){
+            return "MemberUserSignUpSuccess";
+        } else if(response == Constant.ADMIN_DUP_MEMBER){
+            return "MemberUserDup";
+        } else {
+            return "MemberUserSignUpFail";
+        }
     }
 
     @PostMapping("/signIn")
     public Object signIn(@RequestBody Map<String, Object> msgMap, UserMemberDto userMemberDto, RefTokenEntity refTokenEntity, HttpServletRequest request, HttpServletResponse response) {
-        System.out.println("[AuthController] signIn");
+        log.info("signIn");
 
         Map<String, Object> map = iUserMemberService.signIn(msgMap, userMemberDto, refTokenEntity, request,response);
-
         if (map != null) {
-            if (map.get("result") == HttpStatus.NOT_FOUND) {
-                return "로그인 아이디가 없거나, 비밀번호를 틀리셨습니다.";
+            if (map.get("result") == "incorrectIdOrPw") {
+                return "IncorrectIdOrPw";
+            }
+            if (map.get("result") == "MemberUserNull") {
+                return "MemberUserLoginNull";
             }
 
             // 로그인 성공했기때문에 accessToken, refreshToken 발급
@@ -68,8 +72,16 @@ public class UserMemberController {
             return map.get("accessToken");
 
         } else {
-            return null;
+            return "MemberUserLoginFail";
         }
+
+    }
+
+    @PostMapping("/hello")
+    public ResponseEntity<String> hello(@RequestBody Map<String, Object> msgMap) {
+        log.info("hello()");
+        log.info("tp : {}", msgMap);
+        return ResponseEntity.ok("user hello");
 
     }
 

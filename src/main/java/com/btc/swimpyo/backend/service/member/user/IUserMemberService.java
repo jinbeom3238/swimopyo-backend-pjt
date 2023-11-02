@@ -10,7 +10,7 @@ import java.util.Map;
 public interface IUserMemberService {
 
 
-    String signUp(Map<String, Object> msgMap, UserMemberDto userMemberDto);
+    int signUp(Map<String, Object> msgMap, UserMemberDto userMemberDto);
 
     Map<String, Object> signIn(Map<String, Object> msgMap, UserMemberDto userMemberDto, RefTokenEntity refTokenEntity, HttpServletRequest request, HttpServletResponse response);
 }
