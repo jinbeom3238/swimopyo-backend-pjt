@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Service
@@ -276,22 +277,18 @@ public class AdminRoomService implements IAdminRoomService {
     /*
      * Room 리스트 조회 - 숙박시설 상세 페이지에서 보여지는 부분
      */
-    /*@Override
-    public Map<String, Object> showRoomList(int a_acc_no, int a_m_no) {
+    @Override
+    public Map<String, Object> showRoomList(int a_acc_no) {
         log.info("[AdminRoomService] showRoomList()");
 
         AdminRoomDto adminRoomDto= new AdminRoomDto();
         AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
-
 
         Map<String, Object> msgData = new HashMap<>();
         List<AdminRoomDto> adminRoomDtos = new ArrayList<>();
         int a_r_no = adminRoomDto.getA_r_no();
 //        a_m_no = adminRoomDto.getA_m_no();
 //        log.info("a_m_no: {}", a_m_no);
-
-
-
 
         // Room 리스트 조회(이미지 제외)
 //        AdminRoomDto adminRoomDto = iAdminRoomDaoMapper.selectRoomInfoForList(a_acc_no);
@@ -302,18 +299,27 @@ public class AdminRoomService implements IAdminRoomService {
 
         log.info("adminRoomDtos: {}", adminRoomDtos);
 
+
+
         // a_r_no를 가지오기 위함
-        List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
+//        List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
+        List<Integer> a_r_nos = adminRoomDtos.stream()
+                .map(AdminRoomDto::getA_r_no)
+                .collect(Collectors.toList());
 
-        log.info("a_r_nos: {}" + a_r_nos.get(0));
 
-        for ( int i = 1; i < a_r_nos.size(); i++) {
-            adminRoomDto.setA_r_no(a_r_nos.get(i));
-            a_r_no = adminRoomDto.getA_r_no();
-            log.info("a_r_no: {}", a_r_no);
+        log.info("a_r_nos: " + a_r_nos.get(0));
+        log.info("a_r_nos: " + a_r_nos.get(1));
+
+        for ( int i = 0; i < a_r_nos.size(); i++) {
+//            adminRoomDto.setA_r_no(a_r_nos.get(i));
+//            a_r_no = adminRoomDto.getA_r_no();
+            a_r_no = a_r_nos.get(i);
+            log.info("a_r_no: "+ a_r_no);
+
 
         }
-        log.info("a_r_no: {}", a_r_no);
+//        log.info("a_r_no: {}", a_r_no);
 
 //        int a_r_no = adminRoomDto.getA_r_no();
 
@@ -328,6 +334,6 @@ public class AdminRoomService implements IAdminRoomService {
         return msgData;
 
 
-    }*/
+    }
 
 }
