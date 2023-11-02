@@ -95,27 +95,27 @@ public class AdminMemberService implements IAdminMemberService {
         AdminMemberDto idVerifiedadminMemberDto = iAdminMemberDaoMapper.isMember(adminMemberDto);
 
         if (idVerifiedadminMemberDto != null && passwordEncoder.matches(adminMemberDto.getA_m_pw(), idVerifiedadminMemberDto.getA_m_pw())) {
-//            /*
-//                로그인 시
-//                동일한 refresh token 명의 행이 있다면 delete 후
-//                새로 발급받은 refresh token을 insert해준다.
-//             */
-//            final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-//            final String checkingRefToken;
-//            if (authHeader != null) {
-//                String cookieToken = authHeader.substring(7);
-//                checkingRefToken = cookieToken.split("=")[1];
-//                refTokenEntity.setRef_token(checkingRefToken);
-//                RefTokenEntity checkedRefToken = iAdminMemberDaoMapper.selectRefToken(refTokenEntity);
-//                if (checkedRefToken != null) {
-//                    int result = iAdminMemberDaoMapper.deleteDupRefToken(checkedRefToken);
-//                    if (result > 0) {
-//                        log.info("중복 refToken 삭제 완료");
-//                    } else {
-//                        log.info("중복 refToken 삭제 실패");
-//                    }
-//                }
-//            }
+            /*
+                로그인 시
+                동일한 refresh token 명의 행이 있다면 delete 후
+                새로 발급받은 refresh token을 insert해준다.
+             */
+            final String authHeader = request.getHeader(HttpHeaders.COOKIE);
+            final String checkingRefToken;
+            if (authHeader != null) {
+                String cookieToken = authHeader.substring(7);
+                checkingRefToken = cookieToken.split("=")[1];
+                refTokenEntity.setRef_token(checkingRefToken);
+                RefTokenEntity checkedRefToken = iAdminMemberDaoMapper.selectRefToken(refTokenEntity);
+                if (checkedRefToken != null) {
+                    int result = iAdminMemberDaoMapper.deleteDupRefToken(checkedRefToken);
+                    if (result > 0) {
+                        log.info("중복 refToken 삭제 완료");
+                    } else {
+                        log.info("중복 refToken 삭제 실패");
+                    }
+                }
+            }
 
             List<GrantedAuthority> authorities = Arrays.asList(
                     new SimpleGrantedAuthority("ROLE_ADMIN")
