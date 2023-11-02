@@ -4,20 +4,93 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.member.user.IUserMemberDaoMapper">
 
+    <select id="isMemberUser" parameterType="com.btc.swimpyo.backend.dto.member.user.UserMemberDto" resultType="com.btc.swimpyo.backend.dto.member.user.UserMemberDto">
+        SELECT
+            *
+        FROM
+            tbl_user_member
+        WHERE
+            u_m_email = #{u_m_email}
+          AND
+            use_yn = "Y"
+    </select>
+
     <insert id="insertMemberUser" parameterType="com.btc.swimpyo.backend.dto.member.user.UserMemberDto">
         INSERT INTO
-            tbl_user_member(u_m_id, u_m_pw, u_m_name, u_m_phone, u_m_email, u_m_nickname, u_m_reg_date, u_m_mod_date)
+            tbl_user_member(u_m_email, u_m_pw, u_m_name, u_m_phone, u_m_birth, u_m_nickname, u_m_reg_date, u_m_mod_date)
         VALUES
             (
-                #{u_m_id},
+                #{u_m_email},
                 #{u_m_pw},
                 #{u_m_name},
                 #{u_m_phone},
-                #{u_m_email},
+                #{u_m_birth},
                 #{u_m_nickname},
                 NOW(),
                 NOW()
             )
     </insert>
+
+    <update id="updateUser" parameterType="com.btc.swimpyo.backend.dto.member.user.UserMemberDto" >
+
+        UPDATE
+            tbl_user_member
+        SET
+            u_m_name = #{u_m_name},
+            a_m_phone = #{a_m_phone},
+            u_m_nickname = #{u_m_nickname}
+        WHERE
+            u_m_email = #{u_m_email}
+        AND
+            use_yn = "Y"
+    </update>
+
+    <select id="selectRefToken" parameterType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity" resultType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity">
+        SELECT
+            *
+        FROM
+            tokens
+        WHERE
+            ref_token = #{ref_token}
+    </select>
+
+    <delete id="deleteDupRefToken" parameterType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity">
+        DELETE FROM
+            tokens
+        WHERE
+            ref_token = #{ref_token}
+
+    </delete>
+
+    <insert id="insertRefToken" parameterType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity">
+        INSERT INTO
+            tokens(ref_token, t_reg_date)
+        VALUES
+            (
+                #{ref_token},
+                NOW()
+            )
+    </insert>
+
+    <update id="updateUserForPw" parameterType="com.btc.swimpyo.backend.dto.member.user.UserMemberDto" >
+
+        UPDATE
+            tbl_user_member
+        SET
+            u_m_pw = #{u_m_pw}
+        WHERE
+            u_m_email = #{u_m_email}
+    </update>
+
+    <update id="deleteMember" parameterType="com.btc.swimpyo.backend.dto.member.user.UserMemberDto">
+        UPDATE
+            tbl_user_member
+        SET
+            use_yn = "N"
+        WHERE
+            u_m_email = #{u_m_email}
+          AND
+            use_yn = "Y"
+    </update>
 
 </mapper>

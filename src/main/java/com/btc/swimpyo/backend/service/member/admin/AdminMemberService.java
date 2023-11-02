@@ -14,12 +14,16 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Log4j2
@@ -30,10 +34,7 @@ public class AdminMemberService implements IAdminMemberService {
     @Value("${secret-key}")
     private String secretKey;
 
-
-
-    @Autowired
-    IAdminMemberDaoMapper iAdminMemberDaoMapper;
+    private final IAdminMemberDaoMapper iAdminMemberDaoMapper;
 
     // @RequiredArgsConstructor을 이용하면 final로 지정된 것은 필수 생성자로 여긴다
     private final JwtProvider jwtProvider;
@@ -74,12 +75,11 @@ public class AdminMemberService implements IAdminMemberService {
     }
 
     @Override
-    public Map<String, Object> signIn(
-            Map<String, Object> msgMap,
-            AdminMemberDto adminMemberDto,
-            RefTokenEntity refTokenEntity,
-            HttpServletRequest request,
-            HttpServletResponse response) {
+    public Map<String, Object> signIn(Map<String, Object> msgMap,
+                                      AdminMemberDto adminMemberDto,
+                                      RefTokenEntity refTokenEntity,
+                                      HttpServletRequest request,
+                                      HttpServletResponse response) {
         log.info("signIn");
 
         adminMemberDto.setA_m_email(msgMap.get("email").toString());
@@ -112,7 +112,16 @@ public class AdminMemberService implements IAdminMemberService {
                     }
                 }
             }
-            String accessToken = jwtProvider.createAccessToken(adminMemberDto.getA_m_email(), secretKey);
+
+            List<GrantedAuthority> authorities = Arrays.asList(
+                    new SimpleGrantedAuthority("ROLE_ADMIN")
+            );
+
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(adminMemberDto.getA_m_email(), null, authorities);
+
+
+            String accessToken = jwtProvider.createAccessToken(adminMemberDto.getA_m_email(), secretKey, authenticationToken.getAuthorities());
             String refreshToken = jwtProvider.createRefreshToken(adminMemberDto.getA_m_email(), secretKey);
 
             refTokenEntity.setRef_token(refreshToken);
@@ -137,7 +146,7 @@ public class AdminMemberService implements IAdminMemberService {
 
     @Override
     public Map<String, Object> refreshToken(HttpServletRequest request, HttpServletResponse response, RefTokenEntity refTokenEntity) {
-        System.out.println("[AuthServiceImplement] refreshToken");
+        log.info("refreshToken");
 
         Map<String, Object> map = new HashMap<>();
         final String authHeader = request.getHeader(HttpHeaders.COOKIE);
@@ -179,7 +188,15 @@ public class AdminMemberService implements IAdminMemberService {
             } else {
 
                 // 재발급 받은 Ref Token insert
-                String ReAccessToken = jwtProvider.createAccessToken(userEmail, secretKey);
+                List<GrantedAuthority> authorities = Arrays.asList(
+                        new SimpleGrantedAuthority("ROLE_ADMIN")
+                );
+
+                UsernamePasswordAuthenticationToken authenticationToken =
+                        new UsernamePasswordAuthenticationToken(userEmail, null, authorities);
+
+
+                String ReAccessToken = jwtProvider.createAccessToken(userEmail, secretKey, authenticationToken.getAuthorities());
                 String ReRefreshToken = jwtProvider.createRefreshToken(userEmail, secretKey);
 
                 refTokenEntity.setRef_token(ReRefreshToken);
@@ -247,7 +264,7 @@ public class AdminMemberService implements IAdminMemberService {
         log.info("userEmail = {}", userEmail);
         adminMemberDto.setA_m_email(userEmail);
         int deleteMemberResult = iAdminMemberDaoMapper.deleteMember(adminMemberDto);
-        if(deleteMemberResult <= 0) {
+        if (deleteMemberResult <= 0) {
             log.info("delete Member fail");
             return "회원탈퇴 실패";
         }
@@ -276,17 +293,16 @@ public class AdminMemberService implements IAdminMemberService {
         adminMemberDto.setA_m_phone(msgMap.get("phone").toString());
 
         int result = iAdminMemberDaoMapper.updateAdmin(adminMemberDto);
-        if(result == 0){
+        if (result == 0) {
             return 0;
         }
-
 
 
         return 1;
     }
 
     @Override
-    public AdminMemberDto adminInfo(HttpServletRequest request,AdminMemberDto adminMemberDto) {
+    public AdminMemberDto adminInfo(HttpServletRequest request, AdminMemberDto adminMemberDto) {
         log.info("adminInfo");
         final String authHeader = request.getHeader(HttpHeaders.COOKIE);
         final String checkingRefToken;
@@ -326,7 +342,7 @@ public class AdminMemberService implements IAdminMemberService {
             if (idVerifiedAdminMemberDto != null && passwordEncoder.matches(adminMemberDto.getA_m_pw(), idVerifiedAdminMemberDto.getA_m_pw())) {
                 adminMemberDto.setA_m_pw(passwordEncoder.encode(msgMap.get("afterPw").toString()));
                 int result = iAdminMemberDaoMapper.updateAdminForPw(adminMemberDto);
-                if(result > 0){
+                if (result > 0) {
                     return "AdminChangePwSuccess";
                 } else {
                     return "AdminChangePwFail";

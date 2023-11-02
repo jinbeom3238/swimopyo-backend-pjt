@@ -30,7 +30,20 @@ public class WebSecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
                 .authorizeHttpRequests()
-                .requestMatchers("/", "/api/admin/**", "/api/user/**").permitAll()
+                .requestMatchers("/",
+                        "/api/admin/member/signUp",
+                        "/api/admin/member/signIn",
+                        "/api/admin/member/refreshToken",
+                        "/api/admin/member/logout",
+                        "/api/admin/member/signout").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
+                .requestMatchers(
+                        "/api/user/member/signUp",
+                        "/api/user/member/signIn",
+                        "/api/user/member/refreshToken",
+                        "/api/user/member/logout",
+                        "/api/user/member/signout").permitAll()
+                .requestMatchers("/api/user/**").hasRole("USER")
 //                .requestMatchers(HttpMethod.GET, "/api/**").permitAll() // 모든 Get 요청은 인증하지 않겠다
                 .anyRequest().authenticated()
                 .and().build();

@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
@@ -19,7 +21,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Log4j2
 @Component
@@ -55,9 +60,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         // getUserEmail
         String email = getUserEmail(secretKey, token);
+        // 권한 정보 추출
+        String rolesStr = (String) extractClaims(secretKey, token).get("authorities");
+        List<String> roles = Arrays.asList(rolesStr.split(","));
+        List<GrantedAuthority> authorities = roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role))
+                .collect(Collectors.toList());
 
         AbstractAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(email, null, AuthorityUtils.NO_AUTHORITIES);
+                new UsernamePasswordAuthenticationToken(email, null, authorities);
         authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request)); // 인증 요청에 대한 세부정보 작성 가능
 
         SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
@@ -69,11 +80,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     }
 
+
     // Claims에서 login email 꺼내기
-    public static String getUserEmail(String secretKey, String token ) {
+    public static String getUserEmail(String secretKey, String token) {
         log.info("getUserEmail in");
         return extractClaims(secretKey, token).get("email").toString();
     }
+
     // 밝급된 Token이 만료 시간이 지났는지 체크
     public static boolean validate(String secretKey, String token) {
         log.info("validate in");
@@ -96,11 +109,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
     }
+
     //     SecretKey를 사용해 Token Parsing
     private static Claims extractClaims(String secretKey, String token) {
         log.info("extractClaims in");
 
-            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
+        return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
     }
 
 }

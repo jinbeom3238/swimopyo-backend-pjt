@@ -10,6 +10,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -195,6 +196,14 @@ public class AdminMemberController {
         }
 
         return "AdminChangePwFail";
+    }
+
+    @PostMapping("/hello")
+    public ResponseEntity<String> hello(@RequestBody Map<String, Object> msgMap) {
+        log.info("hello()");
+        log.info("tp : {}", msgMap);
+        return ResponseEntity.ok("hello");
+
     }
 
 }
