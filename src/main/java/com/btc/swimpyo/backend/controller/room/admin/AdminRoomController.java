@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -52,15 +53,15 @@ public class AdminRoomController {
 
     // 상세 페이지 조회
     @PostMapping("/showRoomDetail")
-    public Map<String, Object> showRoomDetail(@RequestParam("a_m_no") int a_m_no) {
+    public Map<String, Object> showRoomDetail(@RequestParam("a_r_no") int a_r_no, AdminRoomDto adminRoomDto) {
         log.info("[AdminAccmController] showRoomDetail()");
 
-        AdminRoomDto adminRoomDto = new AdminRoomDto();
+//        AdminRoomDto adminRoomDto = new AdminRoomDto();
         AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
         adminRoomDto.setR_i_image(adminRoomImageDto.getR_i_image());
 
-        log.info("[AdminAccmController] a_m_no : " + a_m_no);
-        Map<String, Object> msgData = adminRoomService.showRoomDetail(a_m_no);
+        log.info("[AdminAccmController] a_m_no : " + a_r_no);
+        Map<String, Object> msgData = adminRoomService.showRoomDetail(a_r_no);
 
         return msgData;
 
@@ -105,18 +106,25 @@ public class AdminRoomController {
         log.info("[AdminRoomController] deleteConfirm()");
 
         int a_m_no = adminRoomDto.getA_m_no();
+        log.info("a_m_no: {}", a_m_no );
+
+
 
         return adminRoomService.deleteConfirm(a_m_no);
 
     }
 
     // Room 리스트 조회 - 숙박시설 상세 페이지에서 보여지는 부분
-    @PostMapping("/showRoomList")
-    public void showRoomList(@RequestParam("a_acc_no") int a_acc_no, @RequestParam("a_m_no") int a_m_no) {
+    /*@PostMapping("/showRoomList")
+    public Map<String, Object> showRoomList(@RequestParam("a_acc_no") int a_acc_no, @RequestParam("a_m_no") int a_m_no) {
         log.info("[AdminAccmController] showRoomList()");
 
-        adminRoomService.showRoomList(a_acc_no, a_m_no);
+        Map<String, Object> msgData = new HashMap<>();
+
+        msgData = adminRoomService.showRoomList(a_acc_no, a_m_no);
+
+        return msgData;
 
     }
-
+*/
 }

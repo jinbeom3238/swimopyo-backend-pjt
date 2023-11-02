@@ -45,15 +45,13 @@
     </insert>
 
     <!-- 상세페이지 조회 - Room 정보(이미지 제외) -->
-    <select id="selectRoomInfo" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto" resultType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
+    <select id="selectRoomInfo" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
         select
-            a_r_no, a_acc_no, a_m_no, a_r_name, a_r_state, a_r_price, a_r_check_in, a_r_check_out, a_r_count, a_r_content, a_r_reg_date, a_r_mod_date
+            a_acc_no, a_m_no, a_r_name, a_r_state, a_r_price, a_r_check_in, a_r_check_out, a_r_count, a_r_content, a_r_reg_date, a_r_mod_date
         from
             tbl_admin_room
         where
-            a_m_no = #{a_m_no}
-        and
-            a_acc_no = #{a_acc_no}
+            a_r_no = #{a_r_no}
         and
             use_yn = 'Y'
     </select>
@@ -134,7 +132,7 @@
     <!-- Room 리스트 조회 - 이미지를 제외한 룸 정보 -->
     <select id="selectRoomInfoForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
         SELECT
-            a_m_no, a_r_name, a_r_state, a_r_price
+            a_r_no, a_m_no, a_r_name, a_r_state, a_r_price
         FROM
             tbl_admin_room
         WHERE

@@ -20,7 +20,7 @@ public interface IAdminRoomDaoMapper {
      * 상세페이지 조회
      */
     // Room 정보 조회(이미지 제외)
-    public AdminRoomDto selectRoomInfo(int a_acc_no);
+    public AdminRoomDto selectRoomInfo(int a_m_no);
     // Room 번호 front에 보내기
     public List<Integer> selectRoomImgNo(int a_r_no);
     // Room 이미지 조회

@@ -211,6 +211,7 @@ public class AdminAccmService implements IAdminAccmService {
                         // s3 파일 업로드
                         for (MultipartFile file : a_i_image) {
                             log.info("[AdminAccmService] a_i_image: -----> {}", file);
+//                            String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
                             String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
                             adminAccmImageDto.setA_i_image(imageUrl);
                             log.info("[AdminAccmService] imageUrl: " + imageUrl);
