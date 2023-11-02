@@ -12,7 +12,7 @@ public interface IAdminRoomDaoMapper {
     // 등록
     public int insertRoomInfo(AdminRoomDto adminRoomDto);   // 이미지를 제외한 룸 정보 등록
 
-    public int selectRoomForArNo(AdminRoomDto adminRoomDto);   // a_r_no를 가져오기 위함
+    public List<Integer> selectRoomForArNo(AdminRoomDto adminRoomDto);   // a_r_no를 가져오기 위함
 
     public int insertRoomImage(AdminRoomImageDto adminRoomImageDto);   // Room 이미지 등록
 

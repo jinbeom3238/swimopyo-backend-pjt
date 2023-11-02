@@ -41,12 +41,17 @@ public class AdminRoomService implements IAdminRoomService {
             log.info("[registConfirm] result : " + result);
 
             // 2. 등록된 룸의 번호 가져오기
-            int a_r_no = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
-            log.info("[selectRoomForArNo] a_r_no : " + a_r_no);
+            List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
+            for ( int i = 1; i < a_r_nos.size(); i++) {
+                adminRoomDto.setA_r_no(a_r_nos.get(i));
+                int a_r_no = adminRoomDto.getA_r_no();
+                log.info("a_r_no: {}", a_r_no);
+
+            }
 
             // AdminRoomImageDto 객체 생성
             AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
-            adminRoomImageDto.setA_r_no(a_r_no);
+//            adminRoomImageDto.setA_r_no(a_r_no);
 
             // 3. tbl_room_image 테이블에 이미지 정보 등록
             for (MultipartFile file : r_i_images) {
@@ -90,11 +95,20 @@ public class AdminRoomService implements IAdminRoomService {
         log.info("[selectRoomInfo] adminRoomDto: " + adminRoomDto);
         log.info("[selectRoomInfo] a_m_no: " + a_m_no);
         List<Integer> r_i_nos = adminRoomDto.getR_i_nos();
+        int a_r_no = adminRoomDto.getA_r_no();
 
         if (StringUtils.hasText(adminRoomDto.getA_r_name())) {
 
             // 룸 번호(a_r_no)를 가지고 옴
-            int a_r_no = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
+            List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
+
+            for ( int i = 1; i < a_r_nos.size(); i++) {
+                adminRoomDto.setA_r_no(a_r_nos.get(i));
+                a_r_no = adminRoomDto.getA_r_no();
+                log.info("a_r_no: {}", a_r_no);
+
+            }
+
             log.info("[selectRoomForArNo] a_r_no: " + a_r_no);
 
             if (a_r_no > 0) {
@@ -259,23 +273,46 @@ public class AdminRoomService implements IAdminRoomService {
      * Room 리스트 조회 - 숙박시설 상세 페이지에서 보여지는 부분
      */
     @Override
-    public void showRoomList(int a_acc_no) {
+    public void showRoomList(int a_acc_no, int a_m_no) {
         log.info("[AdminRoomService] showRoomList()");
 
         AdminRoomDto adminRoomDto= new AdminRoomDto();
         AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
 
+        List<AdminRoomDto> adminRoomDtos = new ArrayList<>();
+        int a_r_no = adminRoomDto.getA_r_no();
+//        a_m_no = adminRoomDto.getA_m_no();
+//        log.info("a_m_no: {}", a_m_no);
+
+
         // Room 리스트 조회(이미지 제외)
 //        AdminRoomDto adminRoomDto = iAdminRoomDaoMapper.selectRoomInfoForList(a_acc_no);
-        List<AdminRoomDto> adminRoomDtos = iAdminRoomDaoMapper.selectRoomInfoForList(a_acc_no);
+        adminRoomDtos = iAdminRoomDaoMapper.selectRoomInfoForList(a_acc_no);
+
+        log.info("a_acc_no: {}", a_acc_no);
+
+        log.info("adminRoomDtos: {}", adminRoomDtos);
 
         // a_r_no를 가지오기 위함
-        iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
+        List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
 
-        int a_r_no = adminRoomDto.getA_r_no();
+        log.info("a_r_nos: {}" + a_r_nos.get(0));
+
+        for ( int i = 1; i < a_r_nos.size(); i++) {
+            adminRoomDto.setA_r_no(a_r_nos.get(i));
+            a_r_no = adminRoomDto.getA_r_no();
+            log.info("a_r_no: {}", a_r_no);
+
+        }
+        log.info("a_r_no: {}", a_r_no);
+
+//        int a_r_no = adminRoomDto.getA_r_no();
 
         // a_r_no를 가지고 Room 이미지 가져오기
         List<AdminRoomImageDto> roomImageDtos = iAdminRoomDaoMapper.selectRoomImgForList(a_r_no);
 
+        log.info("roomImageDtos: {}", roomImageDtos);
+
     }
+
 }

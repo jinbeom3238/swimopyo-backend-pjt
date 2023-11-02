@@ -112,14 +112,11 @@ public class AdminRoomController {
 
     // Room 리스트 조회 - 숙박시설 상세 페이지에서 보여지는 부분
     @PostMapping("/showRoomList")
-    public void showRoomList(@RequestParam("a_acc_no") int a_acc_no) {
+    public void showRoomList(@RequestParam("a_acc_no") int a_acc_no, @RequestParam("a_m_no") int a_m_no) {
         log.info("[AdminAccmController] showRoomList()");
 
-        adminRoomService.showRoomList(a_acc_no);
+        adminRoomService.showRoomList(a_acc_no, a_m_no);
 
     }
-    
-
-
 
 }
