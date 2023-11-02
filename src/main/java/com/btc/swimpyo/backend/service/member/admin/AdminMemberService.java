@@ -118,7 +118,7 @@ public class AdminMemberService implements IAdminMemberService {
 //            }
 
             List<GrantedAuthority> authorities = Arrays.asList(
-                    new SimpleGrantedAuthority("ROLE_USER")
+                    new SimpleGrantedAuthority("ROLE_ADMIN")
             );
 
             UsernamePasswordAuthenticationToken authenticationToken =
