@@ -45,11 +45,11 @@ public interface IAdminRoomDaoMapper {
     public int deleteRoomImg(int a_r_no);
 
     /*
-    /*
      * Room 리스트 조회
      */
     // Room 정보 조회(이미지 제외)
     public List<AdminRoomDto> selectRoomInfoForList(int a_acc_no);
     // Room 이미지 조회
     public List<AdminRoomImageDto> selectRoomImgForList(int a_r_no);
+
 }

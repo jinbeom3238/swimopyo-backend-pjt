@@ -108,8 +108,6 @@ public class AdminRoomController {
         int a_m_no = adminRoomDto.getA_m_no();
         log.info("a_m_no: {}", a_m_no );
 
-
-
         return adminRoomService.deleteConfirm(a_m_no);
 
     }

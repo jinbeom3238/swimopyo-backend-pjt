@@ -299,24 +299,20 @@ public class AdminRoomService implements IAdminRoomService {
 
         log.info("adminRoomDtos: {}", adminRoomDtos);
 
-
-
         // a_r_no를 가지오기 위함
 //        List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
         List<Integer> a_r_nos = adminRoomDtos.stream()
                 .map(AdminRoomDto::getA_r_no)
                 .collect(Collectors.toList());
 
-
-        log.info("a_r_nos: " + a_r_nos.get(0));
-        log.info("a_r_nos: " + a_r_nos.get(1));
+//        log.info("a_r_nos: " + a_r_nos.get(0));
+//        log.info("a_r_nos: " + a_r_nos.get(1));
 
         for ( int i = 0; i < a_r_nos.size(); i++) {
 //            adminRoomDto.setA_r_no(a_r_nos.get(i));
 //            a_r_no = adminRoomDto.getA_r_no();
             a_r_no = a_r_nos.get(i);
             log.info("a_r_no: "+ a_r_no);
-
 
         }
 //        log.info("a_r_no: {}", a_r_no);
@@ -332,7 +328,6 @@ public class AdminRoomService implements IAdminRoomService {
         msgData.put("roomImageDtos", roomImageDtos);
 
         return msgData;
-
 
     }
 
