@@ -307,6 +307,7 @@ public class AdminRoomService implements IAdminRoomService {
         log.info("roomImageDtos: {}", roomImageDtos);
 
         msgData.put("adminRoomDtos", adminRoomDtos);
+        msgData.put("a_r_nos", a_r_nos);
         msgData.put("roomImageDtos", roomImageDtos);
 
         return msgData;
