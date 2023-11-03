@@ -4,6 +4,7 @@ import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import com.btc.swimpyo.backend.service.accm.user.UserAccmService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -33,8 +34,16 @@ public class UserAccmController {
     @PostMapping("/showAccmDetail")
     public Map<String, Object> showAccmDetail(@RequestParam("a_acc_no") int a_acc_no){
         log.info("[UserAccmController] showAccmDetail()");
+        // 경위도 정보를 가져오는 메소드 호출
+       /* longitude = "126.9784";  // 경도 값 설정
+        latitude = "37.5665";   // 위도 값 설정
+        ResponseEntity<String> response = kakaoMapApiController.getAddressFromCoords(longitude, latitude);
+        String address = response.getBody();*/
+
+//        log.info("[AdminAccmController] Address: " + address);
 
         return userAccmService.showAccmDetail(a_acc_no);
+
 
     }
 

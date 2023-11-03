@@ -1,5 +1,6 @@
 package com.btc.swimpyo.backend.service.accm.user;
 
+import com.btc.swimpyo.backend.controller.api.GeoCoderController;
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto;
 import com.btc.swimpyo.backend.mappers.accm.user.IUserAccmDaoMapper;
@@ -84,8 +85,18 @@ public class UserAccmService implements IUserAccmService{
         List<AdminAccmImageDto> a_i_images = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
         log.info("[UserAccmService] a_i_images: " + a_i_images);
 
+        String address = adminAccmDto.getA_acc_address();
+        log.info("[AdminAccmController] Address: " + address);
+
+        // 경도, 위도
+        Map<String, Object> coords = GeoCoderController.geoCoding(address);
+
+        // db에 넣어줘야 함
+        iUserAccmDaoMapper.insertAccmLoc(coords);
+
         msgData.put("adminAccmDto", adminAccmDto);
         msgData.put("a_i_images", a_i_images);
+        msgData.put("coords", coords);
         log.info("[UserAccmService] msgData: " + msgData);
 
         return msgData;

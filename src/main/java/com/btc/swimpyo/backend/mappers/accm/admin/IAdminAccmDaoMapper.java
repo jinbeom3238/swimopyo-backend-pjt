@@ -24,6 +24,8 @@ public interface IAdminAccmDaoMapper {
     public List<String> selectAccmImg(int a_acc_no);
     // 숙박시설 a_i_no front에 보내주기 위해 추가
     public List<Integer> selectAccmImgNo(int a_acc_no);
+    // 주소 값(a_acc_address)을 경도, 위도 값으로 변경해줌
+    public void insertAccmLoc(Map<String, Object> coords);
 
     /*
      * 수정

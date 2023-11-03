@@ -6,6 +6,7 @@ import com.btc.swimpyo.backend.dto.room.admin.AdminRoomImageDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface IUserAccmDaoMapper {
@@ -22,7 +23,11 @@ public interface IUserAccmDaoMapper {
 
     // 상세페이지 조회
     public AdminAccmDto selectAccmDetail(int a_acc_no);
+    // 주소 값을 경도, 위도 값으로 바꿔주기 위함
+    public void insertAccmLoc(Map<String, Object> coords);
+    
 
 
     public List<Integer> selectAccmImgNo(int a_acc_no);
+
 }

@@ -65,4 +65,15 @@
             aa.use_yn = 'Y'
     </select>
 
+    <!-- 주소 값(a_acc_no)을 경도, 위도 값으로 db에 저장 -->
+    <insert id="insertAccmLoc" parameterType="HashMap">
+        UPDATE
+            tbl_admin_accommodation
+        SET
+            a_acc_longitude = #{lng},
+            a_acc_latitude = #{lat}
+        WHERE
+            a_acc_address = #{address}
+    </insert>
+
 </mapper>
