@@ -4,5 +4,57 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.room.user.IUserRoomDaoMapper">
 
+    <select id="selectRoomInfoForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
+        SELECT
+            a_r_no, a_acc_no, a_r_name, a_r_state, a_r_price, a_r_check_in, a_r_check_out
+        FROM
+            tbl_admin_room
+        WHERE
+            a_acc_no = #{a_acc_no}
+        AND
+            use_yn = 'Y'
+    </select>
+
+    <!-- 리스트 조회 - 이미지 -->
+    <select id="selectRoomImgForList" parameterType="Integer" resultType="String">
+        SELECT
+            r_i_image
+        FROM
+            tbl_room_image
+        WHERE
+            a_r_no = #{a_r_no}
+    </select>
+
+    <!-- 상세페이지 조회 - 룸 정보(이미지 제외) -->
+    <select id="selectRoomInfo" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
+        SELECT
+            a_acc_no, a_r_no, a_r_name, a_r_state, a_r_price, a_r_check_in, a_r_check_out, a_r_count, a_r_content, a_r_reg_date
+        FROM
+            tbl_admin_room
+        WHERE
+            a_r_no = #{a_r_no}
+        AND
+            use_yn = 'Y'
+    </select>
+
+    <!-- 상세 페이지 조회 - Room 번호 가지고 오기 -->
+    <select id="selectRoomImgNo" parameterType="Integer" resultType="Integer">
+        SELECT
+            r_i_no
+        FROM
+            tbl_room_image
+        WHERE
+            a_r_no = #{a_r_no}
+    </select>
+
+    <!-- 상세 페이지 조회 - 이미지 -->
+    <select id="selectRoomImg" parameterType="Integer" resultType="String">
+        SELECT
+            r_i_image
+        FROM
+            tbl_room_image
+        WHERE
+            a_r_no = #{a_r_no}
+    </select>
 
 </mapper>

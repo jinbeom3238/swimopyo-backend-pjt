@@ -4,31 +4,55 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.accm.user.IUserAccmDaoMapper">
 
-    <!-- 리스트 조회 -->
+    <!-- 리스트 조회 - 이미지를 제외한 정보 -->
     <select id="selectAccmList" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
     SELECT
-        aa.a_acc_image,
+        aa.a_acc_no,
         aa.a_acc_name,
         aa.a_acc_kind,
-        arp.a_r_p_state,
+        ar.a_r_state,
         ar.a_r_check_in,
-        arp.a_r_price
+        ar.a_r_price
     FROM
         tbl_admin_accommodation aa
         JOIN
             tbl_admin_room ar
         ON
             aa.a_acc_no = ar.a_acc_no
-        JOIN
-            tbl_admin_room_price arp
-        ON
-            ar.a_r_no = arp.a_r_no;
+    </select>
+
+    <!-- a_acc_no 값 -->
+    <select id="selectAccmNo" parameterType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto" resultType="Integer">
+        SELECT
+            a_acc_no
+        FROM
+            tbl_admin_accommodation
+    </select>
+
+    <!-- a_i_no 값 -->
+    <select id="selectAccmImgNo" parameterType="Integer" resultType="Integer">
+        select
+        a_i_no
+        from
+        tbl_accommodation_image
+        where
+        a_acc_no = #{a_acc_no}
+    </select>
+
+    <!-- 리스트 조회 - 이미지 정보 -->
+    <select id="selectAccmImgList" parameterType="Integer" resultType="java.lang.String">
+        select
+            a_i_image
+        from
+            tbl_accommodation_image
+        where
+            a_acc_no = #{a_acc_no}
     </select>
 
     <!-- 상세페이지 보기 -->
     <select id="selectAccmDetail" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
         SELECT
-            aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_image, aa.a_acc_reg_date
+            aa.a_acc_no, aa.a_m_no, aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_reg_date
         FROM
             tbl_admin_accommodation aa
         JOIN
