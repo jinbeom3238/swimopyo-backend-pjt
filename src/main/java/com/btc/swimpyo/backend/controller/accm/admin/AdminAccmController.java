@@ -53,7 +53,7 @@ public class AdminAccmController {
 
     // 상세페이지 조회
     @PostMapping("/show_accm_detail")
-    public Map<String, Object> showAccmDetail(@RequestParam("a_m_no") int a_m_no) {
+    public Map<String, Object> showAccmDetail(@RequestParam(value = "a_m_no", required = false) int a_m_no) {
         log.info("[AdminAccmController] showAccmDetail()");
 
         AdminAccmImageDto adminAccmImageDto = new AdminAccmImageDto();
