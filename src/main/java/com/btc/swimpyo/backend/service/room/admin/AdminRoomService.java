@@ -47,11 +47,14 @@ public class AdminRoomService implements IAdminRoomService {
             // 2. 등록된 룸의 번호 가져오기
             List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
             for ( int i = 1; i < a_r_nos.size(); i++) {
-                adminRoomDto.setA_r_no(a_r_nos.get(i));
+                adminRoomImageDto.setA_r_no(a_r_nos.get(i));
                 int a_r_no = adminRoomImageDto.getA_r_no();
                 log.info("a_r_no: {}", a_r_no);
 
             }
+
+
+//            adminRoomImageDto.setA_r_no(a_r_no);
 
             // 3. tbl_room_image 테이블에 이미지 정보 등록
             for (MultipartFile file : r_i_images) {
@@ -307,7 +310,6 @@ public class AdminRoomService implements IAdminRoomService {
         log.info("roomImageDtos: {}", roomImageDtos);
 
         msgData.put("adminRoomDtos", adminRoomDtos);
-        msgData.put("a_r_nos", a_r_nos);
         msgData.put("roomImageDtos", roomImageDtos);
 
         return msgData;
