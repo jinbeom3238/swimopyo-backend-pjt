@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btc.swimpyo.backend.mappers.accm.user.ISearchAccmDaoMapper">
+
+    <select id="selectAccms" parameterType="String" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+        SELECT
+            *
+        FROM
+            tbl_admin_accommodation
+        WHERE
+            use_yn = 'Y'
+          AND
+            a_acc_name like concat('%', #{searchWord}  ,'%')
+
+
+    </select>
+
+
+</mapper>
