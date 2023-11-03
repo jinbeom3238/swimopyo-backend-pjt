@@ -1,6 +1,7 @@
 package com.btc.swimpyo.backend.service.accm.user;
 
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
+import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto;
 import com.btc.swimpyo.backend.mappers.accm.user.IUserAccmDaoMapper;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -29,9 +30,10 @@ public class UserAccmService implements IUserAccmService{
         int a_acc_no;
         Map<String,Object> msgData = new HashMap<>();
 
+        AdminAccmImageDto adminAccmImageDto = new AdminAccmImageDto();
         List<AdminAccmDto> adminAccmDtos;
         List<Integer> a_i_nos = new ArrayList<>();
-        List<String> adminImgDtos = new ArrayList<>();
+        List<AdminAccmImageDto> adminImgDtos = new ArrayList<>();
 
         adminAccmDtos = iUserAccmDaoMapper.selectAccmList(adminAccmDto);
         log.info("[UserAccmService] adminAccmDtos: " + adminAccmDtos);
@@ -44,12 +46,15 @@ public class UserAccmService implements IUserAccmService{
             a_acc_no = a_acc_nos.get(i);
             log.info("a_acc_no: " + a_acc_no);
 
+            adminAccmImageDto.setA_acc_no(a_acc_no);
+
             // a_i_no 가져오기
             a_i_nos = iUserAccmDaoMapper.selectAccmImgNo(a_acc_no);
             log.info("a_i_nos: " + a_i_nos);
 
             // a_acc_no로 이미지 가져오기
-            adminImgDtos = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
+            List<AdminAccmImageDto> adminAccmImagesForAccNo = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
+            adminImgDtos.addAll(adminAccmImagesForAccNo);
             log.info("[UserAccmService] adminImgDtos: " + adminImgDtos);
 
         }
@@ -76,7 +81,7 @@ public class UserAccmService implements IUserAccmService{
         log.info("[UserAccmService] a_acc_no: " + a_acc_no);
 
         // 이미지 정보 가져오기
-        List<String> a_i_images = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
+        List<AdminAccmImageDto> a_i_images = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
         log.info("[UserAccmService] a_i_images: " + a_i_images);
 
         msgData.put("adminAccmDto", adminAccmDto);

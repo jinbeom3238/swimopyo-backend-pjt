@@ -18,7 +18,7 @@ public interface IUserAccmDaoMapper {
     // a_acc_no 값 조회
     public List<Integer> selectAccmNo(AdminAccmDto adminAccmDto);
     // 이미지 조회
-    public List<String> selectAccmImgList(int a_acc_no);
+    public List<AdminAccmImageDto> selectAccmImgList(int a_acc_no);
 
     // 상세페이지 조회
     public AdminAccmDto selectAccmDetail(int a_acc_no);

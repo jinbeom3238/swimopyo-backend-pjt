@@ -1,6 +1,7 @@
 package com.btc.swimpyo.backend.service.room.user;
 
 import com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto;
+import com.btc.swimpyo.backend.dto.room.admin.AdminRoomImageDto;
 import com.btc.swimpyo.backend.dto.room.user.UserRoomDto;
 import com.btc.swimpyo.backend.mappers.room.user.IUserRoomDaoMapper;
 import com.btc.swimpyo.backend.utils.S3Uploader;
@@ -27,11 +28,12 @@ public class UserRoomService implements IUserRoomService{
     public Map<String, Object> showRoomList(int a_acc_no) {
         log.info("[UserRoomService] showRoomList()");
 
+        AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
         AdminRoomDto adminRoomDto = new AdminRoomDto();
         Map<String, Object> msgData = new HashMap<>();
 
         List<AdminRoomDto> userRoomDtos;
-        List<String> r_i_images = new ArrayList<>();
+        List<AdminRoomImageDto> r_i_images = new ArrayList<>();
         int a_r_no = adminRoomDto.getA_r_no();
 
         // 룸 정보 조회(이미지 제외)
@@ -49,11 +51,14 @@ public class UserRoomService implements IUserRoomService{
             a_r_no = a_r_nos.get(i);
             log.info("a_r_no: " + a_r_no);
 
+            adminRoomImageDto.setA_r_no(a_r_no);
+
             // r_i_no 값 가져오기
             List<Integer> r_i_nos = iUserRoomDaoMapper.selectRoomImgNo(a_r_no);
             log.info("r_i_nos: " + r_i_nos);
 
-            r_i_images = iUserRoomDaoMapper.selectRoomImgForList(a_r_no);
+            List<AdminRoomImageDto> r_i_imagesForArNo = iUserRoomDaoMapper.selectRoomImgForList(a_r_no);
+            r_i_images.addAll(r_i_imagesForArNo);
 
         }
 
@@ -73,41 +78,33 @@ public class UserRoomService implements IUserRoomService{
         log.info("[UserRoomService] showRoomDetail()");
 
         Map<String, Object> msgData = new HashMap<>();
-        List<String> r_i_images = new ArrayList<>();
+        AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
+//        List<String> r_i_images = new ArrayList<>();
 
-        AdminRoomDto adminRoomDto;
-        int r_i_no;
+//        AdminRoomDto adminRoomDto;
+//        int r_i_no;
 
         // Room 정보 조회(이미지 제외)
-        adminRoomDto = iUserRoomDaoMapper.selectRoomInfo(a_r_no);
+        AdminRoomDto adminRoomDto = iUserRoomDaoMapper.selectRoomInfo(a_r_no);
         log.info("[showRoomDetail] adminRoomDto: " + adminRoomDto);
 
         log.info("a_r_no: " + a_r_no);
+        adminRoomImageDto.setA_r_no(a_r_no);
 
         // front에 r_i_no 보내주기
         List<Integer> r_i_nos = iUserRoomDaoMapper.selectRoomImgNo(a_r_no);
         log.info("r_i_nos: " + r_i_nos);
 
-        // Room 이미지 받기
-        /*for (int i = 0; i < r_i_nos.size(); i++) {
-            r_i_no = r_i_nos.get(i);
-            log.info("r_i_no: " + r_i_no);
-
-            r_i_images = iUserRoomDaoMapper.selectRoomImg(r_i_no);
-            log.info("r_i_images: " + r_i_images);
-
-        }*/
-
-        r_i_images = iUserRoomDaoMapper.selectRoomImg(a_r_no);
-
+        List<AdminRoomImageDto> r_i_images = iUserRoomDaoMapper.selectRoomImg(a_r_no);
+        log.info("r_i_images: " + r_i_images);
 
         msgData.put("adminRoomDto", adminRoomDto);
+        msgData.put("r_i_nos", r_i_nos);
         msgData.put("r_i_images", r_i_images);
 
         log.info("msgData: " + msgData);
 
         return msgData;
-
 
     }
 
