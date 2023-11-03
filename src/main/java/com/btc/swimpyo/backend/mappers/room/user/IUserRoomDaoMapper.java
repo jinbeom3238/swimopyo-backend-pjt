@@ -21,12 +21,14 @@ public interface IUserRoomDaoMapper {
      */
     // 룸 정보 조회(이미지 제외)
     public AdminRoomDto selectRoomInfo(int a_r_no);
-
+    // front에 a_r_no 값
+    public List<Integer> selectRoomForArNo(int a_acc_no);
     // r_i_no 값
     public List<Integer> selectRoomImgNo(int aRNo);
 
     // 이미지 정보
     public List<String> selectRoomImg(int rINo);
+
 
     // 예약
 

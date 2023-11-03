@@ -30,6 +30,7 @@ public class UserAccmService implements IUserAccmService{
         Map<String,Object> msgData = new HashMap<>();
 
         List<AdminAccmDto> adminAccmDtos;
+        List<Integer> a_i_nos = new ArrayList<>();
         List<String> adminImgDtos = new ArrayList<>();
 
         adminAccmDtos = iUserAccmDaoMapper.selectAccmList(adminAccmDto);
@@ -44,7 +45,7 @@ public class UserAccmService implements IUserAccmService{
             log.info("a_acc_no: " + a_acc_no);
 
             // a_i_no 가져오기
-            List<Integer> a_i_nos = iUserAccmDaoMapper.selectAccmImgNo(a_acc_no);
+            a_i_nos = iUserAccmDaoMapper.selectAccmImgNo(a_acc_no);
             log.info("a_i_nos: " + a_i_nos);
 
             // a_acc_no로 이미지 가져오기
@@ -55,6 +56,7 @@ public class UserAccmService implements IUserAccmService{
 
         msgData.put("adminAccmDtos", adminAccmDtos);
         msgData.put("adminImgDtos", adminImgDtos);
+        msgData.put("a_i_nos", a_i_nos);
 
         log.info("[UserAccmService] msgData: " + msgData);
 
