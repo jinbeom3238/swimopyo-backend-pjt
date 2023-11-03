@@ -1,6 +1,8 @@
 package com.btc.swimpyo.backend.mappers.accm.user;
 
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
+import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto;
+import com.btc.swimpyo.backend.dto.room.admin.AdminRoomImageDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -22,5 +24,5 @@ public interface IUserAccmDaoMapper {
     public AdminAccmDto selectAccmDetail(int a_acc_no);
 
 
-
+    public List<Integer> selectAccmImgNo(int a_acc_no);
 }

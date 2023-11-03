@@ -31,6 +31,7 @@ public class UserRoomService implements IUserRoomService{
         Map<String, Object> msgData = new HashMap<>();
 
         List<AdminRoomDto> userRoomDtos;
+        List<String> r_i_images = new ArrayList<>();
         int a_r_no = adminRoomDto.getA_r_no();
 
         // 룸 정보 조회(이미지 제외)
@@ -47,10 +48,16 @@ public class UserRoomService implements IUserRoomService{
         for(int i = 0; i<a_r_nos.size(); i++) {
             a_r_no = a_r_nos.get(i);
             log.info("a_r_no: " + a_r_no);
+
+            // r_i_no 값 가져오기
+            List<Integer> r_i_nos = iUserRoomDaoMapper.selectRoomImgNo(a_r_no);
+            log.info("r_i_nos: " + r_i_nos);
+
+            r_i_images = iUserRoomDaoMapper.selectRoomImgForList(a_r_no);
+
         }
 
         // 이미지 가져오기
-        List<String> r_i_images = iUserRoomDaoMapper.selectRoomImgForList(a_r_no);
         log.info("r_i_images: " + r_i_images);
 
         msgData.put("userRoomDtos", userRoomDtos);

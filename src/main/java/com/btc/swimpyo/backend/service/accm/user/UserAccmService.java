@@ -26,27 +26,32 @@ public class UserAccmService implements IUserAccmService{
     public Map<String, Object> showAccmList(AdminAccmDto adminAccmDto) {
         log.info("[UserAccmService] showAccmList()");
 
-        int a_acc_no = adminAccmDto.getA_acc_no();
+        int a_acc_no;
         Map<String,Object> msgData = new HashMap<>();
 
         List<AdminAccmDto> adminAccmDtos;
+        List<String> adminImgDtos = new ArrayList<>();
 
         adminAccmDtos = iUserAccmDaoMapper.selectAccmList(adminAccmDto);
         log.info("[UserAccmService] adminAccmDtos: " + adminAccmDtos);
 
         // a_acc_no 값 가져오기
         List<Integer> a_acc_nos = iUserAccmDaoMapper.selectAccmNo(adminAccmDto);
+        log.info("a_acc_nos: " + a_acc_nos);
 
         for(int i = 0; i<a_acc_nos.size(); i++) {
             a_acc_no = a_acc_nos.get(i);
             log.info("a_acc_no: " + a_acc_no);
 
+            // a_i_no 가져오기
+            List<Integer> a_i_nos = iUserAccmDaoMapper.selectAccmImgNo(a_acc_no);
+            log.info("a_i_nos: " + a_i_nos);
+
+            // a_acc_no로 이미지 가져오기
+            adminImgDtos = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
+            log.info("[UserAccmService] adminImgDtos: " + adminImgDtos);
+
         }
-
-        // a_acc_no로 이미지 가져오기
-        List<String> adminImgDtos = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
-
-        log.info("[UserAccmService] adminImgDtos: " + adminImgDtos);
 
         msgData.put("adminAccmDtos", adminAccmDtos);
         msgData.put("adminImgDtos", adminImgDtos);
