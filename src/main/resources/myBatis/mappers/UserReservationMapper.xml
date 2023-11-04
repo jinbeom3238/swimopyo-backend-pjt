@@ -4,5 +4,53 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.reservation.user.IUserReservationDaoMapper">
 
+    <!-- Room 정보 가져오기 -->
+    <select id="selectRoomInfo" parameterType="com.btc.swimpyo.backend.dto.reservation.admin.AdminReservationDto" resultType="com.btc.swimpyo.backend.dto.reservation.admin.AdminReservationDto">
+        SELECT
+            ar.a_r_no, ar.a_acc_no, ar.a_r_name, ar.a_r_state, ar.a_r_price, ar.a_r_check_in, ar.a_r_check_out, aa.a_acc_name
+        FROM
+            tbl_admin_room ar
+            join
+                tbl_admin_accommodation aa
+            on
+                ar.a_acc_no = aa.a_acc_no
+        WHERE
+            ar.a_r_no = #{a_r_no}
+        AND
+            ar.use_yn IN ('Y', 'R')
+    </select>
+
+
+
+    <!-- 예약 정보 db에 저장 -->
+    <insert id="insertRsvInfo" parameterType="com.btc.swimpyo.backend.dto.reservation.admin.AdminReservationDto">
+        insert into
+            tbl_user_reservation(u_m_email,
+                                 a_r_no,
+                                 u_r_check_in,
+                                 u_r_check_out,
+                                 u_r_car_yn,
+                                 u_r_stay_yn,
+                                 u_r_name,
+                                 u_r_phone,
+                                 u_r_reg_date)
+        values (#{u_m_email},
+                #{a_r_no},
+                #{u_r_check_in},
+                #{u_r_check_out},
+                #{u_r_car_yn},
+                #{u_r_stay_yn},
+                #{u_r_name},
+                #{u_r_phone},
+                NOW())
+    </insert>
+
+    <!-- 모달창에서 입력받은 예약 날짜, 가격, 숙박/대실 여부 값 받아오기 -->
+    <select id="selectRoomModal" parameterType="com.btc.swimpyo.backend.dto.reservation.admin.AdminReservationDto" resultType="com.btc.swimpyo.backend.dto.reservation.admin.AdminReservationDto">
+        select
+        u_r_check_in, u_r_check_out, u_r_stay_yn, a_r_price
+        from
+        where
+    </select>
 
 </mapper>

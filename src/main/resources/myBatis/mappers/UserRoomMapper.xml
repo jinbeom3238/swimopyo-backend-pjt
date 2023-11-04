@@ -34,7 +34,7 @@
         WHERE
             a_r_no = #{a_r_no}
         AND
-            use_yn = 'Y'
+            use_yn = 'Y' or use_yn = 'R'
     </select>
 
     <!-- 상세 페이지 조회 - Room 번호 가지고 오기 -->
