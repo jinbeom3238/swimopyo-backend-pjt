@@ -70,10 +70,10 @@
         UPDATE
             tbl_admin_accommodation
         SET
-            a_acc_longitude = #{lng},
-            a_acc_latitude = #{lat}
+            a_acc_longitude = #{a_acc_longitude},
+            a_acc_latitude = #{a_acc_latitude}
         WHERE
-            a_acc_address = #{address}
+            a_acc_no = #{a_acc_no}
     </insert>
 
 </mapper>

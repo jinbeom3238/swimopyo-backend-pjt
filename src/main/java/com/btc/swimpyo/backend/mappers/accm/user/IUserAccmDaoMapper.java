@@ -24,7 +24,7 @@ public interface IUserAccmDaoMapper {
     // 상세페이지 조회
     public AdminAccmDto selectAccmDetail(int a_acc_no);
     // 주소 값을 경도, 위도 값으로 바꿔주기 위함
-    public void insertAccmLoc(Map<String, Object> coords);
+    public void insertAccmLoc(AdminAccmDto adminAccmDto);
     
 
 

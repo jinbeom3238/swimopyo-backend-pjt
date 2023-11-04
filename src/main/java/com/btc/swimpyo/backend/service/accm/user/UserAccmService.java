@@ -1,27 +1,29 @@
 package com.btc.swimpyo.backend.service.accm.user;
 
-import com.btc.swimpyo.backend.controller.api.GeoCoderController;
+import com.btc.swimpyo.backend.controller.api.KakaoMapApiController;
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmImageDto;
+import com.btc.swimpyo.backend.dto.accm.admin.XyDto;
 import com.btc.swimpyo.backend.mappers.accm.user.IUserAccmDaoMapper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.security.InvalidKeyException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class UserAccmService implements IUserAccmService{
 
-    private IUserAccmDaoMapper iUserAccmDaoMapper;
+    private final IUserAccmDaoMapper iUserAccmDaoMapper;
+    private final KakaoMapApiController kakaoMapApiController;
 
-    public UserAccmService(IUserAccmDaoMapper iUserAccmDaoMapper) {
-        this.iUserAccmDaoMapper = iUserAccmDaoMapper;
-    }
 
     // 리스트 조회
     @Override
@@ -72,7 +74,7 @@ public class UserAccmService implements IUserAccmService{
 
     // 상세페이지 보기
     @Override
-    public Map<String, Object> showAccmDetail(int a_acc_no) {
+    public Map<String, Object> showAccmDetail(int a_acc_no) throws JsonProcessingException {
         log.info("[UserAccmService] showAccmDetail()");
 
         Map<String, Object> msgData = new HashMap<>();
@@ -88,15 +90,58 @@ public class UserAccmService implements IUserAccmService{
         String address = adminAccmDto.getA_acc_address();
         log.info("[AdminAccmController] Address: " + address);
 
+        String jsonString = kakaoMapApiController.getKakaoApiFromAddress(address);
+        log.info("value: " + jsonString);
+
+        // JSON String -> Map
+        ObjectMapper mapper = new ObjectMapper();
+
+        TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>(){};
+
+        Map<String, Object> jsonMap = mapper.readValue(jsonString, typeRef);
+
+        List<LinkedHashMap<String, Object>> document = (List<LinkedHashMap<String, Object>>) jsonMap.get("documents");
+
+        log.info("docment: " + document.get(0).get("address"));
+
+//        StringTokenizer xySplit = new StringTokenizer(String.valueOf(document.get(0).get("address")), ",");
+//
+//        while (xySplit.hasMoreTokens()){
+//
+//            log.info("xySplit:" + xySplit.nextToken());
+//
+//        }
+
+        String [] list = String.valueOf(document.get(0).get("address")).split(",");
+        for(int i =10; i< list.length; i++) {
+            log.info("list " + i + "" + list[i]);
+        }
+
+//        log.info("x : " + list[10].substring(3, list[10].length()));
+//        log.info("x : " + list[11].substring(3, list[11].length()-1));
+
+        String a_acc_longitude = list[10].substring(3, list[10].length());
+        String a_acc_latitude = list[11].substring(3, list[11].length()-1);
+        adminAccmDto.setA_acc_longitude(a_acc_longitude);
+        adminAccmDto.setA_acc_latitude(a_acc_latitude);
+
+        log.info("x : " + adminAccmDto.getA_acc_longitude());
+        log.info("y : " + adminAccmDto.getA_acc_latitude());
+
+
+        log.info("jsonMap:---------->" + jsonMap.get("documents"));
+
+//        String key = "AIzaSyAULzYweWdEST8X8YqvXhwCDRiCEAMNIUw";
+
         // 경도, 위도
-        Map<String, Object> coords = GeoCoderController.geoCoding(address);
+//        Map<String, Object> coords = GeoCoderController.geoCoding(address, key);
 
         // db에 넣어줘야 함
-        iUserAccmDaoMapper.insertAccmLoc(coords);
+        iUserAccmDaoMapper.insertAccmLoc(adminAccmDto);
 
         msgData.put("adminAccmDto", adminAccmDto);
         msgData.put("a_i_images", a_i_images);
-        msgData.put("coords", coords);
+//        msgData.put("coords", coords);
         log.info("[UserAccmService] msgData: " + msgData);
 
         return msgData;
