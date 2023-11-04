@@ -87,31 +87,30 @@ public class UserAccmService implements IUserAccmService{
         List<AdminAccmImageDto> a_i_images = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
         log.info("[UserAccmService] a_i_images: " + a_i_images);
 
+        // 경도, 위도 값을 가지고 오기 위한 a_acc_address
         String address = adminAccmDto.getA_acc_address();
         log.info("[AdminAccmController] Address: " + address);
 
+        // kakao - getKakaoApiFromAddress매서드를 통해 a_acc_address에 관한 정보 값들을 String 형태로 받아옴
         String jsonString = kakaoMapApiController.getKakaoApiFromAddress(address);
-        log.info("value: " + jsonString);
+        log.info("jsonString: " + jsonString);
 
         // JSON String -> Map
         ObjectMapper mapper = new ObjectMapper();
-
+        // Map<String, Object> 형태의 데이터를 읽고, TypeReference를 사용하여 이 정보를 ObjectMapper에게 전달
+        // 즉, JSON을 어떤 형태의 Java 객체로 변환할지 결정
         TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>(){};
-
+        // mapper 객체를 사용하여 JSON 문자열 jsonString을 읽고, typeRef에 지정된 형태로 맵(Map) 형식의 자바 객체로 변환
         Map<String, Object> jsonMap = mapper.readValue(jsonString, typeRef);
+
+        log.info("jsonMap: " + jsonMap);
 
         List<LinkedHashMap<String, Object>> document = (List<LinkedHashMap<String, Object>>) jsonMap.get("documents");
 
         log.info("docment: " + document.get(0).get("address"));
 
-//        StringTokenizer xySplit = new StringTokenizer(String.valueOf(document.get(0).get("address")), ",");
-//
-//        while (xySplit.hasMoreTokens()){
-//
-//            log.info("xySplit:" + xySplit.nextToken());
-//
-//        }
-
+        // document 내의 {} 안에 있는 값들이 배열이 아니라 하나의 String 값으로 되어 있었던 것. 
+        // 따라서, split매서드를 통해 "," 문자열을 기준으로 하나씩 뽑아옴
         String [] list = String.valueOf(document.get(0).get("address")).split(",");
         for(int i =10; i< list.length; i++) {
             log.info("list " + i + "" + list[i]);
@@ -120,6 +119,8 @@ public class UserAccmService implements IUserAccmService{
 //        log.info("x : " + list[10].substring(3, list[10].length()));
 //        log.info("x : " + list[11].substring(3, list[11].length()-1));
 
+        // substring을 통해 x=~~으로 담겨있던 값들을 x=을 제외한 경도, 위도 값만 가지고 올 수 있었음
+        // 위도, 경도 값을 adminAccmDto에 담아줌 -> 이후 Map 형태로 front에 전달
         String a_acc_longitude = list[10].substring(3, list[10].length());
         String a_acc_latitude = list[11].substring(3, list[11].length()-1);
         adminAccmDto.setA_acc_longitude(a_acc_longitude);
@@ -128,20 +129,13 @@ public class UserAccmService implements IUserAccmService{
         log.info("x : " + adminAccmDto.getA_acc_longitude());
         log.info("y : " + adminAccmDto.getA_acc_latitude());
 
-
         log.info("jsonMap:---------->" + jsonMap.get("documents"));
-
-//        String key = "AIzaSyAULzYweWdEST8X8YqvXhwCDRiCEAMNIUw";
-
-        // 경도, 위도
-//        Map<String, Object> coords = GeoCoderController.geoCoding(address, key);
 
         // db에 넣어줘야 함
         iUserAccmDaoMapper.insertAccmLoc(adminAccmDto);
 
         msgData.put("adminAccmDto", adminAccmDto);
         msgData.put("a_i_images", a_i_images);
-//        msgData.put("coords", coords);
         log.info("[UserAccmService] msgData: " + msgData);
 
         return msgData;
