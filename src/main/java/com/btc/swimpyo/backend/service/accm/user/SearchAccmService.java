@@ -22,11 +22,12 @@ public class SearchAccmService implements ISearchAccmService{
     public List<AdminAccmDto> searchAccm(Map<String, Object> msgMap, AdminAccmDto adminAccmDto) {
         log.info("searchAccm");
         log.info("msgMap ==> {}", msgMap);
-        String searchWord = msgMap.get("searchAccm").toString();
+        String searchWord = msgMap.get("searchValue").toString();
 
-        List<AdminAccmDto> selectAccms = iSearchAccmDaoMapper.selectAccms(searchWord);
+        List<AdminAccmDto> selectAccms = iSearchAccmDaoMapper.selectAccms(msgMap);
         log.info("selectAccms ==> {}", selectAccms);
 
         return selectAccms;
+//    return null;
     }
 }

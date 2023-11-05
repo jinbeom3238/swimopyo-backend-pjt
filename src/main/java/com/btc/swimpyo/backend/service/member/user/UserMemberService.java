@@ -45,10 +45,11 @@ public class UserMemberService implements IUserMemberService {
     @Override
     public int signUp(Map<String, Object> msgMap, UserMemberDto userMemberDto) {
         log.info("signUp");
+        String birthDate = msgMap.get("birth").toString().split("T")[0];
         userMemberDto.setU_m_email(msgMap.get("email").toString());
         userMemberDto.setU_m_pw(passwordEncoder.encode(msgMap.get("pw").toString()));
         userMemberDto.setU_m_name(msgMap.get("name").toString());
-        userMemberDto.setU_m_birth(msgMap.get("birth").toString());
+        userMemberDto.setU_m_birth(birthDate);
         userMemberDto.setU_m_phone(msgMap.get("phone").toString());
         userMemberDto.setU_m_nickname(msgMap.get("nickname").toString());
 

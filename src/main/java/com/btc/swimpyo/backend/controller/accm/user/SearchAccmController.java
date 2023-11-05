@@ -6,10 +6,7 @@ import com.btc.swimpyo.backend.service.accm.user.SearchAccmService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -23,14 +20,16 @@ public class SearchAccmController {
     private final ISearchAccmService searchAccmService;
 
     @GetMapping("/search")
-    public Object searchAccm(@RequestBody Map<String, Object> msgMap, AdminAccmDto adminAccmDto) {
+    public Object searchAccm(@RequestParam Map<String, Object> msgMap, AdminAccmDto adminAccmDto) {
         log.info("searchAccm");
         List<AdminAccmDto> searchAccms = searchAccmService.searchAccm(msgMap, adminAccmDto);
 
-        log.info("searchAccms ==> {}", searchAccms);
+        log.info("msgMap ==> {}", msgMap);
 
         return searchAccms;
+//        return null;
     }
+
 
 
 }
