@@ -68,10 +68,11 @@ public class KakaoPayService {
         // 카카오 요청
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", cid);
-        parameters.add("tid", kakaoReady.getTid());
-        parameters.add("partner_order_id", "가맹점 주문 번호");
-        parameters.add("partner_user_id", "가맹점 회원 ID");
-        parameters.add("pg_token", pgToken);
+//        parameters.add("tid", kakaoReady.getTid());
+        parameters.add("tid", "T547b40c2b8b1abb93e6");
+        parameters.add("partner_order_id", "90000");
+        parameters.add("partner_user_id", "iieunji023");
+        parameters.add("pg_token", "078afb7df5107ad82338");
 
         // 파라미터, 헤더
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
@@ -96,10 +97,10 @@ public class KakaoPayService {
         // 카카오페이 요청
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", cid);
-        parameters.add("tid", "환불할 결제 고유 번호");
-        parameters.add("cancel_amount", "환불 금액");
-        parameters.add("cancel_tax_free_amount", "환불 비과세 금액");
-        parameters.add("cancel_vat_amount", "환불 부가세");
+        parameters.add("tid", "T547b40c2b8b1abb93e6");
+        parameters.add("cancel_amount", "100000");
+        parameters.add("cancel_tax_free_amount", "90000");
+        parameters.add("cancel_vat_amount", "10000");
 
         // 파라미터, 헤더
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
