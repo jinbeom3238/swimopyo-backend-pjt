@@ -1,13 +1,9 @@
 package com.btc.swimpyo.backend.controller.reservation.user;
 
-import com.btc.swimpyo.backend.dto.reservation.admin.AdminReservationDto;
-import com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto;
+import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.service.Reservation.user.UserReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -26,19 +22,30 @@ public class UserReservationController {
     // 5. 결제 페이지에는 룸 정보, 예약 날짜, 가격이 나오고, 실사용자의 이름과 연락처를 입력한다.
     // 6. 모두 입력하면 결제하기 버튼을 통해 카카오페이로 결제할 수 있다.
 
-    // 예약하기 버튼 클릭 시 예약 페이지(모달창)
-    @PostMapping("")
-    public String createReservation(@RequestPart AdminReservationDto adminReservationDto){
-        log.info("[UserReservationController] createReservation()");
-        log.info("[UserReservationController] adminReservaitionDto(): " + adminReservationDto);
+    /*
+     * 예약하기 버튼 클릭 시 예약 페이지(모달창) -> 모달창에서 넘어온 값을 가져와서!!!
+     * 이게 예약 페이지에 쓰일 데이터를 뿌려주는 곳!!
+     * 방 상세 정보 + 모달창에서 받은 정보가 담겨 있어야 함 .
+     */
+    @PostMapping("/modal")
+    public ReservationDto createRsvReady(@RequestPart ReservationDto reservationDto){
+        log.info("[UserReservationController] createRsvReady()");
+        log.info("[UserReservationController] adminReservaitionDto(): " + reservationDto);
 
-        return userReservationService.createReservation(adminReservationDto);
+        return userReservationService.createRsvReady(reservationDto);
 
     }
 
     // 결제 페이지
-//    @GetMapping("")
-    
+    @PostMapping("")
+    public String createRsvApproval(@RequestPart ReservationDto reservationDto) {
+        log.info("[UserReservationController] createRsvApproval()");
+        log.info("[UserReservationController] adminReservaitionDto(): " + reservationDto);
 
+        log.info("[UserReservationController] u_m_email(): " + reservationDto.getU_m_email());
+
+        return userReservationService.createRsvApproval(reservationDto);
+
+    }
 
 }

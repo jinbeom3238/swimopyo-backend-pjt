@@ -1,9 +1,11 @@
-package com.btc.swimpyo.backend.dto.reservation.admin;
+package com.btc.swimpyo.backend.dto.reservation;
 
 import lombok.Data;
 
+import java.sql.Time;
+
 @Data
-public class AdminReservationDto {
+public class ReservationDto {
 
     private int u_r_no;
     private String use_yn;
@@ -11,6 +13,8 @@ public class AdminReservationDto {
     private int a_r_no;
     private String u_r_check_in;
     private String u_r_check_out;
+    private Time u_r_check_in_time;
+    private Time u_r_check_out_time;
     private String u_r_car_yn;
     private String u_r_stay_yn;
     private String u_r_name;
