@@ -99,23 +99,43 @@ public class UserReservationService implements IUserReservationService{
         Time u_r_check_out_time = reservationDto.getU_r_check_out_time();
         log.info("u_r_check_out_time:" + u_r_check_out_time);
 
+        log.info("u_r_stay_yn:" + reservationDto.getU_r_stay_yn());
+
         // 도보/차량, 실사용자 정보와 기존에 받았던 예약날짜, 숙박/대실, 가격 정보 db에 저장하기
-        int result = iUserReservationDaoMapper.insertRsvInfo(reservationDto);
-        log.info("reservationDto:" + reservationDto);
+        if (reservationDto.getU_r_stay_yn().equals("Y")){
+            int result = iUserReservationDaoMapper.insertRsvInfo(reservationDto);
+            log.info("reservationDto:" + reservationDto);
 
-        if(result > 0) {
-            log.info("예약 완료");
-//            iUserReservationDaoMapper.updateRsvUse(reservationDto);
+            if(result > 0) {
+                log.info("예약 완료");
 
-            return "success";
+                return "success";
 
-        } else {
-            log.info("예약 실패 ㅠ_ㅠ");
+            } else {
+                log.info("예약 실패 ㅠ_ㅠ");
 
-            return "fail";
+                return "fail";
+
+            }
+
+        } else if(reservationDto.getU_r_stay_yn().equals("N")) {
+            int result = iUserReservationDaoMapper.insertRsvInfoByMoment(reservationDto);
+
+            if(result > 0) {
+                log.info("예약 완료");
+
+                return "success";
+
+            } else {
+                log.info("예약 실패 ㅠ_ㅠ");
+
+                return "fail";
+
+            }
 
         }
 
+        return "success";
     }
 
 }

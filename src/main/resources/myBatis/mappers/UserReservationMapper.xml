@@ -78,8 +78,6 @@
                                  a_r_no,
                                  u_r_check_in,
                                  u_r_check_out,
-                                 u_r_check_in_time,
-                                 u_r_check_out_time,
                                  u_r_car_yn,
                                  u_r_stay_yn,
                                  u_r_name,
@@ -89,6 +87,32 @@
                 #{a_r_no},
                 #{u_r_check_in},
                 #{u_r_check_out},
+                #{u_r_car_yn},
+                #{u_r_stay_yn},
+                #{u_r_name},
+                #{u_r_phone},
+                NOW())
+    </insert>
+
+
+    <!-- 예약 정보 db에 저장 -->
+    <insert id="insertRsvInfoByMoment" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
+        insert into
+        tbl_user_reservation(u_m_email,
+                             a_r_no,
+                             u_r_check_in,
+                             u_r_check_out,
+                             u_r_check_in_time,
+                             u_r_check_out_time,
+                             u_r_car_yn,
+                             u_r_stay_yn,
+                             u_r_name,
+                             u_r_phone,
+                             u_r_reg_date)
+        values (#{u_m_email},
+                #{a_r_no},
+                NOW(),
+                NOW(),
                 #{u_r_check_in_time},
                 #{u_r_check_out_time},
                 #{u_r_car_yn},
@@ -97,4 +121,5 @@
                 #{u_r_phone},
                 NOW())
     </insert>
+
 </mapper>

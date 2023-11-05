@@ -15,9 +15,5 @@ public interface IUserReservationDaoMapper {
     // 예약 가능한 방만 찾기
     public int searchDate(ReservationDto reservationDto);
     public int searchTime(ReservationDto reservationDto);
-
-    // 예약 확정 후 USE_YN 값 바꾸기(Y -> R)
-    public void updateRsvUse(ReservationDto reservationDto);
-
-
+    public int insertRsvInfoByMoment(ReservationDto reservationDto);
 }

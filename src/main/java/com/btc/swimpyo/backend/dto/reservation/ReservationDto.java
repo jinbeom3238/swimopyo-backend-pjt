@@ -3,6 +3,7 @@ package com.btc.swimpyo.backend.dto.reservation;
 import lombok.Data;
 
 import java.sql.Time;
+import java.sql.Timestamp;
 
 @Data
 public class ReservationDto {

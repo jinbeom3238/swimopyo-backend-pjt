@@ -4,6 +4,7 @@ import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.service.Reservation.user.UserReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -27,7 +28,8 @@ public class UserReservationController {
      * 이게 예약 페이지에 쓰일 데이터를 뿌려주는 곳!!
      * 방 상세 정보 + 모달창에서 받은 정보가 담겨 있어야 함 .
      */
-    @PostMapping("/modal")
+    @PostMapping("/ready")
+    @Transactional
     public ReservationDto createRsvReady(@RequestPart ReservationDto reservationDto){
         log.info("[UserReservationController] createRsvReady()");
         log.info("[UserReservationController] adminReservaitionDto(): " + reservationDto);
@@ -38,6 +40,7 @@ public class UserReservationController {
 
     // 결제 페이지
     @PostMapping("")
+
     public String createRsvApproval(@RequestPart ReservationDto reservationDto) {
         log.info("[UserReservationController] createRsvApproval()");
         log.info("[UserReservationController] adminReservaitionDto(): " + reservationDto);
