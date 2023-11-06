@@ -3,6 +3,7 @@ package com.btc.swimpyo.backend.controller.kakaoPay;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoCancelResponseDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto;
+import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.service.kakaoPay.BusinessLogicException;
 import com.btc.swimpyo.backend.service.kakaoPay.ExceptionCode;
 import com.btc.swimpyo.backend.service.kakaoPay.KakaoPayService;
@@ -25,9 +26,9 @@ public class KakaoPayController {
     * 결제 요청
     */
     @PostMapping("/ready")
-    public KakaoReadyResponseDto readyToKakaoPay() {
+    public KakaoReadyResponseDto readyToKakaoPay(ReservationDto reservationDto) {
 
-        return kakaoPayService.kakaoPayReady();
+        return kakaoPayService.kakaoPayReady(reservationDto);
 
     }
 
@@ -35,9 +36,11 @@ public class KakaoPayController {
      * 결제 성공
      */
     @GetMapping("/success")
-    public ResponseEntity afterPayRequest(@RequestParam("pg_token") String pgToken) {
+    public ResponseEntity afterPayRequest(@RequestParam("pg_token") String pgToken, @RequestPart KakaoReadyResponseDto kakaoReady) {
 
-        KakaoApproveResponseDto kakaoApprove = kakaoPayService.approveResponse(pgToken);
+        kakaoReady.setPg_token(pgToken);
+
+        KakaoApproveResponseDto kakaoApprove = kakaoPayService.approveResponse(kakaoReady);
 
         return new ResponseEntity<>(kakaoApprove, HttpStatus.OK);
 

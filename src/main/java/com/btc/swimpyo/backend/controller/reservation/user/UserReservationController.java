@@ -46,6 +46,7 @@ public class UserReservationController {
         log.info("[UserReservationController] adminReservaitionDto(): " + reservationDto);
 
         log.info("[UserReservationController] u_m_email(): " + reservationDto.getU_m_email());
+        log.info("[UserReservationController] a_r_name(): " + reservationDto.getA_r_name());
 
         return userReservationService.createRsvApproval(reservationDto);
 
