@@ -23,16 +23,21 @@ public class SearchAccmService implements ISearchAccmService{
     @Override
     public List<AdminAccmDto> searchAccm(Map<String, Object> msgMap, AdminAccmDto adminAccmDto) {
         log.info("searchAccm");
-        log.info("msgMap ==> {}", msgMap);
-        LocalDate startDay = LocalDate.parse(msgMap.get("startDay").toString());
-        LocalDate endDay = LocalDate.parse(msgMap.get("endDay").toString());
+        String parsingStartDay = msgMap.get("startDay").toString().split("T")[0];
+        String parsingEndDay = msgMap.get("endDay").toString().split("T")[0];
+        msgMap.put("startDay", parsingStartDay);
+        msgMap.put("endDay", parsingEndDay);
+        LocalDate startDay = LocalDate.parse(parsingStartDay);
+        LocalDate endDay = LocalDate.parse(parsingEndDay);
         long Days = ChronoUnit.DAYS.between(startDay, endDay);
         msgMap.put("Days", Days);
+        msgMap.put("priceOrder", Integer.parseInt(msgMap.get("priceOrder").toString()));
+        log.info("msgMap ==> {}", msgMap);
 
         List<AdminAccmDto> selectAccms = iSearchAccmDaoMapper.selectAccms(msgMap);
         log.info("selectAccms ==> {}", selectAccms);
 
         return selectAccms;
-//    return null;
+
     }
 }
