@@ -1,5 +1,6 @@
 package com.btc.swimpyo.backend.dto.kakaoPay;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -7,6 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@Data
 public class KakaoApproveResponseDto {
 
     private String aid; // 요청 고유 번호

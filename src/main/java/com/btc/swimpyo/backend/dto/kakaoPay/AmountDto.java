@@ -1,5 +1,6 @@
 package com.btc.swimpyo.backend.dto.kakaoPay;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -7,6 +8,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
+@Data
 public class AmountDto {
 
     private int total; // 총 결제 금액
