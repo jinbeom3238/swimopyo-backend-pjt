@@ -79,54 +79,54 @@
     <!-- 수정 - 이미지를 제외한 숙박시설 정보 update -->
     <update id="updateRoomInfo" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto">
         UPDATE
-        tbl_admin_room
+            tbl_admin_room
         SET
-        a_r_name = #{a_r_name},
-        a_r_state = #{a_r_state},
-        a_r_price = #{a_r_price},
-        a_r_check_in = #{a_r_check_in},
-        a_r_check_out = #{a_r_check_out},
-        a_r_count = #{a_r_count},
-        a_r_content = #{a_r_content},
-        a_r_mod_date = NOW()
+            a_r_name = #{a_r_name},
+            a_r_state = #{a_r_state},
+            a_r_price = #{a_r_price},
+            a_r_check_in = #{a_r_check_in},
+            a_r_check_out = #{a_r_check_out},
+            a_r_count = #{a_r_count},
+            a_r_content = #{a_r_content},
+            a_r_mod_date = NOW()
         WHERE
-        a_m_no = #{a_m_no}
+            a_r_no = #{a_r_no}
     </update>
 
     <!-- front에서 요청받은 r_i_no 리스트들에 대한 image 값들을 들고 오기 위함 -->
     <select id="selectRoomImgs" parameterType="Integer" resultType="String">
         SELECT
-        r_i_image
+            r_i_image
         FROM
-        tbl_room_image
+            tbl_room_image
         WHERE
-        r_i_no = #{deleteNo}
+            r_i_no = #{deleteNo}
     </select>
 
     <!-- deleteNo를 통해 기존 이미지 삭제 -->
     <delete id="deleteRoomImgs" parameterType="Integer">
         DELETE FROM
-        tbl_room_image
+            tbl_room_image
         WHERE
-        r_i_no = #{deleteNo}
+            r_i_no = #{deleteNo}
     </delete>
 
     <!-- 삭제 - Room (이미지x) 삭제 -->
     <update id="deleteRoomInfo" parameterType="Integer">
         UPDATE
-        tbl_admin_room
+            tbl_admin_room
         SET
-        use_yn = 'N'
+            use_yn = 'N'
         Where
-        a_m_no = #{a_m_no}
+            a_m_no = #{a_m_no}
     </update>
 
     <!-- 삭제 - Room 이미지 삭제 -->
     <delete id="deleteRoomImg" parameterType="Integer">
         DELETE FROM
-        tbl_room_image
+            tbl_room_image
         WHERE
-        a_r_no = #{a_r_no}
+            a_r_no = #{a_r_no}
     </delete>
 
     <!-- Room 리스트 조회 - 이미지를 제외한 룸 정보 -->

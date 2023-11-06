@@ -13,7 +13,7 @@ public class AdminRoomDto {
     private int a_m_no;
     private String a_r_name;
     private String a_r_state;
-    private String a_r_price;
+    private int a_r_price;
     private String a_r_check_in;
     private String a_r_check_out;
     private String a_r_count;

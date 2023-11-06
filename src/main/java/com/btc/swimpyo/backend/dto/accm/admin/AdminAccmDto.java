@@ -28,7 +28,7 @@ public class AdminAccmDto {
     private String a_r_check_in;
 
     private String a_r_p_state;
-    private String a_r_price;
+    private int a_r_price;
 
     private  String a_i_image;
     private List<String> a_i_images;

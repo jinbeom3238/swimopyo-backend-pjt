@@ -29,11 +29,7 @@ public class UserReservationService implements IUserReservationService{
         String user_id = "iieunji023@gmail.com";
 
         log.info("state:" + reservationDto.getU_r_stay_yn());
-        Time u_r_check_in_time = reservationDto.getU_r_check_in_time();
-        // front에서 받아온 u_r_check_in_time에 + 3시간 추가한 값을 u_r_check_out_time에 넣어주기
-        Time u_r_check_out_time = new Time(u_r_check_in_time.getTime() + (4 * 60 * 60 * 1000));
-        reservationDto.setU_r_check_out_time(u_r_check_out_time);
-        log.info("u_r_check_out_time:" + reservationDto.getU_r_check_out_time());
+
 
         // 숙박/대실 분류
         if(reservationDto.getU_r_stay_yn().equals("Y")) {
@@ -52,6 +48,12 @@ public class UserReservationService implements IUserReservationService{
 
         } else if(reservationDto.getU_r_stay_yn().equals("N")){
             log.info("stay_yn = N !! ");
+
+            Time u_r_check_in_time = reservationDto.getU_r_check_in_time();
+            // front에서 받아온 u_r_check_in_time에 + 3시간 추가한 값을 u_r_check_out_time에 넣어주기
+            Time u_r_check_out_time = new Time(u_r_check_in_time.getTime() + (4 * 60 * 60 * 1000));
+            reservationDto.setU_r_check_out_time(u_r_check_out_time);
+            log.info("u_r_check_out_time:" + reservationDto.getU_r_check_out_time());
 
             // 대실 - - 예약 차있는 방 찾기
             int result = iUserReservationDaoMapper.searchTime(reservationDto);
@@ -96,8 +98,7 @@ public class UserReservationService implements IUserReservationService{
 
         reservationDto.setU_m_email(user_id);
 
-        Time u_r_check_out_time = reservationDto.getU_r_check_out_time();
-        log.info("u_r_check_out_time:" + u_r_check_out_time);
+
 
         log.info("u_r_stay_yn:" + reservationDto.getU_r_stay_yn());
 
@@ -120,6 +121,9 @@ public class UserReservationService implements IUserReservationService{
 
         } else if(reservationDto.getU_r_stay_yn().equals("N")) {
             int result = iUserReservationDaoMapper.insertRsvInfoByMoment(reservationDto);
+
+            Time u_r_check_out_time = reservationDto.getU_r_check_out_time();
+//        log.info("u_r_check_out_time:" + u_r_check_out_time);
 
             if(result > 0) {
                 log.info("예약 완료");

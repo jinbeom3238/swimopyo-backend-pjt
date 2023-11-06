@@ -40,6 +40,7 @@ public class KakaoPayController {
         KakaoApproveResponseDto kakaoApprove = kakaoPayService.approveResponse(pgToken);
 
         return new ResponseEntity<>(kakaoApprove, HttpStatus.OK);
+
     }
 
     /*
@@ -49,6 +50,7 @@ public class KakaoPayController {
     public void cancel() {
 
         throw new BusinessLogicException(ExceptionCode.PAY_CANCEL);
+
     }
 
     /*
@@ -58,6 +60,7 @@ public class KakaoPayController {
     public void fail() {
 
         throw new BusinessLogicException(ExceptionCode.PAY_FAILED);
+
     }
 
     /*
@@ -69,6 +72,7 @@ public class KakaoPayController {
         KakaoCancelResponseDto kakaoCancelResponse = kakaoPayService.kakaoCancel();
 
         return new ResponseEntity<>(kakaoCancelResponse, HttpStatus.OK);
+
     }
 
 }
