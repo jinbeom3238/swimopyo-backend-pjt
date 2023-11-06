@@ -9,7 +9,9 @@ import java.util.List;
 @Mapper
 public interface IAdminRoomDaoMapper {
 
-    // 등록
+    /*
+     * 등록
+     */
     public int insertRoomInfo(AdminRoomDto adminRoomDto);   // 이미지를 제외한 룸 정보 등록
 
     public List<Integer> selectRoomForArNo(AdminRoomDto adminRoomDto);   // a_r_no를 가져오기 위함

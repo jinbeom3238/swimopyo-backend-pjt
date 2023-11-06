@@ -28,13 +28,16 @@ public class AdminAccmDto {
     private String a_r_check_in;
 
     private String a_r_p_state;
-    private String a_r_price;
+    private int a_r_price;
 
     private  String a_i_image;
     private List<String> a_i_images;
 
     private int a_i_no;
     private List<Integer> a_i_nos;
+
+    private String a_acc_longitude;
+    private String a_acc_latitude;
 
 
 //    private List<String> a_acc_images; // 여러 장의 이미지 URL을 저장할 리스트

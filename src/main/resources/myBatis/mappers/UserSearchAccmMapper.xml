@@ -30,14 +30,12 @@
             </if>
             <!-- 예약 가능한 날짜 범위 검색 조건 -->
             <if test="startDay != null and endDay != null and able == 'possible'">
-                AND NOT EXISTS (
-                SELECT a_acc_name
-                FROM tbl_room rm2
-                WHERE rm2.a_acc_name = a.a_acc_name
-                AND rm2.reser_date <![CDATA[ >= ]]> #{startDay}
-                AND rm2.reser_date <![CDATA[ < ]]> #{endDay}
-                AND rm2.remaining_room <![CDATA[ <= ]]> 0
-                )
+                AND 3 = (select count(*) from tbl_room b where b.reser_date <![CDATA[ >= ]]> #{startDay}
+                AND b.reser_date <![CDATA[ < ]]> #{endDay}
+                AND a.a_acc_name = b.a_acc_name
+                AND b.remaining_room > 0 group by a_acc_name)
+                and  rm.reser_date <![CDATA[ >= ]]> #{startDay}
+                AND rm.reser_date <![CDATA[ < ]]> #{endDay}
             </if>
             <!-- 업소 종류별 검색 조건 -->
             <if test="accmValue != null">

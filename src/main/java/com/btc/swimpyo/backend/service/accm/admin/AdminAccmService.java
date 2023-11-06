@@ -165,92 +165,92 @@ public class AdminAccmService implements IAdminAccmService {
 
         // update가 되면
 //        if (result > 0) {
-            log.info("[AdminAccmService] updateAccmInfo() SUCCESS!! GOGO IMAGE UPDATE~!!");
+        log.info("[AdminAccmService] updateAccmInfo() SUCCESS!! GOGO IMAGE UPDATE~!!");
 
-            // 기존이미지를 삭제시킨다면
-            if(deleteImgs != null) {
-                log.info("deleteImgs NOT NULL!!");
+        // 기존이미지를 삭제시킨다면
+        if(deleteImgs != null) {
+            log.info("deleteImgs NOT NULL!!");
 
-                // deleteImgs가 integer이므로 String imageUrl에 담아주기 위해 deleteImgFile 리스트로 담아오기
-                // List<String> deleteImgFile = iAdminAccmDaoMapper.selectAccmImg(a_acc_no);
+            // deleteImgs가 integer이므로 String imageUrl에 담아주기 위해 deleteImgFile 리스트로 담아오기
+            // List<String> deleteImgFile = iAdminAccmDaoMapper.selectAccmImg(a_acc_no);
 
-                // s3 삭제
+            // s3 삭제
                 /*for (String imageUrl : deleteImgs) {
                     s3Uploader.deleteFileFromS3(imageUrl);
 
                 }*/
 
-                // s3 & db 삭제
-                // deleteImgs가 List로 담기므로 이미지 하나씩 삭제해주기 위해 for문 사용
-                for(int i = 0; i < deleteImgs.size(); i++) {
-                    adminAccmDto.setA_i_no(deleteImgs.get(i));
-                    int deleteNo = adminAccmDto.getA_i_no();
-                    log.info("a_i_no: " + deleteNo);
+            // s3 & db 삭제
+            // deleteImgs가 List로 담기므로 이미지 하나씩 삭제해주기 위해 for문 사용
+            for(int i = 0; i < deleteImgs.size(); i++) {
+                adminAccmDto.setA_i_no(deleteImgs.get(i));
+                int deleteNo = adminAccmDto.getA_i_no();
+                log.info("a_i_no: " + deleteNo);
 
-                    // front에서 넘어온 삭제할 a_i_no 리스트들에 대한 image 값들을 들고 오기 위함
-                    List<String> deleteImg = iAdminAccmDaoMapper.selectAccmImgs(deleteNo);
-                    log.info("deleteImg: " + deleteImg);
+                // front에서 넘어온 삭제할 a_i_no 리스트들에 대한 image 값들을 들고 오기 위함
+                List<String> deleteImg = iAdminAccmDaoMapper.selectAccmImgs(deleteNo);
+                log.info("deleteImg: " + deleteImg);
 
-                    // s3 삭제
-                    // deleteImg 리스트에 있는 모든 이미지 파일을 S3에서 삭제
-                    for (String imageUrl : deleteImg) {
-                        s3Uploader.deleteFileFromS3(imageUrl);
-
-                    }
-
-                    // deleteNo를 통해 기존 이미지 삭제
-                    int isdelete = iAdminAccmDaoMapper.deleteAccmdelImgs(deleteNo);
-                    log.info("[selectAccmImgForDelete] isdelete-----> {}", isdelete);
-                    
-                }
-
-                        // 기존 이미지를 삭제하고 추가할 이미지가 있는 경우
-                        if(a_i_image != null) {
-                        log.info("a_i_image NOT NULL!!");
-
-                        // s3 파일 업로드
-                        for (MultipartFile file : a_i_image) {
-                            log.info("[AdminAccmService] a_i_image: -----> {}", file);
-//                            String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
-                            String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
-                            adminAccmImageDto.setA_i_image(imageUrl);
-                            log.info("[AdminAccmService] imageUrl: " + imageUrl);
-
-                            // 새로운 사진 등록
-                            int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
-                            log.info("isInsert: " + isInsert);
-                        }
+                // s3 삭제
+                // deleteImg 리스트에 있는 모든 이미지 파일을 S3에서 삭제
+                for (String imageUrl : deleteImg) {
+                    s3Uploader.deleteFileFromS3(imageUrl);
 
                 }
 
-            } else if(deleteImgs == null) {         // 기존이미지를 유지한다면(삭제할 이미지가 없는 경우)
-                log.info("deleteImgs NULL!!");
+                // deleteNo를 통해 기존 이미지 삭제
+                int isdelete = iAdminAccmDaoMapper.deleteAccmdelImgs(deleteNo);
+                log.info("[selectAccmImgForDelete] isdelete-----> {}", isdelete);
 
-                // 이미지를 추가하지 않고, 기존 이미지 그대로 update하는 경우(삭제할 이미지, 추가할 이미지 모두 없는 경우)
-                iAdminAccmDaoMapper.selectAccmImg(a_acc_no);
-
-                // 기존 이미지는 그대로, 새로운 이미지 파일만 추가하는 경우
-                if(a_i_image != null) {
-                    // s3 파일 업로드
-                    for (MultipartFile file : a_i_image) {
-                        log.info("[AdminAccmService] a_i_image: -----> {}", file);
-                        String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
-                        adminAccmImageDto.setA_i_image(imageUrl);
-                        log.info("[AdminAccmService] imageUrl: " + imageUrl);
-
-                        // 새로운 사진 등록
-                        int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
-                        log.info("isInsert: " + isInsert);
-                    }
-                }
             }
 
-            log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
-            log.info("[AdminAccmService]: " + adminAccmDto);
+            // 기존 이미지를 삭제하고 추가할 이미지가 있는 경우
+            if(a_i_image != null) {
+                log.info("a_i_image NOT NULL!!");
 
-            return "숙박시설 정보 수정 완료";
+                // s3 파일 업로드
+                for (MultipartFile file : a_i_image) {
+                    log.info("[AdminAccmService] a_i_image: -----> {}", file);
+//                            String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+                    String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+                    adminAccmImageDto.setA_i_image(imageUrl);
+                    log.info("[AdminAccmService] imageUrl: " + imageUrl);
 
+                    // 새로운 사진 등록
+                    int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
+                    log.info("isInsert: " + isInsert);
+                }
+
+            }
+
+        } else if(deleteImgs == null) {         // 기존이미지를 유지한다면(삭제할 이미지가 없는 경우)
+            log.info("deleteImgs NULL!!");
+
+            // 이미지를 추가하지 않고, 기존 이미지 그대로 update하는 경우(삭제할 이미지, 추가할 이미지 모두 없는 경우)
+            iAdminAccmDaoMapper.selectAccmImg(a_acc_no);
+
+            // 기존 이미지는 그대로, 새로운 이미지 파일만 추가하는 경우
+            if(a_i_image != null) {
+                // s3 파일 업로드
+                for (MultipartFile file : a_i_image) {
+                    log.info("[AdminAccmService] a_i_image: -----> {}", file);
+                    String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
+                    adminAccmImageDto.setA_i_image(imageUrl);
+                    log.info("[AdminAccmService] imageUrl: " + imageUrl);
+
+                    // 새로운 사진 등록
+                    int isInsert = iAdminAccmDaoMapper.insertAccmImage(adminAccmImageDto);
+                    log.info("isInsert: " + isInsert);
+                }
+            }
         }
+
+        log.info("[AdminAccmService] MODIFY ACCM SUCCESS!!");
+        log.info("[AdminAccmService]: " + adminAccmDto);
+
+        return "숙박시설 정보 수정 완료";
+
+    }
 
     @Override
     public int deleteAccm(int a_m_no) {
@@ -274,11 +274,11 @@ public class AdminAccmService implements IAdminAccmService {
             s3Uploader.deleteFileFromS3(imageUrl);
 
         }
-            log.info("[AdminAccmService] DELETE ACCM SUCCESS!!");
+        log.info("[AdminAccmService] DELETE ACCM SUCCESS!!");
 
-            int result = iAdminAccmDaoMapper.deleteAccmImg(a_acc_no);
+        int result = iAdminAccmDaoMapper.deleteAccmImg(a_acc_no);
 
-            return result;
+        return result;
 
     }
 

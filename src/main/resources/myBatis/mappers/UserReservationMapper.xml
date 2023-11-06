@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btc.swimpyo.backend.mappers.reservation.user.IUserReservationDaoMapper">
+    <!-- Room 정보 가져오기 -->
+    <select id="selectRoomInfo" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto" resultType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
+        SELECT
+            ar.a_r_no, ar.a_acc_no, ar.a_r_name, ar.a_r_state, ar.a_r_price, ar.a_r_check_in, ar.a_r_check_out, aa.a_acc_name
+        FROM
+            tbl_admin_room ar
+            join
+                tbl_admin_accommodation aa
+            on
+                ar.a_acc_no = aa.a_acc_no
+        WHERE
+            ar.a_r_no = #{a_r_no}
+        AND
+            ar.use_yn = 'Y'
+    </select>
+
+   <!--  숙박 - 이미 예약된 방만 찾기
+    <select id="searchDate" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            tbl_user_reservation
+        WHERE
+            a_r_no = #{a_r_no}
+        AND
+            u_r_check_out <![CDATA[>]]> #{u_r_check_in}
+        AND
+            u_r_check_in <![CDATA[<=]]> #{u_r_check_in}
+        AND
+            (u_r_check_in AND u_r_check_out) <![CDATA[>]]> #{u_r_check_out}
+    </select>
+-->
+
+    <select id="searchDate" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            tbl_user_reservation
+        WHERE
+            a_r_no = #{a_r_no}
+        AND
+            (
+            (u_r_check_in <![CDATA[>=]]> #{u_r_check_in} AND u_r_check_in <![CDATA[<]]> #{u_r_check_out})
+            OR
+            (u_r_check_out <![CDATA[>]]> #{u_r_check_in} AND u_r_check_out <![CDATA[<=]]> #{u_r_check_out})
+            OR
+            (u_r_check_in <![CDATA[<=]]> #{u_r_check_in} AND u_r_check_out <![CDATA[>=]]> #{u_r_check_out})
+            )
+    </select>
+
+    <!-- 대실 - 이미 예약된 방만 찾기 -->
+    <select id="searchTime" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto" resultType="Integer">
+        SELECT
+            COUNT(*)
+        FROM
+            tbl_user_reservation
+        WHERE
+            a_r_no = #{a_r_no}
+        AND
+            (
+            (u_r_check_in_time <![CDATA[>=]]> #{u_r_check_in_time} AND DATE_SUB(u_r_check_in_time, INTERVAL 1 HOUR) <![CDATA[<]]> #{u_r_check_out_time})
+            OR
+            (DATE_ADD(u_r_check_out_time, INTERVAL 1 HOUR) <![CDATA[>]]> #{u_r_check_in_time} AND u_r_check_out_time <![CDATA[<=]]> #{u_r_check_out_time})
+            OR
+            (u_r_check_in_time <![CDATA[<=]]> #{u_r_check_in_time} AND u_r_check_out_time <![CDATA[>=]]> #{u_r_check_out_time})
+            )
+    </select>
+
+    <!-- 예약 정보 db에 저장 -->
+    <insert id="insertRsvInfo" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
+        insert into
+            tbl_user_reservation(u_m_email,
+                                 a_r_no,
+                                 u_r_check_in,
+                                 u_r_check_out,
+                                 u_r_car_yn,
+                                 u_r_stay_yn,
+                                 u_r_name,
+                                 u_r_phone,
+                                 u_r_reg_date)
+        values (#{u_m_email},
+                #{a_r_no},
+                #{u_r_check_in},
+                #{u_r_check_out},
+                #{u_r_car_yn},
+                #{u_r_stay_yn},
+                #{u_r_name},
+                #{u_r_phone},
+                NOW())
+    </insert>
+
+
+    <!-- 예약 정보 db에 저장 -->
+    <insert id="insertRsvInfoByMoment" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
+        insert into
+        tbl_user_reservation(u_m_email,
+                             a_r_no,
+                             u_r_check_in,
+                             u_r_check_out,
+                             u_r_check_in_time,
+                             u_r_check_out_time,
+                             u_r_car_yn,
+                             u_r_stay_yn,
+                             u_r_name,
+                             u_r_phone,
+                             u_r_reg_date)
+        values (#{u_m_email},
+                #{a_r_no},
+                NOW(),
+                NOW(),
+                #{u_r_check_in_time},
+                #{u_r_check_out_time},
+                #{u_r_car_yn},
+                #{u_r_stay_yn},
+                #{u_r_name},
+                #{u_r_phone},
+                NOW())
+    </insert>
+
+</mapper>
