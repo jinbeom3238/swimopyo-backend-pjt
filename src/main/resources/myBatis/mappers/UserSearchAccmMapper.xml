@@ -11,35 +11,34 @@
         a.a_acc_kind,
         a.a_acc_address,
         a.a_acc_phone,
+        r.a_r_check_in,
         r.a_r_state,
         r.a_r_price,
         rm.a_r_name,
         rm.remaining_room,
-        rm.reser_date
+        rm.reser_date,
+        ai.a_i_image
         FROM
         tbl_admin_accommodation a
         LEFT JOIN tbl_admin_room r ON a.a_acc_no = r.a_acc_no
         LEFT JOIN tbl_room rm ON a.a_acc_name = rm.a_acc_name
-        <where>
+        LEFT JOIN tbl_accommodation_image ai ON a.a_acc_no = ai.a_acc_no
+            where 1=1
             <!-- 업소명 검색 조건 -->
             <if test="searchValue != null">
-                a.a_acc_name like concat('%', #{searchValue}  ,'%')
+                AND a.a_acc_name like concat('%', #{searchValue} ,'%')
             </if>
             <!-- 예약 가능한 날짜 범위 검색 조건 -->
-            <if test="startDay != null and endDay != null">
-                AND rm.reser_date >= #{startDay}
-                AND rm.reser_date &lt; #{endDay}
-                AND EXISTS (
-                SELECT 1
+            <if test="startDay != null and endDay != null and able == 'possible'">
+                AND NOT EXISTS (
+                SELECT a_acc_name
                 FROM tbl_room rm2
-                WHERE rm2.a_r_name = rm.a_r_name
-                AND rm2.reser_date >= #{startDay}
-                AND rm2.reser_date &lt; #{endDay}
-                GROUP BY rm2.a_r_name
-                HAVING MIN(rm2.remaining_room) > 0
+                WHERE rm2.a_acc_name = a.a_acc_name
+                AND rm2.reser_date <![CDATA[ >= ]]> #{startDay}
+                AND rm2.reser_date <![CDATA[ < ]]> #{endDay}
+                AND rm2.remaining_room <![CDATA[ <= ]]> 0
                 )
             </if>
-
             <!-- 업소 종류별 검색 조건 -->
             <if test="accmValue != null">
                 AND a.a_acc_kind = #{accmValue}
@@ -55,7 +54,6 @@
             <if test="dayUseOrStay == '숙박'">
                 AND r.a_r_state = '숙박'
             </if>
-        </where>
         <!-- 가격 정렬 조건 -->
         <choose>
             <when test="priceOrder != null and priceOrder == 1">
