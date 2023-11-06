@@ -8,6 +8,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +24,10 @@ public class SearchAccmService implements ISearchAccmService{
     public List<AdminAccmDto> searchAccm(Map<String, Object> msgMap, AdminAccmDto adminAccmDto) {
         log.info("searchAccm");
         log.info("msgMap ==> {}", msgMap);
-        String searchWord = msgMap.get("searchValue").toString();
+        LocalDate startDay = LocalDate.parse(msgMap.get("startDay").toString());
+        LocalDate endDay = LocalDate.parse(msgMap.get("endDay").toString());
+        long Days = ChronoUnit.DAYS.between(startDay, endDay);
+        msgMap.put("Days", Days);
 
         List<AdminAccmDto> selectAccms = iSearchAccmDaoMapper.selectAccms(msgMap);
         log.info("selectAccms ==> {}", selectAccms);
