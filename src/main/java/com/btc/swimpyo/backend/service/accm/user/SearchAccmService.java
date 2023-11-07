@@ -31,11 +31,11 @@ public class SearchAccmService implements ISearchAccmService{
         LocalDate endDay = LocalDate.parse(parsingEndDay);
         long Days = ChronoUnit.DAYS.between(startDay, endDay);
         msgMap.put("Days", Days);
-        msgMap.put("priceOrder", Integer.parseInt(msgMap.get("priceOrder").toString()));
-        log.info("msgMap ==> {}", msgMap);
+        if(msgMap.get("priceOrder") != null){
+            msgMap.put("priceOrder", Integer.parseInt(msgMap.get("priceOrder").toString()));
+        }
 
         List<AdminAccmDto> selectAccms = iSearchAccmDaoMapper.selectAccms(msgMap);
-        log.info("selectAccms ==> {}", selectAccms);
 
         return selectAccms;
 
