@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btc.swimpyo.backend.mappers.room.user.IUserReviewDaoMapper">
+
+<insert id="insertReview" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" >
+
+    INSERT INTO tbl_review(r_title, r_content, r_image, r_sa_point, r_reg_date, r_mod_date)
+    VALUES (
+            #{r_title},
+            #{r_content},
+            #{r_image},
+            #{r_sa_point},
+            NOW(),
+            NOW()
+           )
+
+</insert>
+
+
+
+</mapper>

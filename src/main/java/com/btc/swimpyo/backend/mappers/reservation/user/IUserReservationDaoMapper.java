@@ -1,6 +1,7 @@
 package com.btc.swimpyo.backend.mappers.reservation.user;
 
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
+import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -16,4 +17,5 @@ public interface IUserReservationDaoMapper {
     public int searchDate(ReservationDto reservationDto);
     public int searchTime(ReservationDto reservationDto);
     public int insertRsvInfoByMoment(ReservationDto reservationDto);
+
 }
