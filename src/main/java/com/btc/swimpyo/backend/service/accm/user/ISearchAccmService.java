@@ -8,5 +8,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface ISearchAccmService {
-    List<AdminAccmDto> searchAccm(Map<String, Object> msgMap, AdminAccmDto adminAccmDto);
+//    List<AdminAccmDto> searchAccm(Map<String, Object> msgMap, AdminAccmDto adminAccmDto);
+List<Map<String, Object>> searchAccm(Map<String, Object> msgMap, AdminAccmDto adminAccmDto);
 }

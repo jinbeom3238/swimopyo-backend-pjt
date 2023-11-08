@@ -23,7 +23,9 @@ public class SearchAccmController {
     @PostMapping("/search")
     public Object searchAccm(@RequestBody Map<String, Object> msgMap, AdminAccmDto adminAccmDto) {
         log.info("searchAccm");
-        List<AdminAccmDto> searchAccms = searchAccmService.searchAccm(msgMap, adminAccmDto);
+
+//        List<AdminAccmDto> searchAccms = searchAccmService.searchAccm(msgMap, adminAccmDto);
+        List<Map<String, Object>> searchAccms = searchAccmService.searchAccm(msgMap, adminAccmDto);
 
         log.info("searchAccms ==> {}", searchAccms);
 
