@@ -122,4 +122,14 @@
                 NOW())
     </insert>
 
+    <!-- [카카오페이] tid, next_redirect_pc_url, pg_token db에 저장 -->
+    <insert id="insertKakaoPayReady" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto">
+        insert into tbl_Kakao_ready(tid,
+                                    next_redirect_pc_url,
+                                    created_at)
+        values (#{tid},
+                #{next_redirect_pc_url},
+                #{created_at})
+    </insert>
+
 </mapper>

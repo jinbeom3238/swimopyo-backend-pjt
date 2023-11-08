@@ -1,7 +1,7 @@
 package com.btc.swimpyo.backend.mappers.reservation.user;
 
+import com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto;
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
-import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
@@ -18,4 +18,6 @@ public interface IUserReservationDaoMapper {
     public int searchTime(ReservationDto reservationDto);
     public int insertRsvInfoByMoment(ReservationDto reservationDto);
 
+    // [카카오페이] tid, next_redirect_pc_url, pg_token db에 저장
+    public int insertKakaoPayReady(KakaoReadyResponseDto kakaoReady);
 }

@@ -1,5 +1,6 @@
 package com.btc.swimpyo.backend.dto.kakaoPay;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -31,6 +32,7 @@ public class KakaoCancelResponseDto {
     @Getter
     @Setter
     @ToString
+    @Data
     public static class ApprovedCancelAmount {
 
         private int total; // 이번 요청으로 취소된 전체 금액
