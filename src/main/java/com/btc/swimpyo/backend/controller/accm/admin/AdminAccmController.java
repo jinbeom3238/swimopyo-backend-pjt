@@ -22,7 +22,7 @@ import java.util.Map;
 public class AdminAccmController {
 
     private final AdminAccmService adminAccmService;
-    private final KakaoMapApiController kakaoMapApiController;
+//    private final KakaoMapApiController kakaoMapApiController;
 
     // 등록
     @PostMapping(value="/regist_confirm", consumes="multipart/form-data")

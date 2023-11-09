@@ -2,22 +2,60 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.btc.swimpyo.backend.mappers.room.user.IUserReviewDaoMapper">
+<mapper namespace="com.btc.swimpyo.backend.mappers.review.IUserReviewDaoMapper">
 
-<insert id="insertReview" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" >
+    <!-- 등록 - 이미지를 제외한 review 정보 db 저장 -->
+    <insert id="insertReview" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+        INSERT INTO tbl_review(
+                                u_m_email,
+                                u_r_no,
+                                r_title,
+                                r_content,
+                                r_sa_point,
+                                r_reg_date,
+                                r_mod_date,
+                                a_r_no)
+        SELECT
+                                #{u_m_email},
+                                #{u_r_no},
+                                #{r_title},
+                                #{r_content},
+                                #{r_sa_point},
+                                NOW(),
+                                NOW(),
+                                a_r_no
+        FROM
+            tbl_user_reservation
+        WHERE
+            u_m_email = #{u_m_email}
+        AND
+            u_r_no is not null
+    </insert>
 
-    INSERT INTO tbl_review(r_title, r_content, r_image, r_sa_point, r_reg_date, r_mod_date)
-    VALUES (
-            #{r_title},
-            #{r_content},
-            #{r_image},
-            #{r_sa_point},
-            NOW(),
-            NOW()
-           )
+    <!-- 등록 - 리뷰 NO 가져오가 -->
+    <select id="selectReviewNo" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" resultType="Integer">
+        SELECT
+            r_no
+        FROM
+            tbl_review
+        WHERE
+            u_m_email = #{u_m_email}
+        and
+            a_r_no = #{a_r_no}
+        and
+            u_r_no = #{u_r_no}
+    </select>
 
-</insert>
+    <!-- 등록 - 주소 값들 db 저장 -->
+    <insert id="insertReviewAddress" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+        insert into tbl_review_xy (r_no, r_xy_address, r_xy_longitude, r_xy_latitude, r_xy_reg_date)
+        values (#{r_no}, #{r_xy_address}, #{r_xy_longitude}, #{r_xy_latitude}, NOW())
+    </insert>
 
-
+    <!-- 등록 - 리뷰 이미지 db 저장 -->
+    <insert id="insertReviewImg" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+        insert into tbl_review_image(r_no, r_ri_image, r_ri_reg_date, r_ri_mod_date)
+        values (#{r_no}, #{r_ri_image}, NOW(), NOW())
+    </insert>
 
 </mapper>
