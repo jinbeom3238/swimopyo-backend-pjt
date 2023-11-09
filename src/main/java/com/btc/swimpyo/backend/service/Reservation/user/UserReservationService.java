@@ -215,10 +215,10 @@ public class UserReservationService implements IUserReservationService{
     public String refundRsv(KakaoApproveResponseDto kakaoApproveResponseDto, AmountDto amountDto, int deleteRsvNo) {
         log.info("[UserReservationService] refundRsv()");
 
-        // 환불 받을 예약 번호
-        int u_r_no = iUserReservationDaoMapper.selectRsvNoForDel(deleteRsvNo);
+        // 환불 받을 예약 번호를 통해 예약번호와 이메일 가져오기
+        ReservationDto reservationDto = iUserReservationDaoMapper.selectRsvNoForDel(deleteRsvNo);
 
-        if(u_r_no > 0) {
+        if(reservationDto != null) {
             log.info("DELETE RSVNO EXIST!!");
 
             // 카카오페이 환불
@@ -229,9 +229,9 @@ public class UserReservationService implements IUserReservationService{
                 log.info("카카오 환불 완료");
 
                 // db에서 삭제
-                int result = iUserReservationDaoMapper.deleteRsvInfo(u_r_no);
+                ReservationDto DeleteRsvDto = iUserReservationDaoMapper.deleteRsvInfo(reservationDto);
 
-                if(result > 0) {
+                if(DeleteRsvDto != null) {
                     log.info("예약 취소 완료");
 
                     return "success";
@@ -246,9 +246,7 @@ public class UserReservationService implements IUserReservationService{
             }
 
         }
-
-
-        return "success";
+        return "successs";
     }
 
 }

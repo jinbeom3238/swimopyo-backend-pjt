@@ -8,7 +8,6 @@ import java.sql.Timestamp;
 @Data
 public class ReservationDto {
 
-
     private int u_r_no;
     private String use_yn;
     private String u_m_email;
@@ -40,6 +39,5 @@ public class ReservationDto {
     private String pg_token;
     private String partner_order_id;
     private String approval_url;
-
 
 }

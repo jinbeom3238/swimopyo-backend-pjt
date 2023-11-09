@@ -59,9 +59,11 @@ public class UserReservationController {
 
     // 결제 취소
     @PostMapping("refund")
-    public void refundRsv(@RequestPart KakaoApproveResponseDto kakaoApproveResponseDto, @RequestPart AmountDto amountDto, @RequestPart ReservationDto reservationDto, @RequestParam(value = "deleteRsvNo", required = false) int deleteRsvNo){
+    public void refundRsv(@RequestPart KakaoApproveResponseDto kakaoApproveResponseDto, @RequestPart AmountDto amountDto, @RequestParam(value = "deleteRsvNo", required = false) int deleteRsvNo){
         log.info("[UserReservationController] refundRsv()");
         log.info("[UserReservationController] kakaoApproveResponseDto: " + kakaoApproveResponseDto);
+        log.info("[UserReservationController] amountDto: " + amountDto);
+        log.info("[UserReservationController] deleteRsvNo: " + deleteRsvNo);
 
         userReservationService.refundRsv(kakaoApproveResponseDto, amountDto, deleteRsvNo);
 

@@ -38,8 +38,8 @@ public interface IUserReservationDaoMapper {
      * 환불
      */
     // 삭제할 예약 번호 받아오기
-    public int selectRsvNoForDel(int deleteRsvNo);
+    public ReservationDto selectRsvNoForDel(int deleteRsvNo);
 
     // db 삭제
-    public int deleteRsvInfo(int u_r_no);
+    public ReservationDto deleteRsvInfo(ReservationDto reservationDto);
 }

@@ -142,6 +142,7 @@ public class KakaoPayService {
         log.info("KakaoApproveResponseDto: " + approveResponse);
 
         approveResponse.setPg_token(kakaoReady.getPg_token());
+        approveResponse.setU_m_email(kakaoReady.getU_m_email());
 
         return approveResponse;
     }
@@ -158,17 +159,21 @@ public class KakaoPayService {
         reservationDto.getA_r_price();
         kakaoApproveResponseDto.getPg_token();
         String tid = kakaoApproveResponseDto.getTid();
-        int totalAmount = amountDto.getTotal();
-        int vatAmount = amountDto.getTax();
-        int taxFreeAmount = amountDto.getTax_free();
+        int cancelAmount = amountDto.getTotal();
+        int cancelVatAmount = amountDto.getTax();
+        int cancelTaxFreeAmount = amountDto.getTax_free();
 
         // 카카오페이 요청
         MultiValueMap<String, Object> parameters = new LinkedMultiValueMap<>();
         parameters.add("cid", cid);
         parameters.add("tid", tid);      // 환불할 결제 고유 번호
-        parameters.add("cancel_amount", totalAmount);          // 환불 금액
-        parameters.add("cancel_tax_free_amount", vatAmount);  // 환불 비과세 금액
-        parameters.add("cancel_vat_amount", taxFreeAmount);       // 환불 부가세
+        parameters.add("cancel_amount", cancelAmount);          // 환불 금액
+        parameters.add("cancel_tax_free_amount", 0);  // 환불 비과세 금액
+        parameters.add("cancel_vat_amount", 0);       // 환불 부가세
+
+        log.info("cancelAmount: {}", cancelAmount);
+        log.info("cancelVatAmount: {}", cancelVatAmount);
+        log.info("cancelTaxFreeAmount: {}", cancelTaxFreeAmount);
 
         // 파라미터, 헤더
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
@@ -180,6 +185,8 @@ public class KakaoPayService {
                 "https://kapi.kakao.com/v1/payment/cancel",
                 requestEntity,
                 KakaoCancelResponseDto.class);
+
+        log.info("cancelResponse:" + cancelResponse);
 
         return cancelResponse;
 

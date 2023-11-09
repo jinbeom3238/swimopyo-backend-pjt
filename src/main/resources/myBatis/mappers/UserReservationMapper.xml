@@ -173,9 +173,9 @@
     </insert>
 
     <!-- 환불 - 삭제할 예약번호 받아오기 -->
-    <select id="selectRsvNoForDel" parameterType="Integer" resultType="Integer">
+    <select id="selectRsvNoForDel" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
         SELECT
-            u_r_no
+            u_r_no, u_m_email
         FROM
             tbl_user_reservation
         WHERE
@@ -183,13 +183,15 @@
     </select>
 
     <!-- 환불 - db삭제 -->
-    <update id="deleteRsvInfo" parameterType="Integer">
+    <update id="deleteRsvInfo" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
         UPDATE
             tbl_user_reservation
         SET
             use_yn = 'N'
         WHERE
             u_r_no = #{u_r_no}
+        AND
+            u_m_email = #{u_m_email}
     </update>
 
 </mapper>
