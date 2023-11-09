@@ -26,4 +26,15 @@ public class KakaoApproveResponseDto {
     private String approved_at; // 결제 승인 시간
     private String payload; // 결제 승인 요청에 대해 저장 값, 요청 시 전달 내용
 
+    private String pg_token;
+    private String u_m_email;
+    private String approval_url;
+
+    private int total; // 총 결제 금액
+    private int tax_free; // 비과세 금액
+    private int tax; // 부가세 금액
+    private int point; // 사용한 포인트
+    private int discount; // 할인금액
+    private int green_deposit; // 컵 보증금
+
 }

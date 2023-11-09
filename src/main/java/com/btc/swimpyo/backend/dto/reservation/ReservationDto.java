@@ -40,5 +40,4 @@ public class ReservationDto {
     private String partner_order_id;
     private String approval_url;
 
-
 }
