@@ -26,8 +26,6 @@ public class SearchAccmService implements ISearchAccmService {
     public List<Map<String, Object>> searchAccm(Map<String, Object> msgMap, AdminAccmDto adminAccmDto) {
         log.info("searchAccm");
         log.info("tp =-----> {}", msgMap);
-//        String parsingStartDay = msgMap.get("startDay").toString().split("T")[0];
-//        String parsingEndDay = msgMap.get("endDay").toString().split("T")[0];
         String parsingStartDay = msgMap.get("startDay").toString();
         String parsingEndDay = msgMap.get("endDay").toString();
         msgMap.put("startDay", parsingStartDay);
@@ -39,7 +37,7 @@ public class SearchAccmService implements ISearchAccmService {
         if (msgMap.get("priceOrder") != null) {
             msgMap.put("priceOrder", Integer.parseInt(msgMap.get("priceOrder").toString()));
         }
-        log.info("msgMap => {}", msgMap);
+        log.info("msgMap + Days => {}", msgMap);
 
 //        List<AdminAccmDto> selectAccms = iSearchAccmDaoMapper.selectAccms(msgMap);
         List<Map<String, Object>> selectAccms = iSearchAccmDaoMapper.selectAccms(msgMap);
