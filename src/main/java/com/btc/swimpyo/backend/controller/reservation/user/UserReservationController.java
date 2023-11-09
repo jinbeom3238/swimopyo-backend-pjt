@@ -1,11 +1,16 @@
 package com.btc.swimpyo.backend.controller.reservation.user;
 
+import com.btc.swimpyo.backend.dto.kakaoPay.AmountDto;
+import com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto;
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.service.Reservation.user.UserReservationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @Log4j2
@@ -38,17 +43,27 @@ public class UserReservationController {
 
     }
 
-    // 결제 페이지
+    // 결제
     @PostMapping("")
-
-    public String createRsvApproval(@RequestPart ReservationDto reservationDto) {
+    public Map<String, Object> createRsvApproval(@RequestPart ReservationDto reservationDto) {
         log.info("[UserReservationController] createRsvApproval()");
         log.info("[UserReservationController] adminReservaitionDto(): " + reservationDto);
 
         log.info("[UserReservationController] u_m_email(): " + reservationDto.getU_m_email());
         log.info("[UserReservationController] a_r_name(): " + reservationDto.getA_r_name());
 
+
         return userReservationService.createRsvApproval(reservationDto);
+
+    }
+
+    // 결제 취소
+    @PostMapping("refund")
+    public void refundRsv(@RequestPart KakaoApproveResponseDto kakaoApproveResponseDto, @RequestPart AmountDto amountDto, @RequestPart ReservationDto reservationDto, @RequestParam(value = "deleteRsvNo", required = false) int deleteRsvNo){
+        log.info("[UserReservationController] refundRsv()");
+        log.info("[UserReservationController] kakaoApproveResponseDto: " + kakaoApproveResponseDto);
+
+        userReservationService.refundRsv(kakaoApproveResponseDto, amountDto, deleteRsvNo);
 
     }
 

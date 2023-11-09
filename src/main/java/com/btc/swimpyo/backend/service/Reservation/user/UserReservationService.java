@@ -3,6 +3,7 @@ package com.btc.swimpyo.backend.service.Reservation.user;
 import com.btc.swimpyo.backend.controller.kakaoPay.KakaoPayController;
 import com.btc.swimpyo.backend.dto.kakaoPay.AmountDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto;
+import com.btc.swimpyo.backend.dto.kakaoPay.KakaoCancelResponseDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto;
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.mappers.reservation.user.IUserReservationDaoMapper;
@@ -11,6 +12,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.util.HashMap;
+import java.util.Map;
 
 @Log4j2
 @Service
@@ -40,7 +43,6 @@ public class UserReservationService implements IUserReservationService{
 
         log.info("state:" + reservationDto.getU_r_stay_yn());
 
-
         // 숙박/대실 분류
         if(reservationDto.getU_r_stay_yn().equals("Y")) {
             log.info("stay_yn = Y !! ");
@@ -52,7 +54,7 @@ public class UserReservationService implements IUserReservationService{
 
                 log.info("예약이 불가합니다.");
 
-            return null;
+                return null;
 
             }
 
@@ -102,9 +104,12 @@ public class UserReservationService implements IUserReservationService{
 
     }
 
+    /* 예약 & 결제 페이지 */
     @Override
-    public String createRsvApproval(ReservationDto reservationDto) {
+    public Map<String, Object> createRsvApproval(ReservationDto reservationDto) {
         log.info("[UserReservationService] createRsvApproval()");
+
+        Map<String, Object> msgData = new HashMap<>();
 
         String user_id = "iieunji023@gmail.com";
         reservationDto.setU_m_email(user_id);
@@ -113,10 +118,6 @@ public class UserReservationService implements IUserReservationService{
 
         // 결제
         KakaoReadyResponseDto kakaoReadyResponseDto = kakaoPayController.readyToKakaoPay(reservationDto);
-        /*kakaoReadyResponseDto.setTid(reservationDto.getTid());
-        kakaoReadyResponseDto.setNext_redirect_pc_url(reservationDto.getNext_redirect_pc_url());
-        kakaoReadyResponseDto.setCreated_at(reservationDto.getCreated_at());
-        kakaoReadyResponseDto.setPg_token(reservationDto.getPg_token());*/
 
         kakaoReadyResponseDto.setPartner_order_id(reservationDto.getPartner_order_id());
 
@@ -127,9 +128,9 @@ public class UserReservationService implements IUserReservationService{
         log.info("kakaoReady:" + kakaoReadyResponseDto);
         log.info("email:" + kakaoReadyResponseDto.getU_m_email());
 
-        String pgToken = kakaoReadyResponseDto.getPg_token();
+//        String pgToken = kakaoReadyResponseDto.getPg_token();
 
-        // db에 tid, next_redirect_pc_url, pg_token 값 저장
+        // db에 tid, next_redirect_pc_url 값 저장
         int isReady = iUserReservationDaoMapper.insertKakaoPayReady(kakaoReadyResponseDto);
 
         // next_redirect_pc_url -> 결제 승인 시 이동되는 redirect page에 나오는 pg_token= 뒤에 값 뽑아주면 됨
@@ -137,39 +138,60 @@ public class UserReservationService implements IUserReservationService{
         kakaoReadyResponseDto.getNext_redirect_pc_url();
         log.info("db에 저장된 redirect 값!!" + kakaoReadyResponseDto.getNext_redirect_pc_url());
 
-        String approval_url = kakaoReadyResponseDto.getApproval_url();
+
+/*      String approval_url = kakaoReadyResponseDto.getApproval_url();
         log.info("approval_url:" + approval_url);
-        log.info("approval_url token:" + approval_url.substring(approval_url.length()-20));
+        log.info("approval_url token:" + approval_url.substring(approval_url.length()-20));*/
 
-
-
-
+        String pg_token = null;
 
         if(isReady > 0) {
             log.info("[insertKakaoPayReady] isReady!!");
 
-            kakaoPayController.afterPayRequest(pgToken, kakaoReadyResponseDto);
+            KakaoApproveResponseDto kakaoApprove= kakaoPayController.afterPayRequest(pg_token, kakaoReadyResponseDto);
+
+            log.info(kakaoReadyResponseDto.getPg_token());
+
+            kakaoApprove.setPg_token(kakaoReadyResponseDto.getPg_token());
+
+            log.info("[kakaoApprove] " + kakaoApprove);
+
+            log.info("[kakaoApprove] SUCCESS!!");
+
+            if(kakaoApprove != null) {
+
+                KakaoApproveResponseDto kakaoApproveInfo = iUserReservationDaoMapper.insertKakaoPayApprove(kakaoApprove);
+                AmountDto amountDto = iUserReservationDaoMapper.insertKakaoPayApproveAmount(kakaoApprove);
+
+                msgData.put("kakaoApproveInfo", kakaoApproveInfo);
+                msgData.put("amountDto", amountDto);
+
+            } else {
+                log.info("[kakaoApprove] FAIL!!");
+
+            }
 
         }
 
         // 도보/차량, 실사용자 정보와 기존에 받았던 예약날짜, 숙박/대실, 가격 정보 db에 저장하기
         if (reservationDto.getU_r_stay_yn().equals("Y")){
+
+            reservationDto.setTid(kakaoApprove.getTid());
+
             int result = iUserReservationDaoMapper.insertRsvInfo(reservationDto);
             log.info("reservationDto:" + reservationDto);
 
             if(result > 0) {
                 log.info("예약 완료");
 
-                return "success";
-
             } else {
                 log.info("예약 실패 ㅠ_ㅠ");
-
-                return "fail";
 
             }
 
         } else if(reservationDto.getU_r_stay_yn().equals("N")) {
+
+            reservationDto.setTid(kakaoApprove.getTid());
             int result = iUserReservationDaoMapper.insertRsvInfoByMoment(reservationDto);
 
             Time u_r_check_out_time = reservationDto.getU_r_check_out_time();
@@ -178,16 +200,53 @@ public class UserReservationService implements IUserReservationService{
             if(result > 0) {
                 log.info("예약 완료");
 
-                return "success";
-
             } else {
                 log.info("예약 실패 ㅠ_ㅠ");
-
-                return "fail";
 
             }
 
         }
+
+        log.info("msgData : " + msgData);
+        return msgData;
+    }
+
+    @Override
+    public String refundRsv(KakaoApproveResponseDto kakaoApproveResponseDto, AmountDto amountDto, int deleteRsvNo) {
+        log.info("[UserReservationService] refundRsv()");
+
+        // 환불 받을 예약 번호
+        int u_r_no = iUserReservationDaoMapper.selectRsvNoForDel(deleteRsvNo);
+
+        if(u_r_no > 0) {
+            log.info("DELETE RSVNO EXIST!!");
+
+            // 카카오페이 환불
+            KakaoCancelResponseDto kakaoCancelResponseDto = kakaoPayController.refund(kakaoApproveResponseDto, amountDto);
+
+            // 환불이 된다면
+            if(kakaoCancelResponseDto != null) {
+                log.info("카카오 환불 완료");
+
+                // db에서 삭제
+                int result = iUserReservationDaoMapper.deleteRsvInfo(u_r_no);
+
+                if(result > 0) {
+                    log.info("예약 취소 완료");
+
+                    return "success";
+
+                } else {
+                    log.info("예약 취소 실패");
+
+                    return "fail";
+
+                }
+
+            }
+
+        }
+
 
         return "success";
     }

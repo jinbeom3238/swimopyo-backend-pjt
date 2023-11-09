@@ -37,7 +37,7 @@ public class WebSecurityConfig {
                         "/api/admin/member/logout",
                         "/api/admin/member/signout").permitAll()
                 .requestMatchers("/api/admin/**").permitAll()
-                .requestMatchers("/api/**").permitAll()
+                .requestMatchers("/api/payment/**").permitAll()
                 .requestMatchers(
                         "/api/user/member/signUp",
                         "/api/user/member/signIn",

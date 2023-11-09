@@ -8,6 +8,7 @@ import java.sql.Timestamp;
 @Data
 public class ReservationDto {
 
+
     private int u_r_no;
     private String use_yn;
     private String u_m_email;
