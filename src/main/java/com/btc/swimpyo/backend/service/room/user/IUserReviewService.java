@@ -9,4 +9,7 @@ public interface IUserReviewService {
 
     // 등록
     public String registReview(UserReviewDto userReviewDto, MultipartFile[] reviewImages);
+
+    // 리스트 조회
+    public Map<String, Object> showReviewList(String u_m_email);
 }

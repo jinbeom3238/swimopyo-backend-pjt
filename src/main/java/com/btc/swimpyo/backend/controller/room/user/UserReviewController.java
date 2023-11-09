@@ -2,11 +2,9 @@ package com.btc.swimpyo.backend.controller.room.user;
 
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
-import com.btc.swimpyo.backend.service.Reservation.user.UserReservationService;
 import com.btc.swimpyo.backend.service.room.user.UserReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.catalina.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -63,6 +61,13 @@ public class UserReviewController {
 //    }
 
     // 리스트 조회
+    @PostMapping("/showReviewList")
+    public Map<String, Object> showReviewList(@RequestParam ("u_m_email") String u_m_email) {
+        log.info("[UserReviewController] showReviewList()");
+
+        return userReviewService.showReviewList(u_m_email);
+
+    }
 
 
     // 상세페이지 조회

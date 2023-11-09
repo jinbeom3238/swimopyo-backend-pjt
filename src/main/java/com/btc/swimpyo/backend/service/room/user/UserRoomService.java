@@ -108,9 +108,4 @@ public class UserRoomService implements IUserRoomService{
 
     }
 
-
-    // 예약
-
-    // 리뷰
-
 }
