@@ -21,7 +21,7 @@ public class WebSecurityConfig {
 
     // throws Exception은 모든 Exception 처리를 호출부에서 하겠다라는 의미
     @Bean
-    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception {
+    protected SecurityFilterChain configure(HttpSecurity httpSecurity) throws Exception { 
         return httpSecurity
                 .cors().and()
                 .csrf().disable() // 공격자가 사용자의 의지 없이(모르게) 공격하게 만드는 보안 공격

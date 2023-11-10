@@ -7,6 +7,7 @@ import com.btc.swimpyo.backend.mappers.member.admin.IAdminMemberDaoMapper;
 import com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity;
 import com.btc.swimpyo.backend.utils.jwt.filter.JwtAuthenticationFilter;
 import com.btc.swimpyo.backend.utils.jwt.provider.JwtProvider;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -96,11 +94,19 @@ public class AdminMemberService implements IAdminMemberService {
                 동일한 refresh token 명의 행이 있다면 delete 후
                 새로 발급받은 refresh token을 insert해준다.
              */
-            final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-            final String checkingRefToken;
+            String checkingRefToken = null;
+            Cookie[] authHeader = request.getCookies();
             if (authHeader != null) {
-                String cookieToken = authHeader.substring(7);
-                checkingRefToken = cookieToken.split("=")[1];
+                for (Cookie cookie : authHeader) {
+                    log.info("str => {}", cookie.getName());
+                    if ("authorization".equals(cookie.getName())) {
+                        checkingRefToken = cookie.getValue();
+                    }
+                }
+            }
+
+            if (authHeader != null) {
+
                 refTokenEntity.setRef_token(checkingRefToken);
                 RefTokenEntity checkedRefToken = iAdminMemberDaoMapper.selectRefToken(refTokenEntity);
                 if (checkedRefToken != null) {
@@ -149,15 +155,21 @@ public class AdminMemberService implements IAdminMemberService {
         log.info("refreshToken");
 
         Map<String, Object> map = new HashMap<>();
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String refreshToken;
+        String refreshToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                }
+            }
+        }
         final String userEmail;
         if (authHeader == null) {
             map.put("result", "RefTokenNullInCookie");
             return map;
         }
-        String cookieToken = authHeader.substring(7);
-        refreshToken = cookieToken.split("=")[1];
 
         // token에 동일한 refresh token 명이 있는지 check
         // 있으면 이후 작업 진행, -> DB 중복 ref token delete -> 새로 발급받은 ref token insert
@@ -220,12 +232,19 @@ public class AdminMemberService implements IAdminMemberService {
     public String logout(HttpServletRequest request, HttpServletResponse response, RefTokenEntity refTokenEntity) {
         log.info("logout");
 
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String checkingRefToken;
+
+        String checkingRefToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    checkingRefToken = cookie.getValue();
+                }
+            }
+        }
         if (authHeader != null) {
             log.info("tp3");
-            String cookieToken = authHeader.substring(7);
-            checkingRefToken = cookieToken.split("=")[1];
             refTokenEntity.setRef_token(checkingRefToken);
             log.info("checkingRefToken = {}", checkingRefToken);
             RefTokenEntity checkedRefToken = iAdminMemberDaoMapper.selectRefToken(refTokenEntity);
@@ -247,15 +266,22 @@ public class AdminMemberService implements IAdminMemberService {
     public String signOut(HttpServletRequest request, HttpServletResponse response, AdminMemberDto adminMemberDto, RefTokenEntity refTokenEntity) {
         log.info("signOut");
 
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String refreshToken;
+        String refreshToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                }
+            }
+        }
+
         final String userEmail;
         if (authHeader == null) {
             log.info("authHeaderNull");
             return "refresh token is null";
         }
-        String cookieToken = authHeader.substring(7);
-        refreshToken = cookieToken.split("=")[1];
 
         // ref token에서 userEmail 추출
         userEmail = jwtAuthenticationFilter.getUserEmail(secretKey, refreshToken);
@@ -304,12 +330,19 @@ public class AdminMemberService implements IAdminMemberService {
     @Override
     public AdminMemberDto adminInfo(HttpServletRequest request, AdminMemberDto adminMemberDto) {
         log.info("adminInfo");
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String checkingRefToken;
+
+        String checkingRefToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    checkingRefToken = cookie.getValue();
+                }
+            }
+        }
 
         if (authHeader != null) {
-            String cookieToken = authHeader.substring(7);
-            checkingRefToken = cookieToken.split("=")[1];
             adminMemberDto.setA_m_email(jwtAuthenticationFilter.getUserEmail(secretKey, checkingRefToken));
 
             AdminMemberDto adminInfo = iAdminMemberDaoMapper.isMember(adminMemberDto);
@@ -330,12 +363,20 @@ public class AdminMemberService implements IAdminMemberService {
 
         adminMemberDto.setA_m_pw(msgMap.get("beforePw").toString());
 
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String checkingRefToken;
+        String checkingRefToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    checkingRefToken = cookie.getValue();
+                }
+            }
+        }
+
 
         if (authHeader != null) {
-            String cookieToken = authHeader.substring(7);
-            checkingRefToken = cookieToken.split("=")[1];
+
             adminMemberDto.setA_m_email(jwtAuthenticationFilter.getUserEmail(secretKey, checkingRefToken));
             AdminMemberDto idVerifiedAdminMemberDto = iAdminMemberDaoMapper.isMember(adminMemberDto);
 
@@ -352,6 +393,5 @@ public class AdminMemberService implements IAdminMemberService {
 
         return null;
     }
-
 
 }

@@ -92,11 +92,18 @@ public class UserMemberService implements IUserMemberService {
                 동일한 refresh token 명의 행이 있다면 delete 후
                 새로 발급받은 refresh token을 insert해준다.
              */
-            final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-            final String checkingRefToken;
+            String checkingRefToken = null;
+            Cookie[] authHeader = request.getCookies();
             if (authHeader != null) {
-                String cookieToken = authHeader.substring(7);
-                checkingRefToken = cookieToken.split("=")[1];
+                for (Cookie cookie : authHeader) {
+                    log.info("str => {}", cookie.getName());
+                    if ("authorization".equals(cookie.getName())) {
+                        checkingRefToken = cookie.getValue();
+                    }
+                }
+            }
+
+            if (authHeader != null) {
                 refTokenEntity.setRef_token(checkingRefToken);
                 RefTokenEntity checkedRefToken = iUserMemberDaoMapper.selectRefToken(refTokenEntity);
                 if (checkedRefToken != null) {
@@ -160,12 +167,20 @@ public class UserMemberService implements IUserMemberService {
     @Override
     public UserMemberDto userInfo(HttpServletRequest request, UserMemberDto userMemberDto) {
         log.info("userInfo");
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String checkingRefToken;
+        String checkingRefToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    checkingRefToken = cookie.getValue();
+                }
+            }
+        }
+
 
         if (authHeader != null) {
-            String cookieToken = authHeader.substring(7);
-            checkingRefToken = cookieToken.split("=")[1];
+
             userMemberDto.setU_m_email(jwtAuthenticationFilter.getUserEmail(secretKey, checkingRefToken));
 
             UserMemberDto userInfo = iUserMemberDaoMapper.isMemberUser(userMemberDto);
@@ -184,15 +199,23 @@ public class UserMemberService implements IUserMemberService {
         log.info("refreshToken");
 
         Map<String, Object> map = new HashMap<>();
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String refreshToken;
+        String refreshToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                }
+            }
+        }
+
         final String userEmail;
         if (authHeader == null) {
             map.put("result", "RefTokenNullInCookie");
             return map;
         }
-        String cookieToken = authHeader.substring(7);
-        refreshToken = cookieToken.split("=")[1];
+
 
         // token에 동일한 refresh token 명이 있는지 check
         // 있으면 이후 작업 진행, -> DB 중복 ref token delete -> 새로 발급받은 ref token insert
@@ -257,12 +280,17 @@ public class UserMemberService implements IUserMemberService {
 
         userMemberDto.setU_m_pw(msgMap.get("beforePw").toString());
 
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String checkingRefToken;
-
+        String checkingRefToken = null;
+        Cookie[] authHeader = request.getCookies();
         if (authHeader != null) {
-            String cookieToken = authHeader.substring(7);
-            checkingRefToken = cookieToken.split("=")[1];
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    checkingRefToken = cookie.getValue();
+                }
+            }
+        }
+
             userMemberDto.setU_m_email(jwtAuthenticationFilter.getUserEmail(secretKey, checkingRefToken));
 
             UserMemberDto idVerifiedUserMemberDto = iUserMemberDaoMapper.isMemberUser(userMemberDto);
@@ -275,7 +303,7 @@ public class UserMemberService implements IUserMemberService {
                     return "UserChangePwFail";
                 }
             }
-        }
+
 
         return null;
     }
@@ -284,11 +312,19 @@ public class UserMemberService implements IUserMemberService {
     public String logout(HttpServletRequest request, HttpServletResponse response, RefTokenEntity refTokenEntity) {
         log.info("logout");
 
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String checkingRefToken;
+        String checkingRefToken = null;
+        Cookie[] authHeader = request.getCookies();
         if (authHeader != null) {
-            String cookieToken = authHeader.substring(7);
-            checkingRefToken = cookieToken.split("=")[1];
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    checkingRefToken = cookie.getValue();
+                }
+            }
+        }
+
+        if (authHeader != null) {
+
             refTokenEntity.setRef_token(checkingRefToken);
             RefTokenEntity checkedRefToken = iUserMemberDaoMapper.selectRefToken(refTokenEntity);
             if (checkedRefToken != null) {
@@ -309,15 +345,22 @@ public class UserMemberService implements IUserMemberService {
     public String signOut(HttpServletRequest request, HttpServletResponse response, UserMemberDto userMemberDto, RefTokenEntity refTokenEntity) {
         log.info("signOut");
 
-        final String authHeader = request.getHeader(HttpHeaders.COOKIE);
-        final String refreshToken;
+        String refreshToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                }
+            }
+        }
+
         final String userEmail;
         if (authHeader == null) {
             log.info("authHeaderNull");
             return "refresh token is null";
         }
-        String cookieToken = authHeader.substring(7);
-        refreshToken = cookieToken.split("=")[1];
 
         // ref token에서 userEmail 추출
         userEmail = jwtAuthenticationFilter.getUserEmail(secretKey, refreshToken);
