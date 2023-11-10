@@ -69,14 +69,15 @@ public class UserReviewController {
 
     }
 
-
     // 상세페이지 조회
-    @PostMapping("/getReview")
-    public Object getReview(@RequestBody Map<String, Object>  msgMap, UserReviewDto userReviewDto){
-        log.info("getReview");
+    @PostMapping("/showDetail")
+    public Map<String, Object> showDetail(@RequestParam("r_no") int r_no, @RequestParam("u_m_email") String u_m_email, UserReviewDto reviewDto){
+        log.info("[UserReviewController] showDetail()");
+        log.info("[UserReviewController] r_no:" + r_no);
+        log.info("[UserReviewController] u_m_email:" + u_m_email);
 
+        return userReviewService.showDetail(r_no, u_m_email, reviewDto);
 
-        return null;
     }
 
 }

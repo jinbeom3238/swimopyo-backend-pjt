@@ -28,4 +28,14 @@ public interface IUserReviewDaoMapper {
     public List<Integer> selectReviewImgNo(int r_no);
     // 이미지 정보 가져오기
     public List<UserReviewDto> selectReviewImgForList(int r_no);
+
+    /*
+     * 상세페이지 조회
+     */
+    // 룸 정보 조회
+    public UserReviewDto selectReviewDetail(UserReviewDto userReviewDto);
+    // 이미지 정보 조회
+    public List<UserReviewDto> selectReviewImgForDetail(int r_no);
+    // 경도, 위도 정보 조회
+    public List<UserReviewDto> selectReviewXYForDetail(int rNo);
 }

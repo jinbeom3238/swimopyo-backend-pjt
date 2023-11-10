@@ -12,4 +12,7 @@ public interface IUserReviewService {
 
     // 리스트 조회
     public Map<String, Object> showReviewList(String u_m_email);
+
+    // 상세페이지 조회
+    public Map<String, Object> showDetail(int r_no, String u_m_email, UserReviewDto userReviewDto);
 }
