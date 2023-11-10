@@ -22,9 +22,6 @@ public class UserReservationService implements IUserReservationService{
 
     private final IUserReservationDaoMapper iUserReservationDaoMapper;
     private final KakaoPayController kakaoPayController;
-    private KakaoReadyResponseDto kakaoReady;
-    private KakaoApproveResponseDto kakaoApprove;
-    private AmountDto amount;
 
     // 예약하기 버튼 클릭 시 화면(모달창)
     @Override
@@ -145,10 +142,12 @@ public class UserReservationService implements IUserReservationService{
 
         String pg_token = null;
 
+        KakaoApproveResponseDto kakaoApprove = new KakaoApproveResponseDto();
+
         if(isReady > 0) {
             log.info("[insertKakaoPayReady] isReady!!");
 
-            KakaoApproveResponseDto kakaoApprove= kakaoPayController.afterPayRequest(pg_token, kakaoReadyResponseDto);
+           kakaoApprove= kakaoPayController.afterPayRequest(pg_token, kakaoReadyResponseDto);
 
             log.info(kakaoReadyResponseDto.getPg_token());
 
@@ -163,6 +162,7 @@ public class UserReservationService implements IUserReservationService{
                 KakaoApproveResponseDto kakaoApproveInfo = iUserReservationDaoMapper.insertKakaoPayApprove(kakaoApprove);
                 AmountDto amountDto = iUserReservationDaoMapper.insertKakaoPayApproveAmount(kakaoApprove);
 
+                msgData.put("kakaoReadyResponseDto", kakaoReadyResponseDto);
                 msgData.put("kakaoApproveInfo", kakaoApproveInfo);
                 msgData.put("amountDto", amountDto);
 
@@ -175,6 +175,8 @@ public class UserReservationService implements IUserReservationService{
 
         // 도보/차량, 실사용자 정보와 기존에 받았던 예약날짜, 숙박/대실, 가격 정보 db에 저장하기
         if (reservationDto.getU_r_stay_yn().equals("Y")){
+
+            KakaoApproveResponseDto kakaoApproveResponseDto;
 
             reservationDto.setTid(kakaoApprove.getTid());
 
@@ -195,7 +197,7 @@ public class UserReservationService implements IUserReservationService{
             int result = iUserReservationDaoMapper.insertRsvInfoByMoment(reservationDto);
 
             Time u_r_check_out_time = reservationDto.getU_r_check_out_time();
-//        log.info("u_r_check_out_time:" + u_r_check_out_time);
+            log.info("u_r_check_out_time:" + u_r_check_out_time);
 
             if(result > 0) {
                 log.info("예약 완료");

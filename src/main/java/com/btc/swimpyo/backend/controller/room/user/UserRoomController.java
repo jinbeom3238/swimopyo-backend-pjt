@@ -27,7 +27,7 @@ public class UserRoomController {
 
     }
 
-    // 룸 정보 조회
+    // 룸 상세페이지 조회
     @PostMapping("/showRoomDetail")
     public Map<String, Object> showRoomDetail(@RequestParam("a_r_no") int a_r_no) {
         log.info("[UserRoomController] showRoomDetail()");

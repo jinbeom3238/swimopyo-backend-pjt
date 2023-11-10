@@ -44,7 +44,7 @@ public class WebSecurityConfig {
                         "/api/user/member/logout",
                         "/api/user/member/signout",
                         "/api/user/accm/search").permitAll()
-                .requestMatchers("/api/user/**").hasRole("USER")
+                .requestMatchers("/api/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and().build();
 
