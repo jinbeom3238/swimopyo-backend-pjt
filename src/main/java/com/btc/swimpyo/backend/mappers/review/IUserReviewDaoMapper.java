@@ -38,4 +38,18 @@ public interface IUserReviewDaoMapper {
     public List<UserReviewDto> selectReviewImgForDetail(int r_no);
     // 경도, 위도 정보 조회
     public List<UserReviewDto> selectReviewXYForDetail(int rNo);
+
+    /*
+     * 삭제
+     */
+    // 이미지를 제외한 리뷰 정보 삭제
+    public int deleteReview(UserReviewDto userReviewDto);
+    // 삭제할 이미지 가져오기
+    public List<String> selectReviewImg(UserReviewDto userReviewDto);
+    // 이미지 db에서 삭제하기
+    public int deleteReviewImg(UserReviewDto userReviewDto);
+    // 삭제할 주소 가져오기
+    public List<String> selectReviewAddress(UserReviewDto userReviewDto);
+    // 주소 db에서 삭제하기
+    public int deleteReviewAddress(UserReviewDto userReviewDto);
 }

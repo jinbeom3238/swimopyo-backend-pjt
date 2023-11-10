@@ -21,8 +21,8 @@ public class UserReviewController {
     private final UserReviewService userReviewService;
 
     // 등록
-    @PostMapping(value = "/registReview", consumes = "multipart/form-data")
-    public void registReview(@RequestPart(value = "userReviewDto", required = false) UserReviewDto userReviewDto,
+    @PostMapping(value = "/registConfirm", consumes = "multipart/form-data")
+    public synchronized void registConfirm(@RequestPart(value = "userReviewDto", required = false) UserReviewDto userReviewDto,
                              @RequestPart(value = "userReservationDto", required = false) ReservationDto reservationDto,
                              @RequestPart(value = "reviewImages", required = false)MultipartFile[] reviewImages) {
         log.info("[UserReviewController] registReview()");
@@ -44,7 +44,7 @@ public class UserReviewController {
         }
 
         // S3에 이미지 업로드하고 url 얻어옴
-        String imageUrl = userReviewService.registReview(userReviewDto, reviewImages);
+        String imageUrl = userReviewService.registConfirm(userReviewDto, reviewImages);
 
     }
 
@@ -71,12 +71,28 @@ public class UserReviewController {
 
     // 상세페이지 조회
     @PostMapping("/showDetail")
-    public Map<String, Object> showDetail(@RequestParam("r_no") int r_no, @RequestParam("u_m_email") String u_m_email, UserReviewDto reviewDto){
+    public Map<String, Object> showDetail(@RequestParam("r_no") int r_no, @RequestParam("u_m_email") String u_m_email, @RequestPart UserReviewDto reviewDto){
         log.info("[UserReviewController] showDetail()");
         log.info("[UserReviewController] r_no:" + r_no);
         log.info("[UserReviewController] u_m_email:" + u_m_email);
 
         return userReviewService.showDetail(r_no, u_m_email, reviewDto);
+
+    }
+
+    // 삭제
+    @PostMapping("/deleteConfirm")
+    public int deleteConfirm(@RequestPart UserReviewDto userReviewDto, @RequestParam("r_no") int r_no, @RequestParam("u_m_email") String u_m_email) {
+        log.info("[UserReviewController] deleteConfirm()");
+
+        userReviewDto.setR_no(r_no);
+        userReviewDto.setU_m_email(u_m_email);
+
+        log.info("userReviewDto: " + userReviewDto);
+        log.info("userReviewDto: " + userReviewDto.getR_no());
+        log.info("userReviewDto: " + userReviewDto.getU_m_email());
+
+        return userReviewService.deleteConfirm(userReviewDto);
 
     }
 

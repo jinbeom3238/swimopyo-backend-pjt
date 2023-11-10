@@ -29,7 +29,7 @@
         WHERE
             u_m_email = #{u_m_email}
         AND
-            u_r_no is not null
+            u_r_no = #{u_r_no}
     </insert>
 
     <!-- 등록 - 리뷰 NO 가져오가 -->
@@ -44,6 +44,8 @@
             a_r_no = #{a_r_no}
         and
             u_r_no = #{u_r_no}
+        and
+            use_yn = 'Y'
     </select>
 
     <!-- 등록 - 주소 값들 db 저장 -->
@@ -73,6 +75,8 @@
             tbl_review
         WHERE
             u_m_email = #{u_m_email}
+        AND
+            use_yn = 'Y'
     </select>
 
     <!-- 리스트 조회 - 이미지 번호 가져오기 -->
@@ -99,7 +103,7 @@
 
     <!-- 상세페이지 조회 - 리뷰 정보 가져오기 -->
     <select id="selectReviewDetail" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
-        select
+        SELECT
             r_no,
             a_r_no,
             u_m_email,
@@ -108,12 +112,13 @@
             r_content,
             r_sa_point,
             r_reg_date
-        from
+        FROM
             tbl_review
-        where
+        WHERE
             r_no = #{r_no}
-        and
+        AND
             u_m_email = #{u_m_email}
+        C
     </select>
 
     <!-- 상세페이지 조회 - 리뷰 이미지 정보 가져오기 -->
@@ -136,4 +141,59 @@
             r_no = #{r_no}
     </select>
 
+    <!-- 삭제 - 리뷰 정보 삭제(이미지 제외) -->
+    <update id="deleteReview" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+        UPDATE
+            tbl_review
+        SET
+            use_yn = 'N'
+        WHERE
+            r_no = #{r_no}
+        AND
+            u_m_email = #{u_m_email}
+    </update>
+
+    <!-- 삭제 - 삭제할 이미지 정보 가져오기 -->
+    <select id="selectReviewImg" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" resultType="String">
+        SELECT
+            r_ri_image
+        FROM
+            tbl_review_image
+        WHERE
+            r_no = #{r_no}
+    </select>
+
+    <!-- 삭제 - 이미지 정보 삭제 -->
+    <delete id="deleteReviewImg" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+        delete ri from
+            tbl_review_image ri
+        join
+            tbl_review rr
+        on
+            ri.r_no = rr.r_no
+        where
+            rr.u_m_email = #{u_m_email}
+    </delete>
+
+    <!-- 삭제 - 삭제할 주소 가져오기 -->
+    <select id="selectReviewAddress" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" resultType="String">
+        SELECT
+            r_xy_address
+        FROM
+            tbl_review_xy
+        WHERE
+            r_no = #{r_no}
+    </select>
+
+    <!-- 삭제 - 주소 db에서 삭제 -->
+    <delete id="deleteReviewAddress" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+        delete address from
+            tbl_review_xy address
+        join
+            tbl_review rr
+        on
+            address.r_no = rr.r_no
+        where
+            rr.u_m_email = #{u_m_email}
+    </delete>
 </mapper>

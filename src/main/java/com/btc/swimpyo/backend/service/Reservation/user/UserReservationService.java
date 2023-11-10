@@ -162,6 +162,7 @@ public class UserReservationService implements IUserReservationService{
                 KakaoApproveResponseDto kakaoApproveInfo = iUserReservationDaoMapper.insertKakaoPayApprove(kakaoApprove);
                 AmountDto amountDto = iUserReservationDaoMapper.insertKakaoPayApproveAmount(kakaoApprove);
 
+                msgData.put("kakaoReadyResponseDto", kakaoReadyResponseDto);
                 msgData.put("kakaoApproveInfo", kakaoApproveInfo);
                 msgData.put("amountDto", amountDto);
 
@@ -196,7 +197,7 @@ public class UserReservationService implements IUserReservationService{
             int result = iUserReservationDaoMapper.insertRsvInfoByMoment(reservationDto);
 
             Time u_r_check_out_time = reservationDto.getU_r_check_out_time();
-//        log.info("u_r_check_out_time:" + u_r_check_out_time);
+            log.info("u_r_check_out_time:" + u_r_check_out_time);
 
             if(result > 0) {
                 log.info("예약 완료");

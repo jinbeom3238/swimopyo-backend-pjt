@@ -44,11 +44,10 @@ public class UserReviewService implements IUserReviewService{
      * 1. 예약한 내역이 있는 사용자만 예약할 수 있다. -> 예약 번호 일치해야한다.
      * 2. 예약한 사용자의 email과 r_no가 일치해야만 등록할 수 있다.
      */
-
     // 등록
     @Override
-    public String registReview(UserReviewDto userReviewDto, MultipartFile[] reviewImages) {
-        log.info("[UserReviewService] registReview()");
+    public String registConfirm(UserReviewDto userReviewDto, MultipartFile[] reviewImages) {
+        log.info("[UserReviewService] registConfirm()");
 
         log.info("[registReview] userReviewDto : " + userReviewDto);
 
@@ -56,7 +55,6 @@ public class UserReviewService implements IUserReviewService{
             // 1. tbl_review 테이블에 데이터 등록
             int result = iUserReviewDaoMapper.insertReview(userReviewDto);
             log.info("result: " + result);
-//            log.info("u_m_email:" + userReviewInfoDto.getU_m_email());
 
             // 2. 등록된 리뷰 테이블 번호 가져오기
             int r_no = iUserReviewDaoMapper.selectReviewNo(userReviewDto);
@@ -179,6 +177,45 @@ public class UserReviewService implements IUserReviewService{
         log.info("msgData: " + msgData);
 
         return msgData;
+
+    }
+
+    // 삭제
+    @Override
+    public int deleteConfirm(UserReviewDto userReviewDto) {
+        log.info("[userReviewService] deleteConfirm()");
+
+        log.info("r_no:" + userReviewDto.getR_no());
+        log.info("u_m_email:" + userReviewDto.getU_m_email());
+
+        // 이미지를 제외한 리뷰 정보 삭제
+        int isDeleteInfo = iUserReviewDaoMapper.deleteReview(userReviewDto);
+        log.info("isDeleteInfo:" + isDeleteInfo);
+
+        // 삭제할 이미지들 조회
+        List<String> deleteImg = iUserReviewDaoMapper.selectReviewImg(userReviewDto);
+
+        // S3에서 이미지 삭제
+        for(String imgUrl : deleteImg) {
+            s3Uploader.deleteFileFromS3(imgUrl);
+
+        }
+
+        log.info("DELETE REVIEW IMAGES");
+
+        // db에서 이미지 삭제
+        int isDeleteImg = iUserReviewDaoMapper.deleteReviewImg(userReviewDto);
+        log.info("isDeleteImg: " + isDeleteImg);
+
+        // 삭제할 주소 정보 조회
+        List<String> deleteAddress = iUserReviewDaoMapper.selectReviewAddress(userReviewDto);
+        log.info("deleteAddress: " + deleteAddress);
+
+        // 경도, 위도 삭제
+        int isDeleteAddress = iUserReviewDaoMapper.deleteReviewAddress(userReviewDto);
+        log.info("isDeleteAddress: " + isDeleteAddress);
+
+        return isDeleteAddress;
 
     }
 }
