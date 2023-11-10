@@ -85,8 +85,8 @@ public class UserReviewController {
     public int deleteConfirm(@RequestPart UserReviewDto userReviewDto, @RequestParam("r_no") int r_no, @RequestParam("u_m_email") String u_m_email) {
         log.info("[UserReviewController] deleteConfirm()");
 
-        userReviewDto.setR_no(r_no);
-        userReviewDto.setU_m_email(u_m_email);
+//        userReviewDto.setR_no(r_no);
+//        userReviewDto.setU_m_email(u_m_email);
 
         log.info("userReviewDto: " + userReviewDto);
         log.info("userReviewDto: " + userReviewDto.getR_no());
