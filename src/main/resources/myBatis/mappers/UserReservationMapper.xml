@@ -51,6 +51,8 @@
             OR
             (u_r_check_in <![CDATA[<=]]> #{u_r_check_in} AND u_r_check_out <![CDATA[>=]]> #{u_r_check_out})
             )
+        AND
+            pay_yn = 'Y'
     </select>
 
     <!-- 대실 - 이미 예약된 방만 찾기 -->
@@ -69,9 +71,11 @@
             OR
             (u_r_check_in_time <![CDATA[<=]]> #{u_r_check_in_time} AND u_r_check_out_time <![CDATA[>=]]> #{u_r_check_out_time})
             )
+        AND
+            pay_yn = 'Y'
     </select>
 
-    <!-- 예약 정보 db에 저장 -->
+    <!-- 예약 정보 db에 저장(숙박) -->
     <insert id="insertRsvInfo" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
         insert into
             tbl_user_reservation(tid,
@@ -97,7 +101,7 @@
     </insert>
 
 
-    <!-- 예약 정보 db에 저장 -->
+    <!-- 예약 정보 db에 저장(대실) -->
     <insert id="insertRsvInfoByMoment" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
         insert into
         tbl_user_reservation(tid,
@@ -126,15 +130,68 @@
                 NOW())
     </insert>
 
-    <!-- [카카오페이] tid, next_redirect_pc_url, pg_token db에 저장 -->
+    <!-- [카카오페이] tid, next_redirect_pc_url 등 db에 저장 -->
     <insert id="insertKakaoPayReady" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto">
-        insert into tbl_Kakao_ready(tid,
+        insert into tbl_kakao_ready(tid,
                                     next_redirect_pc_url,
-                                    created_at)
+                                    created_at,
+                                    partner_order_id,
+                                    partner_user_id,
+                                    item_name,
+                                    cid)
         values (#{tid},
                 #{next_redirect_pc_url},
-                #{created_at})
+                #{created_at},
+                #{partner_order_id},
+                #{partner_user_id},
+                #{item_name},
+                #{cid})
     </insert>
+
+    <!-- 가격 정보 db에 저장 -->
+    <insert id="insertAmount" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto">
+        insert into tbl_amount(tid, total, tax_free, tax, point, discount, green_deposit)
+        values (#{tid}, #{total}, #{tax_free}, #{tax}, #{point}, #{discount}, #{green_deposit})
+    </insert>
+
+    <!-- u_r_no 가져오기 -->
+    <select id="selectRsvNo" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto" resultType="Integer">
+        select
+        max(u_r_no)
+        from
+        tbl_user_reservation
+        where
+        u_m_email = #{u_m_email}
+    </select>
+
+    <!-- tid 값 tbl_user_reservation에 넣기 -->
+    <update id="updateRsvTid" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
+        UPDATE
+            tbl_user_reservation
+        SET
+            tid = #{tid}
+        WHERE
+            u_m_email = #{u_m_email}
+        and
+            u_r_no = #{u_r_no}
+    </update>
+    
+    <!-- tbl_kakao_ready에 저장된 값들 들고오기 -->
+    <select id="selectKakaoReadyInfo" parameterType="String" resultType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto">
+        SELECT  tid,
+                next_redirect_pc_url,
+                created_at,
+                partner_order_id,
+                partner_user_id,
+                item_name,
+                cid
+        FROM
+            tbl_kakao_ready
+        WHERE
+            partner_user_id = #{u_m_email}
+        AND
+            created_at = (SELECT MAX(created_at) FROM tbl_kakao_ready)
+    </select>
 
     <!-- [카카오페이] 승인시 받은 데이터 저장 -->
     <insert id="insertKakaoPayApprove" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto">
@@ -166,11 +223,17 @@
                 #{payload})
     </insert>
 
-    <!-- [카카오페이] 승인시 받은 결제 금액 정보 db 저장 -->
-    <insert id="insertKakaoPayApproveAmount" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto">
-        insert into tbl_amount(tid, total, tax_free, tax, point, discount, green_deposit)
-        values (#{tid}, #{total}, #{tax_free}, #{tax}, #{point}, #{discount}, #{green_deposit})
-    </insert>
+    <!-- 결제 완료시 pay_yn 값 바꾸기 -->
+    <update id="updateRsvpayYN" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
+        update
+            tbl_user_reservation
+        set
+            pay_yn = 'Y'
+        WHERE
+            u_r_no = #{u_r_no}
+        AND
+            u_m_email = #{u_m_email}
+    </update>
 
     <!-- 환불 - 삭제할 예약번호 받아오기 -->
     <select id="selectRsvNoForDel" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">

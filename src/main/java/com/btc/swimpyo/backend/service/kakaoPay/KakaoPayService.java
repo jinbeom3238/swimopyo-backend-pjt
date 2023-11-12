@@ -37,14 +37,16 @@ public class KakaoPayService {
 
 
     public KakaoReadyResponseDto kakaoPayReady(ReservationDto reservationDto) {
-        log.info("[KakaoPayApiService] kakaoPayReady()");
+        log.info("[KakaoPayService] kakaoPayReady()");
 
         int totalAmount = reservationDto.getA_r_price();
         int vatAmount = (int) (totalAmount * 0.1);
         int taxFreeAmount = totalAmount - vatAmount;
 
+
         String partner_order_id = String.valueOf(UUID.randomUUID());
         reservationDto.setPartner_order_id(partner_order_id);
+
 
 //        String approval_url = "http://localhost:8090/payment/success?partner_order_id=" + partner_order_id;
 //        String approval_url = "http://localhost:8090/payment/success";
@@ -55,11 +57,6 @@ public class KakaoPayService {
         log.info("totalAmount:" + totalAmount);
         log.info("vatAmount:" + vatAmount);
         log.info("taxFreeAmount:" + taxFreeAmount);
-
-        AmountDto amountDto = new AmountDto();
-        amountDto.setTotal(totalAmount);
-        amountDto.setTax(vatAmount);
-        amountDto.setTax_free(taxFreeAmount);
 
         /*
          * <카카오페이 요청 양식>
@@ -72,12 +69,12 @@ public class KakaoPayService {
         parameters.add("partner_order_id", partner_order_id);        // 가맹점 주문 번호
         parameters.add("partner_user_id", reservationDto.getU_m_email());    // 가맹점 회원 ID
         parameters.add("item_name", reservationDto.getA_r_name());       // 상품명
-        parameters.add("quantity", "1");                    // 주문 수량
+        parameters.add("quantity", 1);                    // 주문 수량
         parameters.add("total_amount", totalAmount);           // 총 금액
         parameters.add("vat_amount", vatAmount);              // 부가세
         parameters.add("tax_free_amount", taxFreeAmount);         //상품 비과세 금액
 //        parameters.add("approval_url", "http://localhost:8090/payment/success?partner_order_id=" + partner_order_id); // 성공 시 redirect url
-        parameters.add("approval_url", "http://localhost:3000/payment/success"); // 성공 시 redirect url
+        parameters.add("approval_url", "http://localhost:8090/api/user/reservation/registConfirm"); // 성공 시 redirect url
         parameters.add("cancel_url", "http://localhost:3000/payment/cancel");   // 취소 시 redirect url
         parameters.add("fail_url", "http://localhost:3000/payment/fail");       // 실패 시 redirect url
 
@@ -102,6 +99,24 @@ public class KakaoPayService {
                 requestEntity,
                 KakaoReadyResponseDto.class);
 
+//        kakaoReady.setTotal(totalAmount);
+//        kakaoReady.setTax(vatAmount);
+//        kakaoReady.setTax_free(taxFreeAmount);
+//        kakaoReady.setItem_name(reservationDto.getA_r_name());
+//        kakaoReady.setCid(cid);
+//        kakaoReady.setQuantity("1");
+
+//        log.info("kakaoReady: " + kakaoReady);
+        kakaoReady.setPartner_order_id(partner_order_id);
+        kakaoReady.setPartner_user_id(reservationDto.getU_m_email());
+        kakaoReady.setItem_name(reservationDto.getA_r_name());
+        kakaoReady.setCid(cid);
+        kakaoReady.setTotal(totalAmount);
+        kakaoReady.setTax(vatAmount);
+        kakaoReady.setTax_free(taxFreeAmount);
+
+        log.info("kakaoReady:" + kakaoReady);
+
         return kakaoReady;
 
     }
@@ -110,15 +125,15 @@ public class KakaoPayService {
      * 결제 완료 승인
      * 카카오페이에서 결제 승인을 요청하고, 그에 대한 응답을 받아오는 역할
      */
-    public KakaoApproveResponseDto approveResponse(KakaoReadyResponseDto kakaoReady) {
+    public KakaoApproveResponseDto approveResponse(KakaoReadyResponseDto kakaoReadyResponseDto) {
         log.info("[KakaoPayService] ApproveResponse()");
-        log.info("[KakaoPayService] email: " + kakaoReady.getU_m_email());
-        log.info("[KakaoPayService] token: " + kakaoReady.getPg_token());
-        log.info("[KakaoPayService] getPartner_order_id: " + kakaoReady.getPartner_order_id());
+        log.info("[KakaoPayService] email: " + kakaoReadyResponseDto.getPartner_user_id());
+        log.info("[KakaoPayService] token: " + kakaoReadyResponseDto.getPg_token());
+        log.info("[KakaoPayService] getPartner_order_id: " + kakaoReadyResponseDto.getPartner_order_id());
 
-        String tid = kakaoReady.getTid();
-        String partner_order_id = kakaoReady.getPartner_order_id();
-        String partner_user_id = kakaoReady.getU_m_email();
+        String tid = kakaoReadyResponseDto.getTid();
+        String partner_order_id = kakaoReadyResponseDto.getPartner_order_id();
+        String partner_user_id = kakaoReadyResponseDto.getPartner_user_id();
 
         // 카카오 요청
         MultiValueMap<String, String> parameters = new LinkedMultiValueMap<>();
@@ -126,7 +141,7 @@ public class KakaoPayService {
         parameters.add("tid", tid);
         parameters.add("partner_order_id", partner_order_id);        // 가맹점 주문 번호
         parameters.add("partner_user_id", partner_user_id);    // 가맹점 회원 ID
-        parameters.add("pg_token", kakaoReady.getPg_token()); // 승인 요청 -> 성공시 파라미터 값으로 받아와야 함
+        parameters.add("pg_token", kakaoReadyResponseDto.getPg_token()); // 승인 요청 -> 성공시 파라미터 값으로 받아와야 함
 
         // 파라미터, 헤더
         HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
@@ -141,8 +156,8 @@ public class KakaoPayService {
 
         log.info("KakaoApproveResponseDto: " + approveResponse);
 
-        approveResponse.setPg_token(kakaoReady.getPg_token());
-        approveResponse.setU_m_email(kakaoReady.getU_m_email());
+        approveResponse.setPg_token(kakaoReadyResponseDto.getPg_token());
+        approveResponse.setU_m_email(kakaoReadyResponseDto.getPartner_user_id());
 
         return approveResponse;
     }

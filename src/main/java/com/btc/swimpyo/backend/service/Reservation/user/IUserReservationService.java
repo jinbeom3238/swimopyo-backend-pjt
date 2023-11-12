@@ -13,6 +13,8 @@ public interface IUserReservationService {
     // 예약 및 결제 페이지
     public Map<String, Object> createRsvApproval(ReservationDto reservationDto);
 
+    Map<String, Object> registRsv(String pg_token);
+
     // 환불
     public String refundRsv(KakaoApproveResponseDto kakaoApproveResponseDto, AmountDto amountDto, int deleteRsvNo);
 }

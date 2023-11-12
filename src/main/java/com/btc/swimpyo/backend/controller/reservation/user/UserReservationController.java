@@ -2,6 +2,7 @@ package com.btc.swimpyo.backend.controller.reservation.user;
 
 import com.btc.swimpyo.backend.dto.kakaoPay.AmountDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto;
+import com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto;
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.service.Reservation.user.UserReservationService;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +57,15 @@ public class UserReservationController {
         return userReservationService.createRsvApproval(reservationDto);
 
     }
+
+    @GetMapping("/registConfirm")
+    public Map<String, Object> registRsv(@RequestParam ("pg_token")  String pg_token) {
+        log.info("[UserReservationController] registRsv()");
+
+        return userReservationService.registRsv(pg_token);
+
+    }
+
 
     // 결제 취소
     @PostMapping("refund")

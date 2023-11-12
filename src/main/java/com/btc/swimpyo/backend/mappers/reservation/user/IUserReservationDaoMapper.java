@@ -1,16 +1,13 @@
 package com.btc.swimpyo.backend.mappers.reservation.user;
 
-import com.btc.swimpyo.backend.dto.kakaoPay.AmountDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto;
-import com.btc.swimpyo.backend.dto.kakaoPay.KakaoCancelResponseDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto;
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.http.ResponseEntity;
 
 @Mapper
 public interface IUserReservationDaoMapper {
-    
+
     /*
      * 예약하기
      */
@@ -22,17 +19,27 @@ public interface IUserReservationDaoMapper {
 
     // 예약 가능한 방만 찾기
     public int searchDate(ReservationDto reservationDto);
+
     public int searchTime(ReservationDto reservationDto);
+
     public int insertRsvInfoByMoment(ReservationDto reservationDto);
 
     // [카카오페이] tid, next_redirect_pc_url, pg_token db에 저장
     public int insertKakaoPayReady(KakaoReadyResponseDto kakaoReady);
+    public int insertAmount(KakaoReadyResponseDto kakaoReadyResponseDto);
+    // u_r_no 가져오기
+    public int selectRsvNo(ReservationDto reservationDto);
+    // tid 값 tbl_user_reservation에 저장하기
+    public void updateRsvTid(ReservationDto reservationDto);
 
     // [카카오페이] 승인 시 받은 data 모두 저장
-    public KakaoApproveResponseDto insertKakaoPayApprove(KakaoApproveResponseDto kakaoApprove);
+    public void insertKakaoPayApprove(KakaoApproveResponseDto kakaoApprove);
 
-    // [카카오페이] 승인 시 받은 결제 금액 정보 db 저장
-    public AmountDto insertKakaoPayApproveAmount(KakaoApproveResponseDto kakaoApprove);
+    // db에서 kakaopay_ready 값 가져오기
+    public KakaoReadyResponseDto selectKakaoReadyInfo(String uMEmail);
+
+    // 결제 완료시 pay_yn 값 바꾸기
+    public void updateRsvpayYN(ReservationDto reservationDto);
 
     /*
      * 환불
@@ -42,4 +49,7 @@ public interface IUserReservationDaoMapper {
 
     // db 삭제
     public ReservationDto deleteRsvInfo(ReservationDto reservationDto);
+
+
+
 }

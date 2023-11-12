@@ -10,8 +10,6 @@ import com.btc.swimpyo.backend.service.kakaoPay.ExceptionCode;
 import com.btc.swimpyo.backend.service.kakaoPay.KakaoPayService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -41,14 +39,16 @@ public class KakaoPayController {
      */
     @GetMapping("/success")
 //    public ResponseEntity afterPayRequest(@RequestParam(value = "pg_token") String pgToken, @RequestPart KakaoReadyResponseDto kakaoReady) {
-    public KakaoApproveResponseDto afterPayRequest(@RequestParam(value = "pg_token") String pgToken, @RequestPart KakaoReadyResponseDto kakaoReady) {
+    public KakaoApproveResponseDto afterPayRequest(@RequestParam(value = "pg_token") String pgToken, KakaoReadyResponseDto kakaoReadyResponseDto) {
 
         log.info("[KakaoPayController] afterPayRequest()");
 
-        kakaoReady.setPg_token(pgToken);
+//        ReservationDto reservationDto = new ReservationDto();
+
+        kakaoReadyResponseDto.setPg_token(pgToken);
         log.info("pgToken:" + pgToken);
 
-        KakaoApproveResponseDto kakaoApprove = kakaoPayService.approveResponse(kakaoReady);
+        KakaoApproveResponseDto kakaoApprove = kakaoPayService.approveResponse(kakaoReadyResponseDto);
 
         log.info("[KakaoApproveResponseDto] :" + kakaoApprove);
 
