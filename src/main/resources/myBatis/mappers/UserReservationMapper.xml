@@ -245,16 +245,39 @@
             u_r_no = #{deleteRsvNo}
     </select>
 
+    <!-- 환불 - 삭제할 amount 정보 가져오기 -->
+    <select id="selectAmount" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto" resultType="com.btc.swimpyo.backend.dto.kakaoPay.AmountDto">
+        SELECT
+            total, tax_free, tax
+        FROM
+            tbl_amount
+        WHERE
+            tid = #{tid}
+    </select>
+
+    <!-- 환불 - 삭제할 cid 가져오기 -->
+    <select id="selectCid" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto" resultType="String">
+        SELECT
+            cid
+        FROM
+            tbl_pay_approval
+        WHERE
+            tid = #{tid}
+    </select>
+
     <!-- 환불 - db삭제 -->
     <update id="deleteRsvInfo" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
-        UPDATE
-            tbl_user_reservation
-        SET
-            use_yn = 'N'
-        WHERE
-            u_r_no = #{u_r_no}
-        AND
-            u_m_email = #{u_m_email}
+        UPDATE tbl_user_reservation SET use_yn = 'N' WHERE u_r_no = #{u_r_no} AND u_m_email = #{u_m_email};
     </update>
 
+    <!-- 환불 - 결제 정보 삭제 -->
+    <delete id="deletePayReady" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto">
+        delete from tbl_kakao_ready where tid = #{tid};
+    </delete>
+    <delete id="deletePayApproval" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto">
+        delete from tbl_pay_approval where tid = #{tid};
+    </delete>
+    <delete id="deletePayAmount" parameterType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto">
+        delete from tbl_amount where tid = #{tid};
+    </delete>
 </mapper>

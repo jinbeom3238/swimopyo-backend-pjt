@@ -75,8 +75,8 @@ public class KakaoPayService {
         parameters.add("tax_free_amount", taxFreeAmount);         //상품 비과세 금액
 //        parameters.add("approval_url", "http://localhost:8090/payment/success?partner_order_id=" + partner_order_id); // 성공 시 redirect url
         parameters.add("approval_url", "http://localhost:8090/api/user/reservation/registConfirm"); // 성공 시 redirect url
-        parameters.add("cancel_url", "http://localhost:3000/payment/cancel");   // 취소 시 redirect url
-        parameters.add("fail_url", "http://localhost:3000/payment/fail");       // 실패 시 redirect url
+        parameters.add("cancel_url", "http://localhost:8090/api/payment/cancel");   // 취소 시 redirect url
+        parameters.add("fail_url", "http://localhost:8090/api/payment/fail");       // 실패 시 redirect url
 
         /*
          * HTTP 요청을 보내기 위한 엔터티
@@ -171,8 +171,8 @@ public class KakaoPayService {
         log.info("amountDto: "+ amountDto);
         log.info("kakaoApproveResponseDto: "+ kakaoApproveResponseDto);
 
-        reservationDto.getA_r_price();
-        kakaoApproveResponseDto.getPg_token();
+//        reservationDto.getA_r_price();
+//        kakaoApproveResponseDto.getPg_token();
         String tid = kakaoApproveResponseDto.getTid();
         int cancelAmount = amountDto.getTotal();
         int cancelVatAmount = amountDto.getTax();
@@ -183,8 +183,8 @@ public class KakaoPayService {
         parameters.add("cid", cid);
         parameters.add("tid", tid);      // 환불할 결제 고유 번호
         parameters.add("cancel_amount", cancelAmount);          // 환불 금액
-        parameters.add("cancel_tax_free_amount", 0);  // 환불 비과세 금액
-        parameters.add("cancel_vat_amount", 0);       // 환불 부가세
+        parameters.add("cancel_tax_free_amount", cancelTaxFreeAmount);  // 환불 비과세 금액
+        parameters.add("cancel_vat_amount", cancelVatAmount);       // 환불 부가세
 
         log.info("cancelAmount: {}", cancelAmount);
         log.info("cancelVatAmount: {}", cancelVatAmount);
@@ -192,6 +192,8 @@ public class KakaoPayService {
 
         // 파라미터, 헤더
         HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(parameters, this.getHeaders());
+
+        log.info("requestEntity" + requestEntity);
 
         // 외부에 보낼 url
         RestTemplate restTemplate = new RestTemplate();

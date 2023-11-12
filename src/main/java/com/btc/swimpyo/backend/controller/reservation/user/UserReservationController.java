@@ -66,13 +66,15 @@ public class UserReservationController {
 
     }
 
-
+    /*
+     * front에서 받아야 하는 값 : 예약번호(u_r_no), tid, u_m_email 값..?
+     */
     // 결제 취소
     @PostMapping("refund")
-    public void refundRsv(@RequestPart KakaoApproveResponseDto kakaoApproveResponseDto, @RequestPart AmountDto amountDto, @RequestParam(value = "deleteRsvNo", required = false) int deleteRsvNo){
+    public void refundRsv(@RequestPart KakaoApproveResponseDto kakaoApproveResponseDto, AmountDto amountDto, @RequestParam(value = "deleteRsvNo", required = false) int deleteRsvNo){
         log.info("[UserReservationController] refundRsv()");
         log.info("[UserReservationController] kakaoApproveResponseDto: " + kakaoApproveResponseDto);
-        log.info("[UserReservationController] amountDto: " + amountDto);
+//        log.info("[UserReservationController] amountDto: " + amountDto);
         log.info("[UserReservationController] deleteRsvNo: " + deleteRsvNo);
 
         userReservationService.refundRsv(kakaoApproveResponseDto, amountDto, deleteRsvNo);

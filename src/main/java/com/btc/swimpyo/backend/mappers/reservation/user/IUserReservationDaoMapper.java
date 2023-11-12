@@ -1,5 +1,6 @@
 package com.btc.swimpyo.backend.mappers.reservation.user;
 
+import com.btc.swimpyo.backend.dto.kakaoPay.AmountDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto;
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
@@ -33,7 +34,7 @@ public interface IUserReservationDaoMapper {
     public void updateRsvTid(ReservationDto reservationDto);
 
     // [카카오페이] 승인 시 받은 data 모두 저장
-    public void insertKakaoPayApprove(KakaoApproveResponseDto kakaoApprove);
+    public int insertKakaoPayApprove(KakaoApproveResponseDto kakaoApprove);
 
     // db에서 kakaopay_ready 값 가져오기
     public KakaoReadyResponseDto selectKakaoReadyInfo(String uMEmail);
@@ -46,10 +47,12 @@ public interface IUserReservationDaoMapper {
      */
     // 삭제할 예약 번호 받아오기
     public ReservationDto selectRsvNoForDel(int deleteRsvNo);
-
+    // amount 정보 가져오기
+    public AmountDto selectAmount(KakaoApproveResponseDto kakaoApproveResponseDto);
     // db 삭제
-    public ReservationDto deleteRsvInfo(ReservationDto reservationDto);
-
-
-
+    public int deleteRsvInfo(ReservationDto reservationDto);
+    // 결제 정보 삭제
+    public int deletePayReady(KakaoApproveResponseDto kakaoApproveResponseDto);
+    public int deletePayApproval(KakaoApproveResponseDto kakaoApproveResponseDto);
+    public int deletePayAmount(KakaoApproveResponseDto kakaoApproveResponseDto);
 }

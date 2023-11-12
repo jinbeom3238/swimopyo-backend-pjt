@@ -10,6 +10,7 @@ import com.btc.swimpyo.backend.mappers.reservation.user.IUserReservationDaoMappe
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Time;
 import java.util.HashMap;
@@ -218,7 +219,9 @@ public class UserReservationService implements IUserReservationService{
         reservationDto.setU_m_email(kakaoApprove.getPartner_user_id());
 
         if(kakaoApprove != null) {
-            iUserReservationDaoMapper.insertKakaoPayApprove(kakaoApprove);
+            int isApprove = iUserReservationDaoMapper.insertKakaoPayApprove(kakaoApprove);
+
+            log.info("isApprove : " + isApprove);
 
             int u_r_no = iUserReservationDaoMapper.selectRsvNo(reservationDto);
             reservationDto.setU_r_no(u_r_no);
@@ -246,17 +249,27 @@ public class UserReservationService implements IUserReservationService{
 
     }
 
-
-
     @Override
     public String refundRsv(KakaoApproveResponseDto kakaoApproveResponseDto, AmountDto amountDto, int deleteRsvNo) {
         log.info("[UserReservationService] refundRsv()");
 
         // 환불 받을 예약 번호를 통해 예약번호와 이메일 가져오기
         ReservationDto reservationDto = iUserReservationDaoMapper.selectRsvNoForDel(deleteRsvNo);
+        log.info("reservationDto: " + reservationDto);
+
 
         if(reservationDto != null) {
             log.info("DELETE RSVNO EXIST!!");
+
+            // amount 정보 가져오기
+            amountDto = iUserReservationDaoMapper.selectAmount(kakaoApproveResponseDto);
+            // cid 가져오기
+//            String cid = iUserReservationDaoMapper.selectCid(kakaoApproveResponseDto);
+//            kakaoApproveResponseDto.setCid(cid);
+
+            log.info("kakaoApproveResponseDto:" +kakaoApproveResponseDto);
+            log.info("amountDto:" +amountDto);
+
 
             // 카카오페이 환불
             KakaoCancelResponseDto kakaoCancelResponseDto = kakaoPayController.refund(kakaoApproveResponseDto, amountDto);
@@ -266,9 +279,12 @@ public class UserReservationService implements IUserReservationService{
                 log.info("카카오 환불 완료");
 
                 // db에서 삭제
-                ReservationDto DeleteRsvDto = iUserReservationDaoMapper.deleteRsvInfo(reservationDto);
+                int deleteRsv = iUserReservationDaoMapper.deleteRsvInfo(reservationDto);
+                int deletePay = iUserReservationDaoMapper.deletePayReady(kakaoApproveResponseDto);
+                int deleteApproval = iUserReservationDaoMapper.deletePayApproval(kakaoApproveResponseDto);
+                int deleteAmount = iUserReservationDaoMapper.deletePayAmount(kakaoApproveResponseDto);
 
-                if(DeleteRsvDto != null) {
+                if(deleteRsv > 0 && deletePay > 0 && deleteApproval > 0 && deleteAmount > 0) {
                     log.info("예약 취소 완료");
 
                     return "success";
