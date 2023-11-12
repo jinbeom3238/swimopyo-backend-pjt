@@ -32,13 +32,10 @@ public class AdminRoomService implements IAdminRoomService {
     public String registConfirm(AdminRoomDto adminRoomDto, MultipartFile[] r_i_images) {
         log.info("[AdminRoomService] registConfirm()");
         try {
-
             AdminAccmDto adminAccmDto = new AdminAccmDto();
 
             // AdminRoomImageDto 객체 생성
             AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
-
-            int a_acc_no = adminAccmDto.getA_acc_no();
 
             // 1. tbl_admin_room 테이블에 데이터 등록
             int result = iAdminRoomDaoMapper.insertRoomInfo(adminRoomDto);
@@ -48,8 +45,9 @@ public class AdminRoomService implements IAdminRoomService {
             List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
 //            log.info("a_r_nos: " + a_r_nos.get(0));
             for ( int i = 0; i < a_r_nos.size(); i++) {
-                adminRoomImageDto.setA_r_no(a_r_nos.get(i));
-                int a_r_no = adminRoomImageDto.getA_r_no();
+//                adminRoomImageDto.setA_r_no(a_r_nos.get(i));
+//                int a_r_no = adminRoomImageDto.getA_r_no();
+                int a_r_no = a_r_nos.get(i);
                 log.info("a_r_no: {}", a_r_no);
             }
 
@@ -58,25 +56,23 @@ public class AdminRoomService implements IAdminRoomService {
                 log.info("[for MultipartFile] r_i_image: " + r_i_images);
 
                 String imageUrl = s3Uploader.uploadFileToS3(file, "static/test");
-
                 adminRoomImageDto.setR_i_image(imageUrl);
-
                 log.info("[AdminRoomService] imageUrl: " + imageUrl);
 
-                iAdminRoomDaoMapper.insertRoomImage(adminRoomImageDto);
+                int isinsertImg = iAdminRoomDaoMapper.insertRoomImage(adminRoomImageDto);
 
-                log.info("[insertRoomImage] result : " + result);
+                log.info("[insertRoomImage] isinsertImg : " + isinsertImg);
             }
             // 4. 이미지 업로드가 완료되면 이미지 URL을 반환
-            return "이미지 업로드가 완료되었습니다.";
+            return "success";
 
         } catch (Exception e) {
             e.printStackTrace();
             log.info("숙박시설 등록에 실패하였습니다.");
+
+            return "fail";
         }
 
-        // 예외 발생 시 null 또는 예외 메시지 반환
-        return "이미지 업로드 중 오류가 발생했습니다.";
     }
 
     /*
@@ -97,7 +93,6 @@ public class AdminRoomService implements IAdminRoomService {
         List<Integer> r_i_nos = adminRoomDto.getR_i_nos();
 
         if (StringUtils.hasText(adminRoomDto.getA_r_name())) {
-
             log.info("selectRoomForArNo SUCCESS!!");
 
             // front에 r_i_no 보내주기
@@ -144,8 +139,9 @@ public class AdminRoomService implements IAdminRoomService {
             // S3 & DB 삭제
             // deleteNos List로 담기므로 이미지 하나씩 삭제해주기 위해 for문 사용
             for (int i = 0; i < deleteNos.size(); i++) {
-                adminRoomDto.setR_i_no(deleteNos.get(i));
-                int deleteNo = adminRoomDto.getR_i_no();
+//                adminRoomDto.setR_i_no(deleteNos.get(i));
+//                int deleteNo = adminRoomDto.getR_i_no();
+                int deleteNo = deleteNos.get(i);
                 log.info("삭제 요청을 받은 r_i_no: {}", deleteNo);
 
                 // front에서 요청받은 r_i_no 리스트들에 대한 image 값들을 들고 오기 위함
@@ -158,13 +154,11 @@ public class AdminRoomService implements IAdminRoomService {
                     s3Uploader.deleteFileFromS3(imageUrl);
 
                 }
-
                 // deleteNo를 통해 기존 이미지 삭제
                 int isdelete = iAdminRoomDaoMapper.deleteRoomImgs(deleteNo);
                 log.info("[selectAccmImgForDelete] isdelete-----> {}", isdelete);
 
             }
-
             // 기존 이미지를 삭제하고 추가할 이미지가 있는 경우
             if (r_i_image != null) {
                 log.info("기존 이미지 삭제 시 새로운 이미지 추가 시작");
@@ -215,7 +209,7 @@ public class AdminRoomService implements IAdminRoomService {
         log.info("[AdminRoomService] MODIFY ACCM SUCCESS!!");
         log.info("[AdminRoomService] adminRoomDto: " + adminRoomDto);
 
-        return "숙박시설 정보 수정 완료";
+        return "success";
 
     }
 
@@ -252,6 +246,7 @@ public class AdminRoomService implements IAdminRoomService {
         int result = iAdminRoomDaoMapper.deleteRoomImg(a_r_no);
 
         return result;
+
     }
 
     /*
@@ -262,7 +257,7 @@ public class AdminRoomService implements IAdminRoomService {
         log.info("[AdminRoomService] showRoomList()");
 
         AdminRoomDto adminRoomDto= new AdminRoomDto();
-        AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
+//        AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
         List<AdminRoomImageDto> roomImageDtos = new ArrayList<>();
 
         Map<String, Object> msgData = new HashMap<>();

@@ -34,11 +34,11 @@ public class UserAccmService implements IUserAccmService{
         Map<String,Object> msgData = new HashMap<>();
 
         AdminAccmImageDto adminAccmImageDto = new AdminAccmImageDto();
-        List<AdminAccmDto> adminAccmDtos;
+//         adminAccmDtos;
         List<Integer> a_i_nos = new ArrayList<>();
         List<AdminAccmImageDto> adminImgDtos = new ArrayList<>();
 
-        adminAccmDtos = iUserAccmDaoMapper.selectAccmList(adminAccmDto);
+        List<AdminAccmDto> adminAccmDtos = iUserAccmDaoMapper.selectAccmList(adminAccmDto);
         log.info("[UserAccmService] adminAccmDtos: " + adminAccmDtos);
 
         // a_acc_no 값 가져오기
@@ -49,7 +49,7 @@ public class UserAccmService implements IUserAccmService{
             a_acc_no = a_acc_nos.get(i);
             log.info("a_acc_no: " + a_acc_no);
 
-            adminAccmImageDto.setA_acc_no(a_acc_no);
+             adminAccmImageDto.setA_acc_no(a_acc_no);
 
             // a_i_no 가져오기
             a_i_nos = iUserAccmDaoMapper.selectAccmImgNo(a_acc_no);

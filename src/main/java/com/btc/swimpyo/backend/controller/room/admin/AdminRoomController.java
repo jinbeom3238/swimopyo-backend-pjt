@@ -28,11 +28,9 @@ public class AdminRoomController {
         log.info("[AdminRoomController] registConfirm()");
 
         try {
-            // a_i_images의 값을 토대로, 차례대로 data를 뽑아낼 수 있다.
             for (MultipartFile file : r_i_images) {
                 // InputStream은 데이터를 byte 단위로 읽어들이는 통로 (읽어들인 데이터를 byte로 돌려줌)
                 InputStream inputStream = file.getInputStream();
-                // 이제 inputStream을 사용하여 파일을 처리할 수 있습니다.
                 log.info("[AdminAccmController] inputStream: " + inputStream);
 
             }

@@ -49,10 +49,8 @@ public class UserReservationController {
     public Map<String, Object> createRsvApproval(@RequestPart ReservationDto reservationDto) {
         log.info("[UserReservationController] createRsvApproval()");
         log.info("[UserReservationController] adminReservaitionDto(): " + reservationDto);
-
         log.info("[UserReservationController] u_m_email(): " + reservationDto.getU_m_email());
         log.info("[UserReservationController] a_r_name(): " + reservationDto.getA_r_name());
-
 
         return userReservationService.createRsvApproval(reservationDto);
 
@@ -74,7 +72,6 @@ public class UserReservationController {
     public void refundRsv(@RequestPart KakaoApproveResponseDto kakaoApproveResponseDto, AmountDto amountDto, @RequestParam(value = "deleteRsvNo", required = false) int deleteRsvNo){
         log.info("[UserReservationController] refundRsv()");
         log.info("[UserReservationController] kakaoApproveResponseDto: " + kakaoApproveResponseDto);
-//        log.info("[UserReservationController] amountDto: " + amountDto);
         log.info("[UserReservationController] deleteRsvNo: " + deleteRsvNo);
 
         userReservationService.refundRsv(kakaoApproveResponseDto, amountDto, deleteRsvNo);

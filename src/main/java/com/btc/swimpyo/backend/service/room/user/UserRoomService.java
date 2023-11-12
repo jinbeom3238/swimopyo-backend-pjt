@@ -61,7 +61,6 @@ public class UserRoomService implements IUserRoomService{
             r_i_images.addAll(r_i_imagesForArNo);
 
         }
-
         // 이미지 가져오기
         log.info("r_i_images: " + r_i_images);
 
@@ -79,10 +78,6 @@ public class UserRoomService implements IUserRoomService{
 
         Map<String, Object> msgData = new HashMap<>();
         AdminRoomImageDto adminRoomImageDto = new AdminRoomImageDto();
-//        List<String> r_i_images = new ArrayList<>();
-
-//        AdminRoomDto adminRoomDto;
-//        int r_i_no;
 
         // Room 정보 조회(이미지 제외)
         AdminRoomDto adminRoomDto = iUserRoomDaoMapper.selectRoomInfo(a_r_no);

@@ -37,7 +37,7 @@ public class UserReservationService implements IUserReservationService{
         /*  User user_info = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         String user_id = user_info.getUsername(); */
 
-        String user_id = "iieunji023@gmail.com";
+        String user_id = "user1@gmail.com";
         log.info("state:" + reservationDto.getU_r_stay_yn());
 
         // 숙박/대실 분류
@@ -105,10 +105,7 @@ public class UserReservationService implements IUserReservationService{
         log.info("[UserReservationService] createRsvApproval()");
 
         Map<String, Object> msgData = new HashMap<>();
-
-//        String user_id = "iieunji023@gmail.com";
-//        reservationDto.setU_m_email(user_id);
-
+        
         log.info("u_r_stay_yn:" + reservationDto.getU_r_stay_yn());
         log.info("reservationDto: " + reservationDto);
 
@@ -242,13 +239,12 @@ public class UserReservationService implements IUserReservationService{
 
         log.info("[kakaoApprove] FAIL!!");
 
-
-
         msgData.put("status", "fail");
         return msgData;
 
     }
 
+    // 환불
     @Override
     public String refundRsv(KakaoApproveResponseDto kakaoApproveResponseDto, AmountDto amountDto, int deleteRsvNo) {
         log.info("[UserReservationService] refundRsv()");
@@ -257,19 +253,14 @@ public class UserReservationService implements IUserReservationService{
         ReservationDto reservationDto = iUserReservationDaoMapper.selectRsvNoForDel(deleteRsvNo);
         log.info("reservationDto: " + reservationDto);
 
-
         if(reservationDto != null) {
             log.info("DELETE RSVNO EXIST!!");
 
             // amount 정보 가져오기
             amountDto = iUserReservationDaoMapper.selectAmount(kakaoApproveResponseDto);
-            // cid 가져오기
-//            String cid = iUserReservationDaoMapper.selectCid(kakaoApproveResponseDto);
-//            kakaoApproveResponseDto.setCid(cid);
 
             log.info("kakaoApproveResponseDto:" +kakaoApproveResponseDto);
             log.info("amountDto:" +amountDto);
-
 
             // 카카오페이 환불
             KakaoCancelResponseDto kakaoCancelResponseDto = kakaoPayController.refund(kakaoApproveResponseDto, amountDto);
@@ -289,17 +280,18 @@ public class UserReservationService implements IUserReservationService{
 
                     return "success";
 
-                } else {
-                    log.info("예약 취소 실패");
-
-                    return "fail";
-
                 }
+                log.info("db 삭제 실패");
 
+                return "fail";
             }
+            log.info("예약 취소 실패");
 
+            return "fail";
         }
-        return "successs";
+        log.info("삭제할 값이 없습니다.");
+
+        return "fail";
     }
 
 

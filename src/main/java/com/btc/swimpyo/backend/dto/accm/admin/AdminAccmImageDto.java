@@ -2,6 +2,7 @@ package com.btc.swimpyo.backend.dto.accm.admin;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.Builder;
 import lombok.Data;
 
 @Data

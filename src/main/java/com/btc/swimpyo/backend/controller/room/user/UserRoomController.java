@@ -35,9 +35,5 @@ public class UserRoomController {
         return userRoomService.showRoomDetail(a_r_no);
 
     }
-
-    // 예약
-
-    // 리뷰
     
 }

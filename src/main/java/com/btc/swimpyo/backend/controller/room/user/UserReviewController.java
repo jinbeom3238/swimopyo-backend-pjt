@@ -22,9 +22,9 @@ public class UserReviewController {
 
     // 등록
     @PostMapping(value = "/registConfirm", consumes = "multipart/form-data")
-    public synchronized void registConfirm(@RequestPart(value = "userReviewDto", required = false) UserReviewDto userReviewDto,
-                             @RequestPart(value = "userReservationDto", required = false) ReservationDto reservationDto,
-                             @RequestPart(value = "reviewImages", required = false)MultipartFile[] reviewImages) {
+    public String registConfirm(@RequestPart(value = "userReviewDto", required = false) UserReviewDto userReviewDto,
+                                             @RequestPart(value = "userReservationDto", required = false) ReservationDto reservationDto,
+                                             @RequestPart(value = "reviewImages", required = false)MultipartFile[] reviewImages) {
         log.info("[UserReviewController] registReview()");
 
         log.info("reservationDto: " + reservationDto);
@@ -42,23 +42,12 @@ public class UserReviewController {
             log.error("MultipartFile에서 InputStream을 가져오는 중 에러 발생", e);
 
         }
-
         // S3에 이미지 업로드하고 url 얻어옴
         String imageUrl = userReviewService.registConfirm(userReviewDto, reviewImages);
 
-    }
+        return imageUrl;
 
-//    public Object registReview(@RequestBody Map<String, Object> msgMap, UserReviewDto userReviewDto){
-//        log.info("registReview");
-//
-//        int result = -1;
-//        result  = userReviewService.registReview(msgMap, userReviewDto);
-//        if(result > 0){
-//            return "userRegReviewSuccess";
-//        } else {
-//            return "userRegReviewFail";
-//        }
-//    }
+    }
 
     // 리스트 조회
     @PostMapping("/showReviewList")
@@ -84,9 +73,6 @@ public class UserReviewController {
     @PostMapping("/deleteConfirm")
     public int deleteConfirm(@RequestPart UserReviewDto userReviewDto, @RequestParam("r_no") int r_no, @RequestParam("u_m_email") String u_m_email) {
         log.info("[UserReviewController] deleteConfirm()");
-
-//        userReviewDto.setR_no(r_no);
-//        userReviewDto.setU_m_email(u_m_email);
 
         log.info("userReviewDto: " + userReviewDto);
         log.info("userReviewDto: " + userReviewDto.getR_no());
