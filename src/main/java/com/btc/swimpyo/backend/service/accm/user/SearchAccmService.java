@@ -140,4 +140,13 @@ public class SearchAccmService implements ISearchAccmService {
                 ))
                 .values()); // Map의 값들을 리스트로 변환
     }
+
+    @Override
+    public List<AdminAccmDto> mapInfoList(String region) {
+        log.info("mapInfoList");
+
+        return iSearchAccmDaoMapper.mapInfoList(region);
+    }
+
+
 }

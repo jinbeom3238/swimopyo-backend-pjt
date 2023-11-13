@@ -8,6 +8,8 @@ import java.util.Map;
 
 @Mapper
 public interface ISearchAccmDaoMapper {
-//    List<AdminAccmDto> selectAccms(Map<String, Object> msgMap);
-List<Map<String, Object>> selectAccms(Map<String, Object> msgMap);
+    //    List<AdminAccmDto> selectAccms(Map<String, Object> msgMap);
+    List<Map<String, Object>> selectAccms(Map<String, Object> msgMap);
+
+    List<AdminAccmDto> mapInfoList(String region);
 }
