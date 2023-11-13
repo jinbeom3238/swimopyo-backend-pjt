@@ -175,6 +175,14 @@
         and
             u_r_no = #{u_r_no}
     </update>
+
+    <!-- pg_token db에 저장 -->
+<!--    <insert id="insertPgToken" parameterType="String">-->
+<!--        update tbl_user_reservation-->
+<!--        set pg_token = #{pg_token}-->
+<!--        where-->
+<!--        tid = select-->
+<!--    </insert>-->
     
     <!-- tbl_kakao_ready에 저장된 값들 들고오기 -->
     <select id="selectKakaoReadyInfo" parameterType="String" resultType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto">
@@ -188,7 +196,7 @@
         FROM
             tbl_kakao_ready
         WHERE
-            partner_user_id = #{u_m_email}
+            partner_order_id = #{partner_order_id}
         AND
             created_at = (SELECT MAX(created_at) FROM tbl_kakao_ready)
     </select>

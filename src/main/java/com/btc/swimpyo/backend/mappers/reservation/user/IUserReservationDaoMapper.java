@@ -37,7 +37,7 @@ public interface IUserReservationDaoMapper {
     public int insertKakaoPayApprove(KakaoApproveResponseDto kakaoApprove);
 
     // db에서 kakaopay_ready 값 가져오기
-    public KakaoReadyResponseDto selectKakaoReadyInfo(String uMEmail);
+    public KakaoReadyResponseDto selectKakaoReadyInfo(String partner_order_id);
 
     // 결제 완료시 pay_yn 값 바꾸기
     public void updateRsvpayYN(ReservationDto reservationDto);
@@ -55,4 +55,7 @@ public interface IUserReservationDaoMapper {
     public int deletePayReady(KakaoApproveResponseDto kakaoApproveResponseDto);
     public int deletePayApproval(KakaoApproveResponseDto kakaoApproveResponseDto);
     public int deletePayAmount(KakaoApproveResponseDto kakaoApproveResponseDto);
+
+    // pg_token  db에 저장
+    public void insertPgToken(String pgToken);
 }

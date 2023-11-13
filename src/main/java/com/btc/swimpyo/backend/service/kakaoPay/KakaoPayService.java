@@ -73,8 +73,8 @@ public class KakaoPayService {
         parameters.add("total_amount", totalAmount);           // 총 금액
         parameters.add("vat_amount", vatAmount);              // 부가세
         parameters.add("tax_free_amount", taxFreeAmount);         //상품 비과세 금액
-//        parameters.add("approval_url", "http://localhost:8090/payment/success?partner_order_id=" + partner_order_id); // 성공 시 redirect url
-        parameters.add("approval_url", "http://localhost:8090/api/user/reservation/registConfirm"); // 성공 시 redirect url
+        parameters.add("approval_url", "http://localhost:8090/api/user/reservation/registConfirm?partner_order_id=" + partner_order_id); // 성공 시 redirect url
+//        parameters.add("approval_url", "http://localhost:8090/api/user/reservation/registConfirm"); // 성공 시 redirect url
         parameters.add("cancel_url", "http://localhost:8090/api/payment/cancel");   // 취소 시 redirect url
         parameters.add("fail_url", "http://localhost:8090/api/payment/fail");       // 실패 시 redirect url
 

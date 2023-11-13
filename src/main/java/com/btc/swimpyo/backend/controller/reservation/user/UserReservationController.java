@@ -57,10 +57,10 @@ public class UserReservationController {
     }
 
     @GetMapping("/registConfirm")
-    public Map<String, Object> registRsv(@RequestParam ("pg_token")  String pg_token) {
+    public Map<String, Object> registRsv(@RequestParam ("pg_token")  String pg_token, @RequestParam("partner_order_id") String partner_order_id ) {
         log.info("[UserReservationController] registRsv()");
 
-        return userReservationService.registRsv(pg_token);
+        return userReservationService.registRsv(pg_token, partner_order_id);
 
     }
 

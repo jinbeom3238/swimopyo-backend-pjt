@@ -184,22 +184,27 @@ public class UserReservationService implements IUserReservationService{
     }
 
     @Override
-    public Map<String, Object> registRsv(String pg_token) {
+    public Map<String, Object> registRsv(String pg_token, String partner_order_id) {
         log.info("[userReservationService] registRsv()");
 
         log.info("token: " + pg_token);
+        log.info("partner_order_id: " + partner_order_id);
 
         ReservationDto reservationDto = new ReservationDto();
 
         Map<String, Object> msgData = new HashMap<>();
 
-//        User user_info = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        String u_m_email = user_info.getUsername();
-        String u_m_email = "user1@gmail.com";
+
+//        String u_m_email = "user1@gmail.com";
+
+//        iUserReservationDaoMapper.insertPgToken(pg_token);
+//
+//        iUserReservationDaoMapper.selectUserEmail();
+
 
         // db에 저장된 kakaoReady 값들 가져오기
-        KakaoReadyResponseDto kakaoReadyResponseDto = iUserReservationDaoMapper.selectKakaoReadyInfo(u_m_email);
-        kakaoReadyResponseDto.setPg_token(pg_token);
+        KakaoReadyResponseDto kakaoReadyResponseDto = iUserReservationDaoMapper.selectKakaoReadyInfo(partner_order_id);
+//        kakaoReadyResponseDto.setPg_token(pg_token);
         log.info("reservationDto:" + kakaoReadyResponseDto);
 
         // pg_token을 들고 kakaoAprove 가기
@@ -236,7 +241,6 @@ public class UserReservationService implements IUserReservationService{
             return msgData;
 
         }
-
         log.info("[kakaoApprove] FAIL!!");
 
         msgData.put("status", "fail");
