@@ -99,7 +99,7 @@ public class SearchAccmService implements ISearchAccmService {
         // 날짜 파싱 및 일수 계산
         LocalDate startDay = LocalDate.parse(msgMap.get("startDay").toString());
         LocalDate endDay = LocalDate.parse(msgMap.get("endDay").toString());
-        msgMap.put("Days", ChronoUnit.DAYS.between(startDay, endDay));
+        int days = (int) ChronoUnit.DAYS.between(startDay, endDay);
 
         // priceOrder가 null이 아닐 경우 파싱
         if (msgMap.get("priceOrder") != null) {
@@ -117,14 +117,14 @@ public class SearchAccmService implements ISearchAccmService {
         }
 
         // Days가 2 이상일 때
-        if (selectAccms != null && Integer.parseInt(msgMap.get("Days").toString()) > 1) {
+        if (selectAccms != null && (days > 1)) {
             // 동일한 이름을 가진 숙박 시설의 가격을 합산
             return new ArrayList<>(selectAccms.stream()
                     .collect(Collectors.toMap(
                             accm -> (String) accm.get("a_acc_name"), // 키로 사용할 숙박 시설 이름
                             Function.identity(), // 값으로 사용할 원래 객체
                             (accm1, accm2) -> { // 동일한 키를 가진 객체들을 병합하는 로직
-                                accm1.put("a_r_price", (int) accm1.get("a_r_price") + (int) accm2.get("a_r_price"));
+                                accm1.put("a_r_price", Integer.parseInt(accm2.get("a_r_price").toString()) * days);
                                 return accm1; // 가격을 합산한 객체 반환
                             }))
                     .values()); // Map의 값들을 리스트로 변환
