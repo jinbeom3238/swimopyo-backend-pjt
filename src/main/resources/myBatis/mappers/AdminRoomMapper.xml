@@ -40,7 +40,7 @@
 
     <!-- Room 이미지 등록 -->
     <insert id="insertRoomImage" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomImageDto">
-        insert into tbl_room_image ( r_i_image, r_i_reg_date, a_r_no)
+        insert into tbl_room_image(r_i_image, r_i_reg_date, a_r_no)
         select
             #{r_i_image}, NOW(), a_r_no
         from

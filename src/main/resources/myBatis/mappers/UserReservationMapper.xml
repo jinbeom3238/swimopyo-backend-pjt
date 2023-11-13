@@ -176,14 +176,6 @@
             u_r_no = #{u_r_no}
     </update>
 
-    <!-- pg_token db에 저장 -->
-<!--    <insert id="insertPgToken" parameterType="String">-->
-<!--        update tbl_user_reservation-->
-<!--        set pg_token = #{pg_token}-->
-<!--        where-->
-<!--        tid = select-->
-<!--    </insert>-->
-    
     <!-- tbl_kakao_ready에 저장된 값들 들고오기 -->
     <select id="selectKakaoReadyInfo" parameterType="String" resultType="com.btc.swimpyo.backend.dto.kakaoPay.KakaoReadyResponseDto">
         SELECT  tid,
@@ -236,12 +228,23 @@
         update
             tbl_user_reservation
         set
-            pay_yn = 'Y'
+            pay_yn = 'Y',
+            pg_token = #{pg_token}
         WHERE
             u_r_no = #{u_r_no}
         AND
             u_m_email = #{u_m_email}
     </update>
+
+    <!-- [카카오페이] front에 success 메세지 보내기 위함 -->
+    <select id="success" resultType="String">
+        SELECT
+            pg_token
+        FROM
+            tbl_user_reservation
+        WHERE
+            tid = (SELECT MAX(tid) FROM tbl_user_reservation)
+    </select>
 
     <!-- 환불 - 삭제할 예약번호 받아오기 -->
     <select id="selectRsvNoForDel" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">

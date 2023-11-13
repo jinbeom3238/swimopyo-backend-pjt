@@ -118,7 +118,6 @@
             r_no = #{r_no}
         AND
             u_m_email = #{u_m_email}
-        C
     </select>
 
     <!-- 상세페이지 조회 - 리뷰 이미지 정보 가져오기 -->
