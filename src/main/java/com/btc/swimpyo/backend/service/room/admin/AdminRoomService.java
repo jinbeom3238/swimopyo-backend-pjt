@@ -42,14 +42,18 @@ public class AdminRoomService implements IAdminRoomService {
             log.info("[registConfirm] result : " + result);
 
             // 2. 등록된 룸의 번호 가져오기
-            List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
-//            log.info("a_r_nos: " + a_r_nos.get(0));
-            for ( int i = 0; i < a_r_nos.size(); i++) {
-//                adminRoomImageDto.setA_r_no(a_r_nos.get(i));
-//                int a_r_no = adminRoomImageDto.getA_r_no();
-                int a_r_no = a_r_nos.get(i);
-                log.info("a_r_no: {}", a_r_no);
-            }
+//            List<Integer> a_r_nos = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
+////            log.info("a_r_nos: " + a_r_nos.get(0));
+//            for ( int i = 0; i < a_r_nos.size(); i++) {
+////                adminRoomImageDto.setA_r_no(a_r_nos.get(i));
+////                int a_r_no = adminRoomImageDto.getA_r_no();
+//                int a_r_no = a_r_nos.get(i);
+//                log.info("a_r_no: {}", a_r_no);
+//            }
+
+            int a_r_no = iAdminRoomDaoMapper.selectRoomForArNo(adminRoomDto);
+            adminRoomImageDto.setA_r_no(a_r_no);
+            log.info("a_r_no:" + adminRoomImageDto.getA_r_no());
 
             // 3. tbl_room_image 테이블에 이미지 정보 등록
             for (MultipartFile file : r_i_images) {
