@@ -10,7 +10,6 @@ import com.btc.swimpyo.backend.mappers.reservation.user.IUserReservationDaoMappe
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Time;
 import java.util.HashMap;
@@ -182,7 +181,8 @@ public class UserReservationService implements IUserReservationService{
         return msgData;
 
     }
-
+    
+    // 결제 승인
     @Override
     public Map<String, Object> registRsv(String pg_token, String partner_order_id) {
         log.info("[userReservationService] registRsv()");
@@ -193,6 +193,8 @@ public class UserReservationService implements IUserReservationService{
         ReservationDto reservationDto = new ReservationDto();
 
         Map<String, Object> msgData = new HashMap<>();
+        reservationDto.setPg_token(pg_token);
+        log.info("p_g_token" + reservationDto.getPg_token());
 
 
 //        String u_m_email = "user1@gmail.com";
@@ -201,10 +203,9 @@ public class UserReservationService implements IUserReservationService{
 //
 //        iUserReservationDaoMapper.selectUserEmail();
 
-
         // db에 저장된 kakaoReady 값들 가져오기
         KakaoReadyResponseDto kakaoReadyResponseDto = iUserReservationDaoMapper.selectKakaoReadyInfo(partner_order_id);
-//        kakaoReadyResponseDto.setPg_token(pg_token);
+        // kakaoReadyResponseDto.setPg_token(pg_token);
         log.info("reservationDto:" + kakaoReadyResponseDto);
 
         // pg_token을 들고 kakaoAprove 가기
@@ -245,6 +246,23 @@ public class UserReservationService implements IUserReservationService{
 
         msgData.put("status", "fail");
         return msgData;
+
+    }
+
+    // 결제 승인 후 front에 success 메세지
+    @Override
+    public String success() {
+        log.info("[userReservationService] success()");
+
+        String pg_token = iUserReservationDaoMapper.success();
+
+        if(pg_token != null) {
+            log.info("success!!");
+            return "success";
+
+        }
+        log.info("fail!!");
+        return "fail";
 
     }
 
@@ -297,6 +315,7 @@ public class UserReservationService implements IUserReservationService{
 
         return "fail";
     }
+
 
 
 
