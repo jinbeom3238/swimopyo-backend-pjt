@@ -4,5 +4,17 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.mypage.user.IUserMypageDaoMapper">
 
+    <select id="selectRezList" parameterType="String" resultType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
+
+        select
+            *
+        from
+            tbl_user_reservation
+        where
+            u_m_email = #{userEmail}
+
+
+    </select>
+
 
 </mapper>

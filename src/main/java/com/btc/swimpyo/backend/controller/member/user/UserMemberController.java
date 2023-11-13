@@ -29,8 +29,6 @@ public class UserMemberController {
 
     private final IUserMemberService iUserMemberService;
 
-
-
     @PostMapping("/signUp")
     public String signUp(@RequestBody Map<String, Object> msgMap, UserMemberDto userMemberDto) {
         log.info("signUp");
