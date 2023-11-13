@@ -7,21 +7,17 @@
     <select id="selectAccms" parameterType="map" resultType="hashmap">
         SELECT
         a.a_acc_name,
-        a.a_acc_intro,
         a.a_acc_kind,
         a.a_acc_address,
-        a.a_acc_phone,
-        r.a_r_check_in,
         r.a_r_state,
         r.a_r_price,
-        rm.a_r_name,
-        rm.remaining_room,
-        rm.reser_date,
+        rm.u_r_check_in,
+        rm.u_r_check_out,
         ai.a_i_image
         FROM
         tbl_admin_accommodation a
         LEFT JOIN tbl_admin_room r ON a.a_acc_no = r.a_acc_no
-        LEFT JOIN tbl_room rm ON a.a_acc_name = rm.a_acc_name
+        LEFT JOIN tbl_user_reservation rm ON r.a_r_no = rm.a_r_no
         LEFT JOIN tbl_accommodation_image ai ON a.a_acc_no = ai.a_acc_no
             where 1=1
             <!-- 업소명 검색 조건 -->
@@ -30,13 +26,10 @@
             </if>
             <!-- 예약 가능한 날짜 범위 검색 조건 -->
             <if test="startDay != null and endDay != null and able == 'possible'">
-                AND #{Days} = (select count(*) from tbl_room b where b.reser_date <![CDATA[ >= ]]> #{startDay}
-                AND b.reser_date <![CDATA[ < ]]> #{endDay}
-                AND a.a_acc_name = b.a_acc_name
-                AND b.remaining_room > 0 group by a_acc_name)
-                and rm.reser_date <![CDATA[ >= ]]> #{startDay}
-                AND rm.reser_date <![CDATA[ < ]]> #{endDay}
-            </if>
+                AND NOT (u_r_check_in <![CDATA[ < ]]> #{endDay}
+                             AND u_r_check_out <![CDATA[ > ]]> #{startDay})
+
+              </if>
             <!-- 업소 종류별 검색 조건 -->
             <if test="accmValue != null">
                 AND a.a_acc_kind = #{accmValue}
