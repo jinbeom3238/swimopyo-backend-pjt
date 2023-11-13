@@ -4,10 +4,7 @@ import com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto;
 import com.btc.swimpyo.backend.service.accm.user.ISearchAccmService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -32,6 +29,15 @@ public class SearchAccmController {
         return searchAccms;
     }
 
+    @GetMapping("/mapInfoList")
+    public Object mapInfoList(@RequestParam ("region") String region){
+        log.info("mapInfoList");
 
+        List<AdminAccmDto> mapInfoList = searchAccmService.mapInfoList(region);
+        if(mapInfoList == null){
+            return "emptyMapInfo";
+        }
+        return mapInfoList;
+    }
 
 }

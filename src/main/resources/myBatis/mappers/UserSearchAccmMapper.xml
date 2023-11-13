@@ -56,4 +56,18 @@
             </otherwise>
         </choose>
     </select>
+
+
+    <select id="mapInfoList" parameterType="String" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
+        SELECT
+            a_acc_name,
+            a_acc_address
+        FROM
+            tbl_admin_accommodation
+        WHERE
+            a_acc_address like concat('%', #{region} ,'%')
+
+
+    </select>
+
 </mapper>
