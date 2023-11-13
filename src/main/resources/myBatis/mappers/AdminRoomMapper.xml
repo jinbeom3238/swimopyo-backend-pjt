@@ -29,7 +29,7 @@
     <!-- a_acc_no를 가져오기 위함 -->
     <select id="selectRoomForArNo" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto" resultType="Integer">
         SELECT
-        a_r_no
+        max(a_r_no)
         FROM
         tbl_admin_room
         WHERE
@@ -40,8 +40,13 @@
 
     <!-- Room 이미지 등록 -->
     <insert id="insertRoomImage" parameterType="com.btc.swimpyo.backend.dto.room.admin.AdminRoomImageDto">
-        insert into tbl_room_image (a_r_no, r_i_image, r_i_reg_date)
-        values (#{a_r_no}, #{r_i_image}, NOW())
+        insert into tbl_room_image ( r_i_image, r_i_reg_date, a_r_no)
+        select
+            #{r_i_image}, NOW(), a_r_no
+        from
+            tbl_admin_room
+        where
+            a_r_no = #{a_r_no}
     </insert>
 
     <!-- 상세페이지 조회 - Room 정보(이미지 제외) -->
