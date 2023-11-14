@@ -1,7 +1,10 @@
 package com.btc.swimpyo.backend.mappers.review;
 
+import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
+import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -17,17 +20,21 @@ public interface IUserReviewDaoMapper {
     // review 이미지 db에 저장
     public int insertReviewImg(UserReviewDto userReviewDto);
     // 주소 값 db에 저장
-    public int insertReviewAddress(UserReviewDto userReviewInfoDto);
+    public int insertReviewAddress(List<UserReviewDto> r_xy_address);
 
     /*
-     * 리스트 조회
+     * [마이페이지] 리스트 조회
      */
     // 리뷰 정보 가져오기
-    public List<UserReviewDto> selectReviewInfo(String u_m_email);
+    public List<UserReviewDto> selectReviewInfo(int a_acc_no);
     // 이미지 번호(u_ri_no) 가져오기
     public List<Integer> selectReviewImgNo(int r_no);
     // 이미지 정보 가져오기
-    public List<UserReviewDto> selectReviewImgForList(int r_no);
+    public List<UserReviewDto> selectReviewImgForList(int a_acc_no);
+    // 주소 정보 가져오기
+    public List<UserReviewDto> selectReviewAddressForList(int r_no);
+    // r_no 가져오기
+    public List<Integer> selectReviewRno(int a_acc_no);
 
     /*
      * 상세페이지 조회
@@ -52,4 +59,6 @@ public interface IUserReviewDaoMapper {
     public List<String> selectReviewAddress(UserReviewDto userReviewDto);
     // 주소 db에서 삭제하기
     public int deleteReviewAddress(UserReviewDto userReviewDto);
+
+    
 }
