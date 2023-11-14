@@ -10,7 +10,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @Service
@@ -23,8 +25,9 @@ public class UserMypageService implements IUserMypageService{
     private final IUserMypageDaoMapper iUserMypageDaoMapper;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     @Override
-    public List<ReservationDto> GetRezList(HttpServletRequest request) {
+    public List<ReservationDto> GetRezList(HttpServletRequest request, int u_r_no) {
         log.info("GetRezList");
+        Map<String,Object> map = new HashMap<>();
 
         String refreshToken = null;
         Cookie[] authHeader = request.getCookies();
@@ -40,6 +43,10 @@ public class UserMypageService implements IUserMypageService{
         userEmail = jwtAuthenticationFilter.getUserEmail(secretKey, refreshToken);
         log.info("tp => {}", userEmail);
 
-        return iUserMypageDaoMapper.selectRezList(userEmail);
+        map.put("userEmail", userEmail);
+        map.put("u_r_no", u_r_no);
+
+
+        return iUserMypageDaoMapper.selectRezList(map);
     }
 }
