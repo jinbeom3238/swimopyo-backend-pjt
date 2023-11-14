@@ -25,7 +25,7 @@ public class UserMypageService implements IUserMypageService{
     private final IUserMypageDaoMapper iUserMypageDaoMapper;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     @Override
-    public List<ReservationDto> GetRezList(HttpServletRequest request, int u_r_no) {
+    public List<ReservationDto> GetRezList(HttpServletRequest request, int u_r_no, int period) {
         log.info("GetRezList");
         Map<String,Object> map = new HashMap<>();
 
@@ -41,10 +41,10 @@ public class UserMypageService implements IUserMypageService{
         }
         final String userEmail;
         userEmail = jwtAuthenticationFilter.getUserEmail(secretKey, refreshToken);
-        log.info("tp => {}", userEmail);
 
         map.put("userEmail", userEmail);
         map.put("u_r_no", u_r_no);
+        map.put("period", period);
 
 
         return iUserMypageDaoMapper.selectRezList(map);

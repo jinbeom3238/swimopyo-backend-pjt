@@ -12,8 +12,12 @@
             tbl_user_reservation
         where 1=1
             AND u_m_email = #{userEmail}
+            AND use_yn = "Y"
             <if test="u_r_no != 0">
                 AND u_r_no = #{u_r_no}
+            </if>
+            <if test="period != 0">
+                AND u_r_reg_date >= DATE_SUB(NOW(), INTERVAL #{period} MONTH)
             </if>
 
 

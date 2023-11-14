@@ -21,10 +21,12 @@ public class UserMypageController {
     private final UserMypageService userMypageService;
 
     @GetMapping("/GetRezList")
-    public Object GetRezList(@RequestParam(value = "u_r_no", defaultValue="0") int u_r_no, HttpServletRequest request){
+    public Object GetRezList(@RequestParam(value = "u_r_no", defaultValue="0") int u_r_no,
+                             @RequestParam(value = "period", defaultValue = "0") int period,
+                             HttpServletRequest request){
         log.info("GetRezList");
 
-        List<ReservationDto> GetRezList = userMypageService.GetRezList(request, u_r_no);
+        List<ReservationDto> GetRezList = userMypageService.GetRezList(request, u_r_no, period);
         if(GetRezList == null){
             return "GetRezListFail";
         }
