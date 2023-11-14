@@ -50,8 +50,8 @@
 
     <!-- 등록 - 주소 값들 db 저장 -->
     <insert id="insertReviewAddress" parameterType="String">
-        insert into tbl_review_xy (r_no, r_xy_address, r_xy_longitude, r_xy_latitude, r_xy_reg_date)
-        values (#{r_no}, #{r_xy_address}, #{r_xy_longitude}, #{r_xy_latitude}, NOW())
+        insert into tbl_review_xy (r_no, r_xy_address, r_xy_comment, r_xy_longitude, r_xy_latitude, r_xy_reg_date)
+        values (#{r_no}, #{r_xy_address}, #{r_xy_comment}, #{r_xy_longitude}, #{r_xy_latitude}, NOW())
     </insert>
 
     <!-- 등록 - 리뷰 이미지 db 저장 -->
@@ -157,7 +157,7 @@
     <!-- [상세페이지] 리스트 조회 - 주소 정보 가져오기 -->
         <select id="selectReviewAddressForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
             SELECT
-                r_no, r_xy_no, r_xy_address
+                r_no, r_xy_no, r_xy_address, r_xy_comment
             FROM
                 tbl_review_xy
             WHERE
@@ -196,7 +196,7 @@
     <!-- 상세페이지 조회 - 경도, 위도 이미지 정보 가져오기 -->
     <select id="selectReviewXYForDetail" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
         SELECT
-            r_xy_no, r_xy_address
+            r_xy_no, r_xy_address, r_xy_comment
         FROM
             tbl_review_xy
         WHERE

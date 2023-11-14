@@ -51,7 +51,4 @@ public interface IUserReservationDaoMapper {
     public int deletePayApproval(KakaoApproveResponseDto kakaoApproveResponseDto);
     public int deletePayAmount(KakaoApproveResponseDto kakaoApproveResponseDto);
 
-
-
-
 }
