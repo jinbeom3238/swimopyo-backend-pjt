@@ -35,7 +35,7 @@
     <!-- 등록 - 리뷰 NO 가져오가 -->
     <select id="selectReviewNo" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" resultType="Integer">
         SELECT
-            r_no
+            max(r_no)
         FROM
             tbl_review
         WHERE
@@ -49,7 +49,7 @@
     </select>
 
     <!-- 등록 - 주소 값들 db 저장 -->
-    <insert id="insertReviewAddress" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+    <insert id="insertReviewAddress" parameterType="String">
         insert into tbl_review_xy (r_no, r_xy_address, r_xy_longitude, r_xy_latitude, r_xy_reg_date)
         values (#{r_no}, #{r_xy_address}, #{r_xy_longitude}, #{r_xy_latitude}, NOW())
     </insert>
@@ -60,48 +60,111 @@
         values (#{r_no}, #{r_ri_image}, NOW(), NOW())
     </insert>
 
-    <!-- 리스트 조회 - 리뷰 정보 가져오기(이미지 제외) -->
-    <select id="selectReviewInfo" parameterType="String" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+    <!-- [마이페이지]리스트 조회 - 리뷰 정보 가져오기(이미지 제외) -->
+<!--    <select id="selectReviewInfo" parameterType="String" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">-->
+<!--        SELECT-->
+<!--            r_no,-->
+<!--            a_r_no,-->
+<!--            u_m_email,-->
+<!--            u_r_no,-->
+<!--            r_title,-->
+<!--            r_content,-->
+<!--            r_sa_point,-->
+<!--            r_reg_date-->
+<!--        FROM-->
+<!--            tbl_review-->
+<!--        WHERE-->
+<!--            u_m_email = #{u_m_email}-->
+<!--        AND-->
+<!--            use_yn = 'Y'-->
+<!--    </select>-->
+
+    <!-- [마이페이지]리스트 조회 - 이미지 번호 가져오기 -->
+<!--    <select id="selectReviewImgNo" parameterType="Integer" resultType="Integer">-->
+<!--        SELECT-->
+<!--            u_ri_no-->
+<!--        FROM-->
+<!--            tbl_review_image-->
+<!--        WHERE-->
+<!--            r_no = #{r_no}-->
+<!--    </select>-->
+
+    <!-- [마이페이지]리스트 조회 - 이미지 정보 가져오기 -->
+<!--    <select id="selectReviewImgForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">-->
+<!--    SELECT-->
+<!--        r_no, u_ri_no, r_ri_image,-->
+<!--    FROM-->
+<!--        tbl_review_image ri-->
+<!--    WHERE-->
+<!--        r_no = #{r_no}-->
+<!--    </select>-->
+
+    <!-- [마이페이지]리스트 조회 - 주소 정보 가져오기 -->
+<!--    <select id="selectReviewAddressForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">-->
+<!--        SELECT-->
+<!--            r_no, r_xy_no, r_xy_address-->
+<!--        FROM-->
+<!--            tbl_review_xy-->
+<!--        WHERE-->
+<!--            r_no = #{r_no}-->
+<!--    </select>-->
+
+    <!-- [상세페이지] 리스트 조회 - 리뷰 정보 가져오기 -->
+    <select id="selectReviewInfo" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+        select
+            rr.r_no,
+            rr.a_r_no,
+            rr.u_m_email,
+            rr.u_r_no,
+            rr.r_title,
+            rr.r_content,
+            rr.r_sa_point,
+            rr.r_reg_date
+        from
+            tbl_review rr
+            join
+                tbl_admin_room ar
+            on
+                ar.a_r_no = rr.a_r_no
+        where
+            ar.a_acc_no = #{a_acc_no};
+        </select>
+
+    <!-- [상세페이지] a_acc_no에 존재하는 r_no 가져오기 -->
+    <select id="selectReviewRno" parameterType="Integer" resultType="Integer">
         SELECT
-            r_no,
-            a_r_no,
-            u_m_email,
-            u_r_no,
-            r_title,
-            r_content,
-            r_sa_point,
-            r_reg_date
+            rr.r_no
         FROM
-            tbl_review
+            tbl_review rr
+            JOIN
+                tbl_admin_room ar
+            ON
+                ar.a_r_no = rr.a_r_no
         WHERE
-            u_m_email = #{u_m_email}
-        AND
-            use_yn = 'Y'
+            ar.a_acc_no = #{a_acc_no};
     </select>
 
-    <!-- 리스트 조회 - 이미지 번호 가져오기 -->
-    <select id="selectReviewImgNo" parameterType="Integer" resultType="Integer">
+    <!-- [상세페이지]리스트 조회 - 이미지 정보 가져오기 -->
+    <select id="selectReviewImgForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
         SELECT
-            u_ri_no
+            ri.r_no, ri.u_ri_no, ri.r_ri_image
         FROM
-            tbl_review_image
+            tbl_review_image ri
         WHERE
             r_no = #{r_no}
     </select>
 
-    <!-- 리스트 조회 = 이미지 정보 가져오기 -->
-    <select id="selectReviewImgForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
-    SELECT
-        xy.r_no, ri.u_ri_no, ri.r_ri_image, xy.r_xy_no, xy.r_xy_address
-    FROM
-        tbl_review_image ri
-        JOIN
-            tbl_review_xy xy
-        ON
-            xy.r_no = ri.r_no
-    </select>
+    <!-- [상세페이지] 리스트 조회 - 주소 정보 가져오기 -->
+        <select id="selectReviewAddressForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+            SELECT
+                r_no, r_xy_no, r_xy_address
+            FROM
+                tbl_review_xy
+            WHERE
+                r_no = #{r_no}
+        </select>
 
-    <!-- 상세페이지 조회 - 리뷰 정보 가져오기 -->
+        <!-- 상세페이지 조회 - 리뷰 정보 가져오기 -->
     <select id="selectReviewDetail" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
         SELECT
             r_no,

@@ -4,11 +4,13 @@ import com.btc.swimpyo.backend.dto.kakaoPay.AmountDto;
 import com.btc.swimpyo.backend.dto.kakaoPay.KakaoApproveResponseDto;
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.service.Reservation.user.UserReservationService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -56,15 +58,15 @@ public class UserReservationController {
 
     // 결제 승인
     @GetMapping("/registConfirm")
-    public Map<String, Object> registRsv(@RequestParam ("pg_token") String pg_token, @RequestParam("partner_order_id") String partner_order_id ) {
+    public Map<String, Object> registRsv(@RequestParam ("pg_token") String pg_token, @RequestParam("partner_order_id") String partner_order_id, HttpServletResponse response ) throws IOException {
         log.info("[UserReservationController] registRsv()");
-
-//        if(pg_token)
-
+        
+        response.sendRedirect("http://localhost:3000/payment/success");
         return userReservationService.registRsv(pg_token, partner_order_id);
 
     }
-    
+
+
     // 결제 승인 후 front에 success 메세지
     @GetMapping("/success")
     public String success() {

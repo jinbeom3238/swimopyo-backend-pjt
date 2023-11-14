@@ -19,23 +19,7 @@
             ar.use_yn = 'Y'
     </select>
 
-   <!--  숙박 - 이미 예약된 방만 찾기
-    <select id="searchDate" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto" resultType="Integer">
-        SELECT
-            COUNT(*)
-        FROM
-            tbl_user_reservation
-        WHERE
-            a_r_no = #{a_r_no}
-        AND
-            u_r_check_out <![CDATA[>]]> #{u_r_check_in}
-        AND
-            u_r_check_in <![CDATA[<=]]> #{u_r_check_in}
-        AND
-            (u_r_check_in AND u_r_check_out) <![CDATA[>]]> #{u_r_check_out}
-    </select>
--->
-
+   <!-- 숙박 - 이미 예약된 방만 찾기 -->
     <select id="searchDate" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto" resultType="Integer">
         SELECT
             COUNT(*)
@@ -223,7 +207,7 @@
                 #{payload})
     </insert>
 
-    <!-- 결제 완료시 pay_yn 값 바꾸기 -->
+    <!-- 결제 완료시 pay_yn, pg_token 값 바꾸기 -->
     <update id="updateRsvpayYN" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
         update
             tbl_user_reservation
@@ -278,7 +262,15 @@
 
     <!-- 환불 - db삭제 -->
     <update id="deleteRsvInfo" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
-        UPDATE tbl_user_reservation SET use_yn = 'N' WHERE u_r_no = #{u_r_no} AND u_m_email = #{u_m_email};
+        UPDATE
+            tbl_user_reservation
+        SET
+            use_yn = 'N',
+            pay_yn = 'N'
+        WHERE
+            u_r_no = #{u_r_no}
+        AND
+            u_m_email = #{u_m_email};
     </update>
 
     <!-- 환불 - 결제 정보 삭제 -->
