@@ -9,6 +9,8 @@ import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.mappers.reservation.user.IUserReservationDaoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.catalina.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -27,16 +29,15 @@ public class UserReservationService implements IUserReservationService{
     @Override
     public ReservationDto createRsvReady(ReservationDto reservationDto) {
         log.info("[UserReservationService] createRsvReady()");
-
         log.info("[createRsvReady] reservationDto" + reservationDto);
 
         // SecurityContextHolder : 전역적으로 값을 저장하기 위함
         // getAuthentication : 이 안에 user 정보를 저장함
         // getPrincipal : user id 값이 저장되어 있음
-        /*  User user_info = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String user_id = user_info.getUsername(); */
+//          User user_info = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        String user_id = user_info.getUsername();
 
-        String user_id = "user1@gmail.com";
+//        String user_id = "user1@gmail.com";
         log.info("state:" + reservationDto.getU_r_stay_yn());
 
         // 숙박/대실 분류
@@ -44,6 +45,7 @@ public class UserReservationService implements IUserReservationService{
             log.info("stay_yn = Y !! ");
             // 숙박 - 예약 차있는 방 찾기
             int result = iUserReservationDaoMapper.searchDate(reservationDto);
+            log.info("result:" + result);
 
             // 예약 불가시
             if(result > 0) {
@@ -63,6 +65,7 @@ public class UserReservationService implements IUserReservationService{
 
             // 대실 - 예약 차있는 방 찾기
             int result = iUserReservationDaoMapper.searchTime(reservationDto);
+            log.info("result:" + result);
 
             // 예약 불가시
             if(result > 0) {
@@ -71,6 +74,7 @@ public class UserReservationService implements IUserReservationService{
                 return null;
 
             }
+            return reservationDto;
 
         }
 
@@ -82,7 +86,7 @@ public class UserReservationService implements IUserReservationService{
         ReservationDto rsvRoomInfo = iUserReservationDaoMapper.selectRoomInfo(reservationDto);
         log.info("adminReservation" + rsvRoomInfo);
 
-        rsvRoomInfo.setU_m_email(user_id);
+//        rsvRoomInfo.setU_m_email(user_id);
         rsvRoomInfo.getA_r_name();
         rsvRoomInfo.setU_r_check_in(reservationDto.getU_r_check_in());
         rsvRoomInfo.setU_r_check_out(reservationDto.getU_r_check_out());
@@ -104,7 +108,7 @@ public class UserReservationService implements IUserReservationService{
         log.info("[UserReservationService] createRsvApproval()");
 
         Map<String, Object> msgData = new HashMap<>();
-        
+
         log.info("u_r_stay_yn:" + reservationDto.getU_r_stay_yn());
         log.info("reservationDto: " + reservationDto);
 
@@ -181,7 +185,7 @@ public class UserReservationService implements IUserReservationService{
         return msgData;
 
     }
-    
+
     // 결제 승인
     @Override
     public Map<String, Object> registRsv(String pg_token, String partner_order_id) {

@@ -84,7 +84,6 @@
                 NOW())
     </insert>
 
-
     <!-- 예약 정보 db에 저장(대실) -->
     <insert id="insertRsvInfoByMoment" parameterType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
         insert into
