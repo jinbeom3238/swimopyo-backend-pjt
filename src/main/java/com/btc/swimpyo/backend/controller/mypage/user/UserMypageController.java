@@ -36,11 +36,12 @@ public class UserMypageController {
     public Object showReviewList(HttpServletRequest request) {
         log.info("showReviewList");
 
-        Map<String, Object> map = userMypageService.showReviewList(request);
-        if(map == null){
-            return "getReviewListFail";
-        }
-        return map;
+//        Map<String, Object> map = userMypageService.showReviewList(request);
+//        if(map == null){
+//            return "getReviewListFail";
+//        }
+//        return map;
+        return null;
 
     }
 

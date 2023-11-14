@@ -85,19 +85,19 @@ public class UserMypageService implements IUserMypageService {
         int r_no;
 
         // 리뷰 리스트 가져오기(이미지 제외)
-        List<UserReviewDto> userReviewDto = iUserReviewDaoMapper.selectReviewInfo(userEmail);
-        log.info("userReviewDtos: " + userReviewDto);
-
-        // 사용자가 작성한 리뷰 번호 가져오기
-        List<Integer> r_nos = userReviewDto.stream()
-                .map(UserReviewDto::getR_no)
-                .toList();
-        log.info("r_nos: " + r_nos);
-
-        // r_no에 대한 이미지, 주소 정보 들고 오기
-        for(int i = 0; i<r_nos.size(); i++) {
-
-            r_no = r_nos.get(i);
+//        List<UserReviewDto> userReviewDto = iUserReviewDaoMapper.selectReviewInfo(userEmail);
+//        log.info("userReviewDtos: " + userReviewDto);
+//
+//        // 사용자가 작성한 리뷰 번호 가져오기
+//        List<Integer> r_nos = userReviewDto.stream()
+//                .map(UserReviewDto::getR_no)
+//                .toList();
+//        log.info("r_nos: " + r_nos);
+//
+//        // r_no에 대한 이미지, 주소 정보 들고 오기
+//        for(int i = 0; i<r_nos.size(); i++) {
+//
+//            r_no = r_nos.get(i);
 
 
 
@@ -109,14 +109,14 @@ public class UserMypageService implements IUserMypageService {
 
 //            reviewList = iUserMypageDaoMapper.selectReviewList(r_no);
 
-        }
-
-        msgData.put("r_ri_images", r_ri_images);
-        msgData.put("r_xy_address", r_xy_address);
-
-        log.info(msgData);
-
-        return msgData;
-
+//        }
+//
+//        msgData.put("r_ri_images", r_ri_images);
+//        msgData.put("r_xy_address", r_xy_address);
+//
+//        log.info(msgData);
+//
+//        return msgData;
+        return null;
     }
 }
