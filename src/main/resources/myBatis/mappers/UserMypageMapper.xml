@@ -4,7 +4,7 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.mypage.user.IUserMypageDaoMapper">
 
-    <select id="selectRezList" parameterType="map" resultType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
+    <select id="selectRezList" parameterType="map" resultType="hashmap">
 
         select
         ai.a_i_image,

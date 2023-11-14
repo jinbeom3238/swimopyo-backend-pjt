@@ -35,7 +35,7 @@ public class UserMypageService implements IUserMypageService {
     }
 
     @Override
-    public List<ReservationDto> GetRezList(HttpServletRequest request, int u_r_no, int period) {
+    public List<Map<String,Object>> GetRezList(HttpServletRequest request, int u_r_no, int period) {
         log.info("GetRezList");
         Map<String, Object> map = new HashMap<>();
 

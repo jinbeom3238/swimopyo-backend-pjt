@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface IUserMypageService {
-    List<ReservationDto> GetRezList(HttpServletRequest request, int u_r_no, int period);
+    List<Map<String,Object>> GetRezList(HttpServletRequest request, int u_r_no, int period);
 
     Map<String, Object> showReviewList(HttpServletRequest request);
 }

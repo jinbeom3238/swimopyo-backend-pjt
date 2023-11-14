@@ -24,7 +24,7 @@ public class UserMypageController {
                              HttpServletRequest request){
         log.info("GetRezList");
 
-        List<ReservationDto> GetRezList = userMypageService.GetRezList(request, u_r_no, period);
+        List<Map<String,Object>> GetRezList = userMypageService.GetRezList(request, u_r_no, period);
         if(GetRezList == null){
             return "GetRezListFail";
         }

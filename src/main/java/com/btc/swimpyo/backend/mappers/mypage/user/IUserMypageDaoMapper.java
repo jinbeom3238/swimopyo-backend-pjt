@@ -10,7 +10,7 @@ import java.util.Map;
 @Mapper
 public interface IUserMypageDaoMapper {
 //    List<ReservationDto> selectRezList(String userEmail, int a_r_no);
-    List<ReservationDto> selectRezList(Map<String, Object> map);
+    List<Map<String,Object>> selectRezList(Map<String, Object> map);
 
     List<UserReviewDto> selectRezAddressForList(int rNo);
 }
