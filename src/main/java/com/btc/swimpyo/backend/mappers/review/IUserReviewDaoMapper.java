@@ -20,7 +20,7 @@ public interface IUserReviewDaoMapper {
     // review 이미지 db에 저장
     public int insertReviewImg(UserReviewDto userReviewDto);
     // 주소 값 db에 저장
-    public int insertReviewAddress(List<UserReviewDto> r_xy_address);
+    public int insertReviewAddress(List<String> r_xy_address);
 
     /*
      * [마이페이지] 리스트 조회

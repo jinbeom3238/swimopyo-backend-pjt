@@ -25,13 +25,14 @@ public class UserReviewController {
     @PostMapping(value = "/registConfirm", consumes = "multipart/form-data")
     public String registConfirm(@RequestPart(value = "userReviewDto", required = false) UserReviewDto userReviewDto,
                                              @RequestPart(value = "userReservationDto", required = false) ReservationDto reservationDto,
-                                             @RequestPart(value = "r_xy_address", required = false) List<UserReviewDto> r_xy_address,
+                                             @RequestPart(value = "r_xy_address", required = false) List<String> r_xy_address,
                                              @RequestPart(value = "reviewImages", required = false) MultipartFile[] reviewImages) {
         log.info("[UserReviewController] registReview()");
 
         log.info("reservationDto: " + reservationDto);
         userReviewDto.setU_r_no(reservationDto.getU_r_no());
         log.info("reviewImages" + reviewImages);
+        log.info("r_xy_address" + r_xy_address);
 
         try {
             // reviewImages 차례대로 data를 뽑음

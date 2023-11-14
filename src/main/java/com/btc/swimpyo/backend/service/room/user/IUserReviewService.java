@@ -11,7 +11,7 @@ import java.util.Map;
 public interface IUserReviewService {
 
     // 등록
-    public String registConfirm(UserReviewDto userReviewDto, List<UserReviewDto> r_xy_address, MultipartFile[] reviewImages);
+    public String registConfirm(UserReviewDto userReviewDto, List<String> r_xy_address, MultipartFile[] reviewImages);
 
     // 리스트 조회
     // public Map<String, Object> showReviewList(String u_m_email);

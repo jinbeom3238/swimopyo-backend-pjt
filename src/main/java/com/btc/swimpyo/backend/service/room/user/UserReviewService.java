@@ -44,7 +44,7 @@ public class UserReviewService implements IUserReviewService{
      */
     // 등록
     @Override
-    public String registConfirm(UserReviewDto userReviewDto, List<UserReviewDto> r_xy_address, MultipartFile[] reviewImages) {
+    public String registConfirm(UserReviewDto userReviewDto, List<String> r_xy_address, MultipartFile[] reviewImages) {
         log.info("[UserReviewService] registConfirm()");
         log.info("[registReview] userReviewDto : " + userReviewDto);
         log.info("[registReview] reviewImages : " + reviewImages);
@@ -64,12 +64,14 @@ public class UserReviewService implements IUserReviewService{
 
             // 3. front에서 입력받은 주소 값 db에 저장
             for (int i = 0; i<r_xy_address.size(); i++) {
-//                String address = r_xy_address.get(i);
-                
+                userReviewDto.setR_xy_address(r_xy_address.get(i));
+
+                int isInsertAddress = iUserReviewDaoMapper.insertReviewAddress(r_xy_address);
+                log.info("isInsertAddress:" + isInsertAddress);
+
             }
 
-            int isInsertAddress = iUserReviewDaoMapper.insertReviewAddress(r_xy_address);
-            log.info("isInsertAddress:" + isInsertAddress);
+
 
             // 4. tbl_review_image 테이블에 이미지 정보 등록
             for (MultipartFile file : reviewImages) {
