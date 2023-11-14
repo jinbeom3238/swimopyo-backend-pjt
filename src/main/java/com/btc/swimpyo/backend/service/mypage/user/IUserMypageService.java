@@ -10,4 +10,6 @@ public interface IUserMypageService {
     List<Map<String,Object>> GetRezList(HttpServletRequest request, int u_r_no, int period);
 
     Map<String, Object> showReviewList(HttpServletRequest request);
+
+    Map<String, Object> GetRezDetail(HttpServletRequest request, int u_r_no);
 }

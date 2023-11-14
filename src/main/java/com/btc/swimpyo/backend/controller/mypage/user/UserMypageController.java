@@ -31,6 +31,18 @@ public class UserMypageController {
         return GetRezList;
     }
 
+    @GetMapping("/GetRezDetail")
+    public Object GetRezDetail(@RequestParam(value = "u_r_no", defaultValue="0") int u_r_no,
+                               HttpServletRequest request){
+        log.info("GetRezDetail");
+
+        Map<String,Object> GetRezDetail = userMypageService.GetRezDetail(request, u_r_no);
+        if(GetRezDetail == null){
+            return "GetRezDetailFail";
+        }
+        return GetRezDetail;
+    }
+
 //     [마이페이지] 리스트 조회
     @PostMapping("/getReviewList")
     public Object showReviewList(HttpServletRequest request) {

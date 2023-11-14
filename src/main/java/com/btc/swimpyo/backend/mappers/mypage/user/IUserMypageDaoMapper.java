@@ -13,4 +13,6 @@ public interface IUserMypageDaoMapper {
     List<Map<String,Object>> selectRezList(Map<String, Object> map);
 
     List<UserReviewDto> selectRezAddressForList(int rNo);
+
+    Map<String, Object> selectRezDetail(Map<String, Object> map);
 }

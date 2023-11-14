@@ -11,6 +11,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -118,5 +120,44 @@ public class UserMypageService implements IUserMypageService {
 //
 //        return msgData;
         return null;
+    }
+
+    @Override
+    public Map<String, Object> GetRezDetail(HttpServletRequest request, int u_r_no) {
+        log.info("GetRezDetail");
+
+        Map<String, Object> map = new HashMap<>();
+
+        String refreshToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                }
+            }
+        }
+        final String userEmail;
+        userEmail = jwtAuthenticationFilter.getUserEmail(secretKey, refreshToken);
+
+
+        map.put("userEmail", userEmail);
+        map.put("u_r_no", u_r_no);
+
+        map = iUserMypageDaoMapper.selectRezDetail(map);
+
+        // 날짜 파싱 및 일수 계산
+        LocalDate startDay = LocalDate.parse(map.get("u_r_check_in").toString());
+        LocalDate endDay = LocalDate.parse(map.get("u_r_check_out").toString());
+        int days = (int) ChronoUnit.DAYS.between(startDay, endDay);
+
+        log.info("days = {}", days);
+        if(days > 1){
+            map.put("a_r_pride", Integer.parseInt(map.get("a_r_pride").toString()) * days);
+        }
+
+        return map;
+
     }
 }
