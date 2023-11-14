@@ -7,19 +7,58 @@
     <select id="selectRezList" parameterType="map" resultType="com.btc.swimpyo.backend.dto.reservation.ReservationDto">
 
         select
-            *
+        ai.a_i_image,
+        aa.a_acc_name,
+        ar.a_r_name,
+        ar.a_r_content,
+        ar.a_r_state,
+        ur.u_m_email,
+        ur.use_yn,
+        ur.pay_yn,
+        ur.u_r_check_in,
+        ur.u_r_check_out,
+        ur.u_r_car_yn,
+        ur.u_r_check_in_time,
+        ur.u_r_check_out_time
         from
-            tbl_user_reservation
+            tbl_user_reservation ur
+            LEFT JOIN tbl_admin_room ar ON ur.a_r_no = ar.a_r_no
+            LEFT JOIN tbl_admin_accommodation aa ON ar.a_acc_no = aa.a_acc_no
+            LEFT JOIN tbl_accommodation_image ai ON aa.a_acc_no = ai.a_acc_no
         where 1=1
-            AND u_m_email = #{userEmail}
-            AND use_yn = "Y"
+            AND ur.u_m_email = #{userEmail}
+            AND ur.use_yn = "Y"
+            AND ur.pay_yn = "Y"
             <if test="u_r_no != 0">
-                AND u_r_no = #{u_r_no}
+                AND ur.u_r_no = #{u_r_no}
             </if>
             <if test="period != 0">
-                AND u_r_reg_date >= DATE_SUB(NOW(), INTERVAL #{period} MONTH)
+                AND ur.u_r_reg_date >= DATE_SUB(NOW(), INTERVAL #{period} MONTH)
             </if>
 
+
+    </select>
+
+    <select id="selectRezAddressForList" parameterType="Integer" resultType="String" >
+
+        SELECT
+            r_xy_address
+        FROM
+            tbl_review_xy
+        WHERE
+            r_no = #{r_no}
+
+
+
+    </select>
+
+    <select id="" >
+        SELECT
+
+
+        FROM
+            tbl_review_image ri
+                LEFT JOIN tbl_review_xy rxy ON a.a_acc_no = r.a_acc_no
 
     </select>
 

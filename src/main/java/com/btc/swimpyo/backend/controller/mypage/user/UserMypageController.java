@@ -5,12 +5,10 @@ import com.btc.swimpyo.backend.service.mypage.user.UserMypageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @Log4j2
 @RestController
@@ -31,6 +29,19 @@ public class UserMypageController {
             return "GetRezListFail";
         }
         return GetRezList;
+    }
+
+//     [마이페이지] 리스트 조회
+    @PostMapping("/getReviewList")
+    public Object showReviewList(HttpServletRequest request) {
+        log.info("showReviewList");
+
+        Map<String, Object> map = userMypageService.showReviewList(request);
+        if(map == null){
+            return "getReviewListFail";
+        }
+        return map;
+
     }
 
 }
