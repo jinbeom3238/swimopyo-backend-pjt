@@ -65,4 +65,8 @@ dependencies {
 //
 //	implementation group: 'commons-io', name: 'commons-io', version: '2.11.0' // 최신 버전 사용 가능
 
+	//aop 적용
+	implementation 'org.springframework.boot:spring-boot-starter-aop'
+	implementation group: 'com.google.guava', name: 'guava', version: 'r05'
+
 }
