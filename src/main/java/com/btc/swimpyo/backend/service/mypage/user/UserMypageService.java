@@ -63,7 +63,8 @@ public class UserMypageService implements IUserMypageService {
     }
 
     @Override
-    public Map<String, Object> showReviewList(HttpServletRequest request) {
+//    public Map<String, Object> showReviewList(HttpServletRequest request) {
+    public List<Map<String,Object>> showReviewList(HttpServletRequest request) {
         log.info("showReviewList");
 
         String refreshToken = null;
@@ -86,8 +87,10 @@ public class UserMypageService implements IUserMypageService {
 
         int r_no;
 
+        List<Map<String, Object>> tempList = iUserMypageDaoMapper.selectReviewInfo(userEmail);
+
         // 리뷰 리스트 가져오기(이미지 제외)
-//        List<UserReviewDto> userReviewDto = iUserReviewDaoMapper.selectReviewInfo(userEmail);
+//        List<UserReviewDto> userReviewDto = iUserMypageDaoMapper.selectReviewInfo(userEmail);
 //        log.info("userReviewDtos: " + userReviewDto);
 //
 //        // 사용자가 작성한 리뷰 번호 가져오기
@@ -100,26 +103,26 @@ public class UserMypageService implements IUserMypageService {
 //        for(int i = 0; i<r_nos.size(); i++) {
 //
 //            r_no = r_nos.get(i);
-
-
-
-            // 주소 정보 가져오기
+//
+////             주소 정보 가져오기
 //            r_xy_address = iUserMypageDaoMapper.selectRezAddressForList(r_no);
-
-            // 이미지 정보 가져오기
+//
+////             이미지 정보 가져오기
 //            r_ri_images = iUserReviewDaoMapper.selectReviewImgForList(r_no);
-
-//            reviewList = iUserMypageDaoMapper.selectReviewList(r_no);
-
+//
+////            reviewList = iUserMypageDaoMapper.selectReviewList(r_no);
+//
 //        }
 //
-//        msgData.put("r_ri_images", r_ri_images);
-//        msgData.put("r_xy_address", r_xy_address);
+//            msgData.put("r_ri_images", r_ri_images);
+//            msgData.put("r_xy_address", r_xy_address);
+//            msgData.put("userReviewDto", userReviewDto);
 //
 //        log.info(msgData);
 //
 //        return msgData;
-        return null;
+        return tempList;
+
     }
 
     @Override

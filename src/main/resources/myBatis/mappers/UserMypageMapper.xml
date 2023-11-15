@@ -47,7 +47,9 @@
     <select id="selectRezAddressForList" parameterType="Integer" resultType="String" >
 
         SELECT
-            r_xy_address
+            r_no,
+            r_xy_address,
+            r_xy_comment
         FROM
             tbl_review_xy
         WHERE
@@ -90,6 +92,30 @@
         <if test="u_r_no != 0">
             AND ur.u_r_no = #{u_r_no}
         </if>
+    </select>
+
+<!--    <select id="selectReviewInfo" parameterType="String" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">-->
+<!--        SELECT-->
+<!--            *-->
+<!--        FROM-->
+<!--            tbl_review-->
+<!--        WHERE-->
+<!--            u_m_email = #{u_m_email}-->
+<!--        AND use_yn = "Y"-->
+
+<!--    </select>-->
+
+    <select id="selectReviewInfo" parameterType="String" resultType="hashmap">
+        SELECT
+            *
+        FROM
+            tbl_review r
+            join tbl_review_image ri ON r.r_no = ri.r_no
+            join tbl_review_xy rxy ON r.r_no = ri.r_no
+        WHERE
+            u_m_email = #{u_m_email}
+          AND use_yn = "Y"
+
     </select>
 
 

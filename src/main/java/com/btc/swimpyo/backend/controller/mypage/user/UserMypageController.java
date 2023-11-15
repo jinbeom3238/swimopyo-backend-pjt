@@ -1,6 +1,7 @@
 package com.btc.swimpyo.backend.controller.mypage.user;
 
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
+import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
 import com.btc.swimpyo.backend.service.mypage.user.UserMypageService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -51,11 +52,11 @@ public class UserMypageController {
         log.info("showReviewList");
 
 //        Map<String, Object> map = userMypageService.showReviewList(request);
-//        if(map == null){
-//            return "getReviewListFail";
-//        }
-//        return map;
-        return null;
+        List<Map<String,Object>> map = userMypageService.showReviewList(request);
+        if(map == null){
+            return "getReviewListFail";
+        }
+        return map;
 
     }
 
