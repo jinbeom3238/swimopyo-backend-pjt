@@ -1,10 +1,7 @@
 package com.btc.swimpyo.backend.mappers.review;
 
-import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
-import org.apache.catalina.User;
 import org.apache.ibatis.annotations.Mapper;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -46,14 +43,23 @@ public interface IUserReviewDaoMapper {
     public List<Integer> selectReviewRnoInRoom(Map<String, Object> msgData);
 
     /*
-     * 상세페이지 조회
+     * [마이페이지]상세페이지 조회
      */
     // 룸 정보 조회
     public UserReviewDto selectReviewDetail(UserReviewDto userReviewDto);
     // 이미지 정보 조회
     public List<UserReviewDto> selectReviewImgForDetail(int r_no);
     // 경도, 위도 정보 조회
-    public List<UserReviewDto> selectReviewXYForDetail(int rNo);
+    public List<UserReviewDto> selectReviewXYForDetail(int r_no);
+    /*
+     * [숙박업소]상세페이지 조회
+     */
+    // 룸 정보 조회
+    public UserReviewDto selectReviewDetailForAccm(UserReviewDto userReviewDto);
+    // a_acc_no 뽑아오기
+    public int selectReviewAccNo(int r_no);
+
+
 
     /*
      * 삭제
@@ -71,4 +77,5 @@ public interface IUserReviewDaoMapper {
 
     // a_r_no
     public void selectArNo(String u_m_email);
+
 }

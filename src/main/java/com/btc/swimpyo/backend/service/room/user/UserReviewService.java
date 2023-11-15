@@ -162,9 +162,9 @@ public class UserReviewService implements IUserReviewService{
 
     }
 
-    // 상세페이지 조회
+    // [마이페이지] 상세페이지 조회
     @Override
-    public Map<String, Object> showDetail(int r_no, String u_m_email, UserReviewDto userReviewDto) {
+    public Map<String, Object> showDetailMyPage(int r_no, String u_m_email, UserReviewDto userReviewDto) {
         log.info("[userReviewService] showDetail()");
 
         Map<String ,Object> msgData = new HashMap<>();
@@ -178,6 +178,51 @@ public class UserReviewService implements IUserReviewService{
 
         // 리뷰 정보 가져오기(이미지 제외)
         UserReviewDto reviewDto = iUserReviewDaoMapper.selectReviewDetail(userReviewDto);
+        log.info("reviewDto:" + reviewDto);
+
+        // front에  u_ri_no 보내기
+//        List<Integer> u_ri_nos = iUserReviewDaoMapper.selectReviewImgNo(r_no);
+//        log.info("u_ri_nos:" + u_ri_nos);
+
+        // 이미지 정보 가져오기
+        List<UserReviewDto> r_ri_images = iUserReviewDaoMapper.selectReviewImgForDetail(r_no);
+        log.info("r_ri_images:" + r_ri_images);
+
+        // 주소 정보 가져오기
+        List<UserReviewDto> r_xy_address = iUserReviewDaoMapper.selectReviewXYForDetail(r_no);
+        log.info("r_xy_address:" + r_xy_address);
+
+        msgData.put("reviewDto", reviewDto);
+//        msgData.put("u_ri_nos", u_ri_nos);
+        msgData.put("r_ri_images", r_ri_images);
+        msgData.put("r_xy_address", r_xy_address);
+
+        log.info("msgData: " + msgData);
+
+        return msgData;
+
+    }
+
+    // [숙박업소] 상세페이지 조회
+    @Override
+    public Map<String, Object> showDetail(int r_no) {
+        log.info("[userReviewService] showDetail()");
+
+        Map<String ,Object> msgData = new HashMap<>();
+
+        UserReviewDto userReviewDto = new UserReviewDto();
+
+        log.info("r_no:" + userReviewDto.getR_no());
+
+        int a_acc_no = iUserReviewDaoMapper.selectReviewAccNo(r_no);
+        userReviewDto.setR_no(r_no);
+        userReviewDto.setA_acc_no(a_acc_no);
+
+        log.info("r_no: " + userReviewDto.getR_no());
+        log.info("a_acc_no: " + userReviewDto.getA_acc_no());
+
+        // 리뷰 정보 가져오기(이미지 제외)
+        UserReviewDto reviewDto = iUserReviewDaoMapper.selectReviewDetailForAccm(userReviewDto);
         log.info("reviewDto:" + reviewDto);
 
         // front에  u_ri_no 보내기

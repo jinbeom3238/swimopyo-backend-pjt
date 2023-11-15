@@ -16,8 +16,11 @@ public interface IUserReviewService {
     // [룸 상세페이지] 리스트 조회
     public Map<String, Object> showReviewListRoom(int a_r_no, int a_acc_no);
 
-    // 상세페이지 조회
-    public Map<String, Object> showDetail(int r_no, String u_m_email, UserReviewDto userReviewDto);
+    // [마이페이지] 상세페이지 조회
+    public Map<String, Object> showDetailMyPage(int r_no, String u_m_email, UserReviewDto userReviewDto);
+
+    // [숙박업소] 상세페이지 조회
+    public Map<String, Object> showDetail(int r_no);
 
     // 삭제
     public int deleteConfirm(UserReviewDto userReviewDto);

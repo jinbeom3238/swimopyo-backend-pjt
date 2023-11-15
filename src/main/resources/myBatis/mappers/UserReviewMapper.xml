@@ -275,6 +275,50 @@
             r_no = #{r_no}
     </select>
 
+    <!-- [숙박업소] 상세페이지 조회 - 리뷰 정보 가져오기 -->
+    <select id="selectReviewDetailForAccm" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+        SELECT
+            rr.r_no,
+            rr.a_r_no,
+            rr.u_m_email,
+            rr.u_r_no,
+            rr.r_content,
+            rr.r_sa_point,
+            rr.r_reg_date,
+            aa.a_acc_name,
+            aa.a_acc_no
+        FROM
+            tbl_review rr
+            JOIN
+                tbl_admin_room ar
+            ON
+                ar.a_r_no = rr.a_r_no
+            JOIN
+                tbl_admin_accommodation aa
+            ON
+                ar.a_acc_no = aa.a_acc_no
+        WHERE
+            rr.r_no = #{r_no}
+    </select>
+
+    <!-- [숙박업소] a_acc_no 뽑아오기 -->
+    <select id="selectReviewAccNo" parameterType="Integer" resultType="Integer">
+    SELECT
+        aa.a_acc_no
+    FROM
+        tbl_admin_accommodation aa
+        JOIN
+            tbl_admin_room ar
+        ON
+            ar.a_acc_no = aa.a_acc_no
+        JOIN
+            tbl_review rr
+        ON
+            ar.a_r_no = rr.a_r_no
+    WHERE
+        rr.r_no = #{r_no}
+    </select>
+
     <!-- 삭제 - 리뷰 정보 삭제(이미지 제외) -->
     <update id="deleteReview" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
         UPDATE
