@@ -9,8 +9,6 @@ import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.mappers.reservation.user.IUserReservationDaoMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.apache.catalina.User;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
@@ -27,9 +25,11 @@ public class UserReservationService implements IUserReservationService{
 
     // 예약하기 버튼 클릭 시 화면(모달창)
     @Override
-    public ReservationDto createRsvReady(ReservationDto reservationDto) {
+    public Map<String, Object> createRsvReady(ReservationDto reservationDto) {
         log.info("[UserReservationService] createRsvReady()");
         log.info("[createRsvReady] reservationDto" + reservationDto);
+
+        Map<String, Object> msgData = new HashMap<>();
 
         // SecurityContextHolder : 전역적으로 값을 저장하기 위함
         // getAuthentication : 이 안에 user 정보를 저장함
@@ -47,11 +47,13 @@ public class UserReservationService implements IUserReservationService{
             int result = iUserReservationDaoMapper.searchDate(reservationDto);
             log.info("result:" + result);
 
+
             // 예약 불가시
             if(result > 0) {
                 log.info("예약이 불가합니다.");
 
-                return null;
+                msgData.put("status", "fail");
+                return msgData;
 
             }
         } else if(reservationDto.getU_r_stay_yn().equals("N")){
@@ -71,10 +73,13 @@ public class UserReservationService implements IUserReservationService{
             if(result > 0) {
                 log.info("예약 불가능");
 
-                return null;
+                return msgData;
 
             }
-            return reservationDto;
+//            msgData.put("reservationDto", reservationDto);
+            msgData.put("status", "success");
+
+            return msgData;
 
         }
 
@@ -98,7 +103,10 @@ public class UserReservationService implements IUserReservationService{
         log.info("adminReservation" + rsvRoomInfo);
         log.info("a_r_name:" + rsvRoomInfo.getA_r_name());
 
-        return rsvRoomInfo;
+        msgData.put("rsvRoomInfo", rsvRoomInfo);
+        msgData.put("status", "success");
+
+        return msgData;
 
     }
 
