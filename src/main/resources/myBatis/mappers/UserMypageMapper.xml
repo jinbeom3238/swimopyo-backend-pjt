@@ -107,6 +107,8 @@
 
     <select id="selectReviewInfo" parameterType="String" resultType="hashmap">
         SELECT
+            aa.a_acc_no,
+            aa.a_acc_name,
             ar.a_r_name,
             um.u_m_email,
             um.u_m_nickname,
@@ -118,6 +120,7 @@
         FROM
             tbl_review r
             join tbl_admin_room ar ON r.a_r_no = ar.a_r_no
+            join tbl_admin_accommodation aa ON ar.a_acc_no = aa.a_acc_no
             join tbl_review_image ri ON r.r_no = ri.r_no
             join tbl_review_xy rxy ON r.r_no = ri.r_no
             join tbl_user_member um ON r.u_m_email = um.u_m_email
