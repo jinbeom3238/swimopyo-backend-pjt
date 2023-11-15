@@ -72,6 +72,7 @@
 
     <select id="selectTop3Accm" parameterType="String" resultType="hashmap">
         SELECT
+            aa.a_acc_no,
             aa.a_acc_name,
             ai.a_i_image,
             COUNT(ur.u_r_no) as 예약수
