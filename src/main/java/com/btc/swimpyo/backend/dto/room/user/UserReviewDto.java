@@ -33,12 +33,14 @@ public class UserReviewDto {
 //    private String address;
   
     // 룸 예약번호
+    private String a_r_name;
     private int u_r_no;
 
     // 숙박업소 테이블
     private int a_acc_no;
     private String a_acc_name;
     private String u_m_nickname;
+    private String a_acc_adress;
 
 
 }

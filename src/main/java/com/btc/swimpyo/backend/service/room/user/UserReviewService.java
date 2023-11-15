@@ -106,23 +106,23 @@ public class UserReviewService implements IUserReviewService{
 //        List<Integer> r_nos = iUserReviewDaoMapper.selectReviewRno(a_acc_no);
 
 //        for(int i = 0; i < r_nos.size(); i++) {
-//            int r_no = r_nos.get(i);
-//
-//            // 이미지, 주소 정보 들고 오기
-//            List<UserReviewDto> r_ri_images = iUserReviewDaoMapper.selectReviewImgForList(r_no);
-//            log.info("r_ri_images: " + r_ri_images );
-//
-////            List<UserReviewDto> r_xy_address = iUserReviewDaoMapper.selectReviewAddressForList(r_no);
-////            log.info("r_xy_address: " + r_xy_address );
-//
-//            msgData.put("r_ri_images", r_ri_images);
-////            msgData.put("r_xy_address", r_xy_address);
-//
-//        }
-//
-//        msgData.put("userReviewDto", userReviewDto);
-//
-//        log.info("msgData: " + msgData);
+////            int r_no = r_nos.get(i);
+////
+////            // 이미지, 주소 정보 들고 오기
+////            List<UserReviewDto> r_ri_images = iUserReviewDaoMapper.selectReviewImgForList(r_no);
+////            log.info("r_ri_images: " + r_ri_images );
+////
+//////            List<UserReviewDto> r_xy_address = iUserReviewDaoMapper.selectReviewAddressForList(r_no);
+//////            log.info("r_xy_address: " + r_xy_address );
+////
+////            msgData.put("r_ri_images", r_ri_images);
+//////            msgData.put("r_xy_address", r_xy_address);
+////
+////        }
+////
+////        msgData.put("userReviewDto", userReviewDto);
+////
+////        log.info("msgData: " + msgData);
 
         return msgData;
 
