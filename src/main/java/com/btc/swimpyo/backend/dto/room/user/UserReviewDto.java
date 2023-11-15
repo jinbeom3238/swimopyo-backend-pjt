@@ -15,6 +15,7 @@ public class UserReviewDto {
     private int r_sa_point;
     private String r_reg_date;
     private String r_mod_date;
+    private int isWrite;
 
     // image 테이블
     private int u_ri_no;

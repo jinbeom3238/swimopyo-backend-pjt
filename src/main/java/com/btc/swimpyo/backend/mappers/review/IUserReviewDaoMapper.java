@@ -19,6 +19,9 @@ public interface IUserReviewDaoMapper {
     public int insertReviewImg(UserReviewDto userReviewDto);
     // 주소 값 db에 저장
     public int insertReviewAddress(UserReviewDto userReviewDto);
+    // isWrite = 1로 update
+    public int updateIsWrite(int r_no);
+
 
     /*
      * [숙박시설 상세페이지] 리스트 조회

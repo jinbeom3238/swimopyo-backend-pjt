@@ -54,7 +54,7 @@ public class UserReviewController {
     }
 
     // [숙박시설 상세페이지] 리스트 조회
-    @PostMapping("showReviewList")
+    @GetMapping("showReviewList")
     public Map<String, Object> showReviewList(@RequestParam("a_acc_no") int a_acc_no) {
         log.info("[UserReviewController] showReviewList()");
 
@@ -63,7 +63,7 @@ public class UserReviewController {
     }
 
     // [룸 상세페이지] 리스트 조회
-    @PostMapping("showReviewListRoom")
+    @GetMapping("showReviewListRoom")
     public Map<String, Object> showReviewListRoom(@RequestParam("a_r_no") int a_r_no,
                                                   @RequestParam("a_acc_no") int a_acc_no) {
         log.info("[UserReviewController] showReviewListRoom()");
@@ -72,19 +72,19 @@ public class UserReviewController {
 
     }
 
-    // [마이페이지] 상세페이지 조회
-    @PostMapping("/showDetailMyPage")
-    public Map<String, Object> showDetailMyPage(@RequestParam("r_no") int r_no, @RequestParam("u_m_email") String u_m_email, UserReviewDto userReviewDto){
-        log.info("[UserReviewController] showDetailMyPage()");
-        log.info("[UserReviewController] r_no:" + r_no);
-        log.info("[UserReviewController] u_m_email:" + u_m_email);
-
-        return userReviewService.showDetailMyPage(r_no, u_m_email, userReviewDto);
-
-    }
+//    // [마이페이지] 상세페이지 조회
+//    @PostMapping("/showDetailMyPage")
+//    public Map<String, Object> showDetailMyPage(@RequestParam("r_no") int r_no, UserReviewDto userReviewDto){
+//        log.info("[UserReviewController] showDetailMyPage()");
+//        log.info("[UserReviewController] r_no:" + r_no);
+////        log.info("[UserReviewController] u_m_email:" + u_m_email);
+//
+//        return userReviewService.showDetailMyPage(r_no, userReviewDto);
+//
+//    }
 
     // [숙박업소] 상세페이지 조회
-    @PostMapping("/showDetail")
+    @GetMapping("/showDetail")
     public Map<String, Object> showDetail(@RequestParam("r_no") int r_no) {
         log.info("[UserReviewController] showDetail()");
 
