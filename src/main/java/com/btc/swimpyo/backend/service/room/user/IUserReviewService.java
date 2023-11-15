@@ -12,7 +12,7 @@ public interface IUserReviewService {
     public String registConfirm(UserReviewDto userReviewDto, List<UserReviewDto> address, MultipartFile[] reviewImages);
 
     // [숙박시설 상세페이지] 리스트 조회
-    public Map<String, Object> showReviewList(int a_acc_no);
+    public List<Map<String, Object>> showReviewList(int a_acc_no);
     // [룸 상세페이지] 리스트 조회
     public Map<String, Object> showReviewListRoom(int a_r_no, int a_acc_no);
 

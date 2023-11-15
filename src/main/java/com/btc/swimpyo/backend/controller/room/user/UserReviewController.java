@@ -55,7 +55,7 @@ public class UserReviewController {
 
     // [숙박시설 상세페이지] 리스트 조회
     @GetMapping("showReviewList")
-    public Map<String, Object> showReviewList(@RequestParam("a_acc_no") int a_acc_no) {
+    public List<Map<String, Object>> showReviewList(@RequestParam("a_acc_no") int a_acc_no) {
         log.info("[UserReviewController] showReviewList()");
 
         return userReviewService.showReviewList(a_acc_no);

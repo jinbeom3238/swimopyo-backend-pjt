@@ -81,4 +81,5 @@ public interface IUserReviewDaoMapper {
     // a_r_no
     public void selectArNo(String u_m_email);
 
+    List<Map<String, Object>> selectReviewInfoAll(int aAccNo);
 }
