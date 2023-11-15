@@ -107,14 +107,23 @@
 
     <select id="selectReviewInfo" parameterType="String" resultType="hashmap">
         SELECT
-            *
+            ar.a_r_name,
+            um.u_m_email,
+            um.u_m_nickname,
+            r.r_no,
+            r.r_reg_date,
+            r.r_content,
+            r.r_sa_point,
+            ri.r_ri_image
         FROM
             tbl_review r
+            join tbl_admin_room ar ON r.a_r_no = ar.a_r_no
             join tbl_review_image ri ON r.r_no = ri.r_no
             join tbl_review_xy rxy ON r.r_no = ri.r_no
+            join tbl_user_member um ON r.u_m_email = um.u_m_email
         WHERE
-            u_m_email = #{u_m_email}
-          AND use_yn = "Y"
+            r.u_m_email = #{u_m_email}
+          AND r.use_yn = "Y"
 
     </select>
 
