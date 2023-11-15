@@ -69,5 +69,6 @@ public interface IUserReviewDaoMapper {
     // 주소 db에서 삭제하기
     public int deleteReviewAddress(UserReviewDto userReviewDto);
 
-
+    // a_r_no
+    public void selectArNo(String u_m_email);
 }
