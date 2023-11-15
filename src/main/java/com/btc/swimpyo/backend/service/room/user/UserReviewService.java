@@ -46,8 +46,6 @@ public class UserReviewService implements IUserReviewService{
             userReviewDto.setR_no(r_no);
             log.info("r_no: " + userReviewDto.getR_no());
 
-
-
             // 3. front에서 입력받은 주소 값 db에 저장
         for (int i = 0; i < address.size(); i++) {
             userReviewDto.setR_xy_address(address.get(i).getR_xy_address());
@@ -81,6 +79,9 @@ public class UserReviewService implements IUserReviewService{
 
                 }
             }
+
+            // 모두 insert가 되면 isWrite = 1로  바꿔주는 작업
+            int isUpdate = iUserReviewDaoMapper.updateIsWrite(r_no);
             return "success";
 
         }
@@ -98,6 +99,7 @@ public class UserReviewService implements IUserReviewService{
         // 리뷰 정보 가져오기(이미지 제외)
         List<UserReviewDto> userReviewDto = iUserReviewDaoMapper.selectReviewInfo(a_acc_no);
         log.info("userReviewDto: " + userReviewDto);
+
         // r_no
         List<Integer> r_nos = iUserReviewDaoMapper.selectReviewRno(a_acc_no);
 
@@ -174,7 +176,6 @@ public class UserReviewService implements IUserReviewService{
 
         log.info("r_no:" + userReviewDto.getR_no());
         log.info("r_no:" + userReviewDto.getU_m_email());
-
 
         // 리뷰 정보 가져오기(이미지 제외)
         UserReviewDto reviewDto = iUserReviewDaoMapper.selectReviewDetail(userReviewDto);
