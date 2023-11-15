@@ -29,7 +29,7 @@
 
     <select id="selectAccmCheck" parameterType="Integer" resultType="Integer">
         SELECT
-            *
+            COUNT(*)
         FROM
             tbl_admin_accommodation
         WHERE
