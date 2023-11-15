@@ -132,7 +132,8 @@
             ar.a_r_check_in,
             ar.a_r_check_out,
             aa.a_acc_name,
-            aa.a_acc_no
+            aa.a_acc_no,
+            um.u_m_nickname
         FROM
             tbl_review rr
             JOIN
@@ -143,6 +144,10 @@
                 tbl_admin_accommodation aa
             ON
                 ar.a_acc_no = aa.a_acc_no
+            JOIN
+                tbl_user_member um
+            ON
+                um.u_m_email = rr.u_m_email
         WHERE
             ar.a_acc_no = #{a_acc_no};
         </select>
@@ -194,7 +199,8 @@
             ar.a_r_check_in,
             ar.a_r_check_out,
             aa.a_acc_name,
-            aa.a_acc_no
+            aa.a_acc_no,
+            um.u_m_nickname
         FROM
             tbl_review rr
             JOIN
@@ -205,6 +211,10 @@
                 tbl_admin_accommodation aa
             ON
                 ar.a_acc_no = aa.a_acc_no
+            JOIN
+                tbl_user_member um
+            ON
+                um.u_m_email = rr.u_m_email
         WHERE
             ar.a_acc_no = #{a_acc_no}
         AND
@@ -227,7 +237,7 @@
             ar.a_r_no = #{a_r_no};
     </select>
 
-        <!-- 상세페이지 조회 - 리뷰 정보 가져오기 -->
+        <!-- [마이페이지] 상세페이지 조회 - 리뷰 정보 가져오기 -->
     <select id="selectReviewDetail" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
         SELECT
             rr.r_no,
@@ -238,7 +248,8 @@
             rr.r_sa_point,
             rr.r_reg_date,
             aa.a_acc_name,
-            aa.a_acc_no
+            aa.a_acc_no,
+            um.u_m_nickname
         FROM
             tbl_review rr
             JOIN
@@ -249,6 +260,10 @@
                 tbl_admin_accommodation aa
             ON
                 ar.a_acc_no = aa.a_acc_no
+            JOIN
+                tbl_user_member um
+            ON
+                um.u_m_email = rr.u_m_email
         WHERE
             rr.r_no = #{r_no}
         AND
@@ -286,7 +301,8 @@
             rr.r_sa_point,
             rr.r_reg_date,
             aa.a_acc_name,
-            aa.a_acc_no
+            aa.a_acc_no,
+            um.u_m_nickname
         FROM
             tbl_review rr
             JOIN
@@ -297,6 +313,10 @@
                 tbl_admin_accommodation aa
             ON
                 ar.a_acc_no = aa.a_acc_no
+            JOIN
+                tbl_user_member um
+            ON
+                um.u_m_email = rr.u_m_email
         WHERE
             rr.r_no = #{r_no}
     </select>

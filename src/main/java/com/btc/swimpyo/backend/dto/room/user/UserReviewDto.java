@@ -37,5 +37,7 @@ public class UserReviewDto {
     // 숙박업소 테이블
     private int a_acc_no;
     private String a_acc_name;
+    private String u_m_nickname;
+
 
 }
