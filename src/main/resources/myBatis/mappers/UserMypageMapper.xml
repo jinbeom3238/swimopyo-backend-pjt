@@ -60,6 +60,7 @@
     <select id="selectRezDetail" parameterType="map" resultType="map">
         SELECT
             ai.a_i_image,
+            aa.a_acc_no,
             aa.a_acc_name,
             ar.a_r_name,
             ar.a_r_content,

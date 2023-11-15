@@ -12,4 +12,6 @@ public interface ISearchAccmDaoMapper {
     List<Map<String, Object>> selectAccms(Map<String, Object> msgMap);
 
     List<AdminAccmDto> mapInfoList(String region);
+
+    List<Map<String, Object>> selectTop3Accm(String accmValue);
 }

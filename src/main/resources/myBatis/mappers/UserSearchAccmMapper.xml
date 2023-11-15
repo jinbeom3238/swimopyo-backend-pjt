@@ -70,4 +70,27 @@
 
     </select>
 
+    <select id="selectTop3Accm" parameterType="String" resultType="hashmap">
+        SELECT
+            aa.a_acc_name,
+            ai.a_i_image,
+            COUNT(ur.u_r_no) as 예약수
+        FROM
+            tbl_user_reservation ur
+                JOIN tbl_admin_room ar ON ur.a_r_no = ar.a_r_no
+                JOIN tbl_admin_accommodation aa ON ar.a_acc_no = aa.a_acc_no
+                JOIN tbl_accommodation_image ai ON aa.a_acc_no = ai.a_acc_no
+        WHERE 1=1
+            AND ur.use_yn = 'Y'
+            AND ar.use_yn = 'Y'
+            AND aa.use_yn = 'Y'
+            <if test="accmValue != null">
+                AND a_acc_kind = #{accmValue}
+            </if>
+        GROUP BY
+            aa.a_acc_name
+        ORDER BY
+            예약수 DESC;
+    </select>
+
 </mapper>

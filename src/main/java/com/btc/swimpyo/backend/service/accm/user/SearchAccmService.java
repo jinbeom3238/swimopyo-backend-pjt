@@ -148,5 +148,12 @@ public class SearchAccmService implements ISearchAccmService {
         return iSearchAccmDaoMapper.mapInfoList(region);
     }
 
+    @Override
+    public List<Map<String, Object>> rankAccmList(String accmValue) {
+        log.info("rankAccmList");
+
+        return iSearchAccmDaoMapper.selectTop3Accm(accmValue);
+    }
+
 
 }

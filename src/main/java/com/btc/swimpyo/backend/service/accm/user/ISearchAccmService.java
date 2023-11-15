@@ -10,4 +10,6 @@ public interface ISearchAccmService {
 List<Map<String, Object>> searchAccm(Map<String, Object> msgMap, AdminAccmDto adminAccmDto);
 
     List<AdminAccmDto> mapInfoList(String region);
+
+    List<Map<String, Object>> rankAccmList(String accmValue);
 }
