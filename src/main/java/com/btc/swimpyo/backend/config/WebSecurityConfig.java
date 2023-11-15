@@ -35,8 +35,7 @@ public class WebSecurityConfig {
                         "/api/admin/member/signIn",
                         "/api/admin/member/refreshToken",
                         "/api/admin/member/logout",
-                        "/api/admin/member/signout",
-                        "/api/admin/member/hello").permitAll()
+                        "/api/admin/member/signout").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
 //                .requestMatchers("/api/admin/**").permitAll()
                 .requestMatchers(
@@ -45,6 +44,8 @@ public class WebSecurityConfig {
                         "/api/user/member/refreshToken",
                         "/api/user/member/logout",
                         "/api/user/member/signout",
+                        "/api/user/accm/rankAccmList",
+                        "/api/user/accm/mapInfoList",
                         "/api/user/accm/search").permitAll()
                 .requestMatchers("/api/user/**").hasRole("USER")
 //                .requestMatchers("/api/user/**").permitAll()
