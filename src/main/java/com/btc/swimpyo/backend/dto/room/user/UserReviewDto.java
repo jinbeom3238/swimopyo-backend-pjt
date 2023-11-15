@@ -29,8 +29,13 @@ public class UserReviewDto {
     private String r_xy_longitude;
     private String r_xy_latitude;
     private String r_xy_reg_date;
+//    private String address;
   
     // 룸 예약번호
     private int u_r_no;
+
+    // 숙박업소 테이블
+    private int a_acc_no;
+    private String a_acc_name;
 
 }
