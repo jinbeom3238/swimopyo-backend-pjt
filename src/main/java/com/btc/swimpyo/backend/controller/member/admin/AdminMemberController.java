@@ -29,6 +29,7 @@ public class AdminMemberController {
 
     private final IAdminMemberService iAdminMemberService;
 
+    // 관리자 회원가입
     @PostMapping("/signUp")
     public String signUp(@RequestBody Map<String, Object> msgMap, AdminMemberDto adminMemberDto) {
         log.info("signUp");
@@ -44,6 +45,7 @@ public class AdminMemberController {
         }
     }
 
+    //관리자 로그인
     @PostMapping("/signIn")
     public Object signIn(@RequestBody Map<String, Object> msgMap, AdminMemberDto adminMemberDto, RefTokenEntity refTokenEntity, HttpServletRequest request, HttpServletResponse response) {
         log.info("signIn");
@@ -76,6 +78,7 @@ public class AdminMemberController {
 
     }
 
+    // 관리자 회원수정
     @PostMapping("/modify")
     public Object modify(@RequestBody Map<String, Object> msgMap, AdminMemberDto adminMemberDto){
         log.info("modify");
@@ -91,6 +94,7 @@ public class AdminMemberController {
         return result;
     }
 
+    // 리프레쉬 토큰 요청
     @PostMapping("/refreshToken")
     public Object refreshToken(HttpServletRequest request, HttpServletResponse response, RefTokenEntity refTokenEntity) {
         log.info("refreshToken in");
@@ -122,6 +126,7 @@ public class AdminMemberController {
 
     }
 
+    // 관리자 로그아웃
     @PostMapping("/logout")
     public Object logout(HttpServletRequest request, HttpServletResponse response, RefTokenEntity refTokenEntity) {
         log.info("logout");
@@ -145,6 +150,7 @@ public class AdminMemberController {
         return "logout success";
     }
 
+    // 관리자 회원 탈퇴
     @PostMapping("/signout")
     public Object signOut(HttpServletRequest request,
                           HttpServletResponse response,
@@ -171,6 +177,7 @@ public class AdminMemberController {
         return "signOutSuccess";
     }
 
+    // 관리자 정보 요청
     @PostMapping("/adminInfo")
     public Object adminInfo(HttpServletRequest request,AdminMemberDto adminMemberDto){
         log.info("adminInfo");
@@ -182,6 +189,7 @@ public class AdminMemberController {
         return adminInfo;
     }
 
+    // 관리자 비밀번호 변경
     @PostMapping("/changePw")
     public Object changePw(@RequestBody Map<String, Object> msgMap,HttpServletRequest request,AdminMemberDto adminMemberDto){
         log.info("changePw");
@@ -196,14 +204,6 @@ public class AdminMemberController {
         }
 
         return "AdminChangePwFail";
-    }
-
-    @PostMapping("/hello")
-    public ResponseEntity<String> hello(@RequestBody Map<String, Object> msgMap) {
-        log.info("hello()");
-        log.info("tp : {}", msgMap);
-        return ResponseEntity.ok("hello");
-
     }
 
 }

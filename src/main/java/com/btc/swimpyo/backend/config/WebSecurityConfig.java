@@ -38,7 +38,7 @@ public class WebSecurityConfig {
                         "/api/admin/member/signout",
                         "/api/admin/member/hello").permitAll()
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
-                .requestMatchers("/api/admin/**").permitAll()
+//                .requestMatchers("/api/admin/**").permitAll()
                 .requestMatchers(
                         "/api/user/member/signUp",
                         "/api/user/member/signIn",
@@ -46,8 +46,8 @@ public class WebSecurityConfig {
                         "/api/user/member/logout",
                         "/api/user/member/signout",
                         "/api/user/accm/search").permitAll()
-//                .requestMatchers("/api/user/**").hasRole("USER")
-                .requestMatchers("/api/user/**").permitAll()
+                .requestMatchers("/api/user/**").hasRole("USER")
+//                .requestMatchers("/api/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and().build();
 

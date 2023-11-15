@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.btc.swimpyo.backend.mappers.accm.admin.IAdminSearchAccmDaoMapper">
+
+    <select id="selectRezList" parameterType="Integer" resultType="hashmap">
+        SELECT
+            ur.u_r_name,
+            ur.u_r_stay_yn,
+            ur.u_r_car_yn,
+            ur.u_r_check_in,
+            ur.u_r_check_in_time,
+            ur.u_r_check_out,
+            ur.u_r_check_out_time,
+            ur.u_r_phone,
+            ar.a_r_name,
+            ar.a_r_check_in,
+            ar.a_r_check_out
+
+        FROM
+            tbl_user_reservation ur
+        JOIN tbl_admin_room ar ON ur.a_r_no = ar.a_r_no
+        JOIN tbl_admin_accommodation aa ON ar.a_m_no = aa.a_m_no
+        WHERE
+            aa.a_m_no = #{a_m_no}
+
+    </select>
+
+    <select id="selectAccmCheck" parameterType="Integer" resultType="Integer">
+        SELECT
+            *
+        FROM
+            tbl_admin_accommodation
+        WHERE
+            a_m_no = #{a_m_no}
+    </select>
+
+</mapper>

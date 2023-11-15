@@ -7,6 +7,7 @@ import com.btc.swimpyo.backend.mappers.review.IUserReviewDaoMapper;
 import com.btc.swimpyo.backend.utils.jwt.filter.JwtAuthenticationFilter;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 
 @Log4j2
 @Service
+@RequiredArgsConstructor
 public class UserMypageService implements IUserMypageService {
 
     @Value("${secret-key}")
@@ -30,11 +32,6 @@ public class UserMypageService implements IUserMypageService {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private final IUserReviewDaoMapper iUserReviewDaoMapper;
 
-    public UserMypageService(IUserMypageDaoMapper iUserMypageDaoMapper, JwtAuthenticationFilter jwtAuthenticationFilter, IUserReviewDaoMapper iUserReviewDaoMapper) {
-        this.iUserMypageDaoMapper = iUserMypageDaoMapper;
-        this.jwtAuthenticationFilter = jwtAuthenticationFilter;
-        this.iUserReviewDaoMapper = iUserReviewDaoMapper;
-    }
 
     @Override
     public List<Map<String,Object>> GetRezList(HttpServletRequest request, int u_r_no, int period) {

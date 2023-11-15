@@ -29,6 +29,7 @@ public class UserMemberController {
 
     private final IUserMemberService iUserMemberService;
 
+    // 사용자 회원가입
     @PostMapping("/signUp")
     public String signUp(@RequestBody Map<String, Object> msgMap, UserMemberDto userMemberDto) {
         log.info("signUp");
@@ -44,6 +45,7 @@ public class UserMemberController {
         }
     }
 
+    // 사용자 로그인
     @PostMapping("/signIn")
     public Object signIn(@RequestBody Map<String, Object> msgMap, UserMemberDto userMemberDto, RefTokenEntity refTokenEntity, HttpServletRequest request, HttpServletResponse response) {
         log.info("signIn");
@@ -75,6 +77,7 @@ public class UserMemberController {
 
     }
 
+    // 사용자 회원수정
     @PostMapping("/modify")
     public Object modify(@RequestBody Map<String, Object> msgMap, UserMemberDto userMemberDto){
         log.info("modify");
@@ -90,6 +93,7 @@ public class UserMemberController {
         return result;
     }
 
+    // 사용자 정보 요청
     @PostMapping("/userInfo")
     public Object userInfo(HttpServletRequest request,UserMemberDto userMemberDto){
         log.info("userInfo");
@@ -101,6 +105,7 @@ public class UserMemberController {
         return userInfo;
     }
 
+    // 사용자 리프레쉬 토큰 요청
     @PostMapping("/refreshToken")
     public Object refreshToken(HttpServletRequest request, HttpServletResponse response, RefTokenEntity refTokenEntity) {
         log.info("refreshToken in");
@@ -132,6 +137,7 @@ public class UserMemberController {
 
     }
 
+    // 사용자 회원 탈퇴
     @PostMapping("/signout")
     public Object signOut(HttpServletRequest request,
                           HttpServletResponse response,
@@ -159,6 +165,7 @@ public class UserMemberController {
     }
 
 
+    // 사용자 비밀번호 변경
     @PostMapping("/changePw")
     public Object changePw(@RequestBody Map<String, Object> msgMap,HttpServletRequest request,UserMemberDto userMemberDto){
         log.info("changePw");
@@ -197,14 +204,5 @@ public class UserMemberController {
 
         return "logout success";
     }
-
-    @PostMapping("/hello")
-    public ResponseEntity<String> hello(@RequestBody Map<String, Object> msgMap) {
-        log.info("hello()");
-        log.info("tp : {}", msgMap);
-        return ResponseEntity.ok("user hello");
-
-    }
-
 
 }

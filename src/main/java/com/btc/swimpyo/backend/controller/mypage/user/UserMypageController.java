@@ -19,6 +19,7 @@ public class UserMypageController {
 
     private final UserMypageService userMypageService;
 
+    // 사용자 마이페이지 예약 리스트
     @GetMapping("/GetRezList")
     public Object GetRezList(@RequestParam(value = "u_r_no", defaultValue="0") int u_r_no,
                              @RequestParam(value = "period", defaultValue = "0") int period,
@@ -32,6 +33,7 @@ public class UserMypageController {
         return GetRezList;
     }
 
+    // 사용자 마이페이지 예약 상세보기
     @GetMapping("/GetRezDetail")
     public Object GetRezDetail(@RequestParam(value = "u_r_no", defaultValue="0") int u_r_no,
                                HttpServletRequest request){
@@ -46,12 +48,12 @@ public class UserMypageController {
         return GetRezDetail;
     }
 
-//     [마이페이지] 리스트 조회
+
+    // 사용자 마이페이지 리뷰 리스트
     @PostMapping("/getReviewList")
     public Object showReviewList(HttpServletRequest request) {
         log.info("showReviewList");
 
-//        Map<String, Object> map = userMypageService.showReviewList(request);
         List<Map<String,Object>> map = userMypageService.showReviewList(request);
         if(map == null){
             return "getReviewListFail";
