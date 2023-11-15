@@ -8,7 +8,7 @@ import java.util.Map;
 
 public interface IUserReservationService {
     // 예약하기 버튼 클릭 시 화면(모달창)
-    public ReservationDto createRsvReady(ReservationDto reservationDto);
+    public Map<String, Object> createRsvReady(ReservationDto reservationDto);
 
     // 예약 및 결제
     public Map<String, Object> createRsvApproval(ReservationDto reservationDto);

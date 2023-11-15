@@ -8,9 +8,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Log4j2
 @Service
@@ -20,23 +18,6 @@ public class UserReviewService implements IUserReviewService{
     private final IUserReviewDaoMapper iUserReviewDaoMapper;
     private final S3Uploader s3Uploader;
 
-//    @Override
-//    public int registReview(Map<String, Object> msgMap, UserReviewDto userReviewDto) {
-//        log.info("registReview");
-////        userReviewDto.setA_r_no(Integer.parseInt(msgMap.get("a_r_no").toString()));
-////        userReviewDto.setU_m_no(Integer.parseInt(msgMap.get("u_m_no").toString()));
-////        userReviewDto.setP_am_no(Integer.parseInt(msgMap.get("p_am_no").toString()));
-//        userReviewDto.setR_title(msgMap.get("r_title").toString());
-//        userReviewDto.setR_content(msgMap.get("r_content").toString());
-//        userReviewDto.setR_image(msgMap.get("r_image").toString());
-//        userReviewDto.setR_sa_point(Integer.parseInt(msgMap.get("r_sa_point").toString()));
-//
-//        int result;
-//        result = iUserReviewDaoMapper.insertReview(userReviewDto);
-//
-//        return result;
-//    }
-
     /*
      * 리뷰 등록
      * 1. 예약한 내역이 있는 사용자만 예약할 수 있다. -> 예약 번호 일치해야한다.
@@ -44,11 +25,11 @@ public class UserReviewService implements IUserReviewService{
      */
     // 등록
     @Override
-    public String registConfirm(UserReviewDto userReviewDto, List<String> r_xy_address, MultipartFile[] reviewImages) {
+    public String registConfirm(UserReviewDto userReviewDto, List<UserReviewDto> address, MultipartFile[] reviewImages) {
         log.info("[UserReviewService] registConfirm()");
         log.info("[registReview] userReviewDto : " + userReviewDto);
         log.info("[registReview] reviewImages : " + reviewImages);
-        log.info("[registReview] r_xy_address : " + r_xy_address);
+        log.info("[registReview] r_xy_address : " + address);
 
             // 1. tbl_review 테이블에 데이터 등록
             int result = iUserReviewDaoMapper.insertReview(userReviewDto);
@@ -60,20 +41,20 @@ public class UserReviewService implements IUserReviewService{
             userReviewDto.setR_no(r_no);
             log.info("r_no: " + userReviewDto.getR_no());
 
-            // userReviewInfoDto.setU_r_no(r_no);
-
             // 3. front에서 입력받은 주소 값 db에 저장
-            for (int i = 0; i<r_xy_address.size(); i++) {
-                userReviewDto.setR_xy_address(r_xy_address.get(i));
+        for (int i = 0; i < address.size(); i++) {
+            userReviewDto.setR_xy_address(address.get(i).getR_xy_address());
+            userReviewDto.setR_xy_comment(address.get(i).getR_xy_comment());
 
-                int isInsertAddress = iUserReviewDaoMapper.insertReviewAddress(r_xy_address);
-                log.info("isInsertAddress:" + isInsertAddress);
+            log.info("address:" + userReviewDto.getR_xy_address());
+            log.info("comment:" + userReviewDto.getR_xy_comment());
 
-            }
+            int isInsertAddress = iUserReviewDaoMapper.insertReviewAddress(userReviewDto);
+            log.info("isInsertAddress:" + isInsertAddress);
 
-
-
+        }
             // 4. tbl_review_image 테이블에 이미지 정보 등록
+        if(reviewImages != null) {
             for (MultipartFile file : reviewImages) {
                 log.info("reviewImages: " + reviewImages);
 
@@ -85,84 +66,28 @@ public class UserReviewService implements IUserReviewService{
 
                 int isInsertImg = iUserReviewDaoMapper.insertReviewImg(userReviewDto);
                 log.info("isInsertImg:" + isInsertImg);
-                
-                if (result > 0) {
-                    log.info("등록 성공");
 
-                    return "success";
-
-                } else {
-                     log.info("등록 실패");
+                if (result <= 0) {
+                    log.info("등록 실패");
 
                     return "fail";
 
                 }
-
             }
             // 4. 이미지 업로드가 완료되면 이미지 url을 반환
-            return "fail";
+            return "success";
+
+        }
+        return "fail";
 
     }
 
-    // [마이페이지] 리스트 조회
-//    @Override
-//    public Map<String, Object> showReviewList(String u_m_email) {
-//        log.info("[userReviewService] showReviewList()");
-//
-//        Map<String, Object> msgData = new HashMap<>();
-//        List<UserReviewDto> r_ri_images = new ArrayList<>();
-//        List<UserReviewDto> r_xy_address = new ArrayList<>();
-//        int r_no;
-//
-//        // 리뷰 리스트 가져오기(이미지 제외)
-//        List<UserReviewDto> userReviewDto = iUserReviewDaoMapper.selectReviewInfo(u_m_email);
-//        log.info("userReviewDtos: " + userReviewDto);
-//
-//        // 사용자가 작성한 리뷰 번호 가져오기
-//        List<Integer> r_nos = userReviewDto.stream()
-//                .map(UserReviewDto::getR_no)
-//                .collect(Collectors.toList());
-//        log.info("r_nos: " + r_nos.get(0));
-//
-//        // r_no에 대한 이미지, 주소 정보 들고 오기
-//        for(int i = 0; i<r_nos.size(); i++) {
-//            log.info("r_nos: " + r_nos);
-//
-//            r_no = r_nos.get(i);
-//            log.info("r_no: " + r_no);
-//
-//            // 주소 정보 가져오기
-////            r_xy_address = iUserReviewDaoMapper.selectReviewAddress(r_no);
-//
-//            // u_ri_no 가져오기(이미지 번호)
-//            List<Integer> u_ri_nos = iUserReviewDaoMapper.selectReviewImgNo(r_no);
-//            log.info("u_ri_nos: " + u_ri_nos);
-//
-//            // 이미지 정보 가져오기
-//            r_ri_images = iUserReviewDaoMapper.selectReviewImgForList(r_no);
-//            log.info("image and xy: " + r_ri_images);
-//
-//            r_xy_address = iUserReviewDaoMapper.selectReviewAddressForList(r_no);
-//
-//        }
-//
-//        msgData.put("r_ri_images", r_ri_images);
-//        msgData.put("r_xy_address", r_xy_address);
-//        msgData.put("userReviewDto", userReviewDto);
-//
-//        log.info(msgData);
-//
-//        return msgData;
-//
-//    }
-
+    // [숙박시설 상세페이지] 리스트 조회
     @Override
     public Map<String, Object> showReviewList(int a_acc_no) {
         log.info("[userReviewService] showReviewList()");
 
         Map<String, Object> msgData = new HashMap<>();
-//        List<UserReviewDto> r_ri_images = new ArrayList<>();
-//        List<UserReviewDto> r_xy_address = new ArrayList<>();
 
         // 리뷰 정보 가져오기(이미지 제외)
         List<UserReviewDto> userReviewDto = iUserReviewDaoMapper.selectReviewInfo(a_acc_no);
@@ -171,7 +96,45 @@ public class UserReviewService implements IUserReviewService{
         List<Integer> r_nos = iUserReviewDaoMapper.selectReviewRno(a_acc_no);
 
         for(int i = 0; i < r_nos.size(); i++) {
+            int r_no = r_nos.get(i);
 
+            // 이미지, 주소 정보 들고 오기
+            List<UserReviewDto> r_ri_images = iUserReviewDaoMapper.selectReviewImgForList(r_no);
+            log.info("r_ri_images: " + r_ri_images );
+
+            List<UserReviewDto> r_xy_address = iUserReviewDaoMapper.selectReviewAddressForList(r_no);
+            log.info("r_xy_address: " + r_xy_address );
+
+            msgData.put("r_ri_images", r_ri_images);
+            msgData.put("r_xy_address", r_xy_address);
+
+        }
+
+        msgData.put("userReviewDto", userReviewDto);
+
+        log.info("msgData: " + msgData);
+
+        return msgData;
+
+    }
+
+    // [룸 상세페이지] 리스트 조회
+    @Override
+    public Map<String, Object> showReviewListRoom(int a_r_no, int a_acc_no) {
+        log.info("[userReviewService] showReviewListRoom()");
+
+        Map<String, Object> msgData = new HashMap<>();
+
+        msgData.put("a_r_no", a_r_no);
+        msgData.put("a_acc_no", a_acc_no);
+
+        // 리뷰 정보 가져오기(이미지 제외)
+        List<UserReviewDto> userReviewDto = iUserReviewDaoMapper.selectReviewInfoInRoom(msgData);
+        log.info("userReviewDto: " + userReviewDto);
+        // r_no
+        List<Integer> r_nos = iUserReviewDaoMapper.selectReviewRnoInRoom(msgData);
+
+        for(int i = 0; i < r_nos.size(); i++) {
             int r_no = r_nos.get(i);
 
             // 이미지, 주소 정보 들고 오기

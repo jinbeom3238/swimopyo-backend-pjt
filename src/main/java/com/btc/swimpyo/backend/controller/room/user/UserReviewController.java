@@ -25,14 +25,15 @@ public class UserReviewController {
     @PostMapping(value = "/registConfirm", consumes = "multipart/form-data")
     public String registConfirm(@RequestPart(value = "userReviewDto", required = false) UserReviewDto userReviewDto,
                                              @RequestPart(value = "userReservationDto", required = false) ReservationDto reservationDto,
-                                             @RequestPart(value = "r_xy_address", required = false) List<String> r_xy_address,
+//                                           @RequestParam(name = "address", required = false) List<String> address,
+                                             @RequestPart List<UserReviewDto> address,
                                              @RequestPart(value = "reviewImages", required = false) MultipartFile[] reviewImages) {
         log.info("[UserReviewController] registReview()");
 
         log.info("reservationDto: " + reservationDto);
         userReviewDto.setU_r_no(reservationDto.getU_r_no());
         log.info("reviewImages" + reviewImages);
-        log.info("r_xy_address" + r_xy_address);
+        log.info("r_xy_address" + address);
 
         try {
             // reviewImages 차례대로 data를 뽑음
@@ -46,20 +47,11 @@ public class UserReviewController {
             log.error("MultipartFile에서 InputStream을 가져오는 중 에러 발생", e);
 
         }
-        String imageUrl = userReviewService.registConfirm(userReviewDto, r_xy_address, reviewImages);
+        String imageUrl = userReviewService.registConfirm(userReviewDto, address, reviewImages);
 
         return imageUrl;
 
     }
-
-    // [마이페이지] 리스트 조회
-//    @PostMapping("/")
-//    public Map<String, Object> showReviewList1(@RequestParam ("u_m_email") String u_m_email) {
-//        log.info("[UserReviewController] showReviewList()");
-//
-//        return userReviewService.showReviewList1(u_m_email);
-//
-//    }
 
     // [숙박시설 상세페이지] 리스트 조회
     @PostMapping("showReviewList")
@@ -67,6 +59,16 @@ public class UserReviewController {
         log.info("[UserReviewController] showReviewList()");
 
         return userReviewService.showReviewList(a_acc_no);
+
+    }
+
+    // [룸 상세페이지] 리스트 조회
+    @PostMapping("showReviewListRoom")
+    public Map<String, Object> showReviewListRoom(@RequestParam("a_r_no") int a_r_no,
+                                                  @RequestParam("a_acc_no") int a_acc_no) {
+        log.info("[UserReviewController] showReviewListRoom()");
+
+        return userReviewService.showReviewListRoom(a_r_no, a_acc_no);
 
     }
 

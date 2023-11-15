@@ -25,11 +25,12 @@ public class UserReviewDto {
     // 경도,위도 테이블
     private int r_xy_no;
     private String r_xy_address;
+    private String r_xy_comment;
     private String r_xy_longitude;
     private String r_xy_latitude;
+    private String r_xy_reg_date;
   
     // 룸 예약번호
     private int u_r_no;
-
 
 }

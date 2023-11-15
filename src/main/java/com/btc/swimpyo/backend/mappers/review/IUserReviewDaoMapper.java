@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface IUserReviewDaoMapper {
@@ -20,10 +21,10 @@ public interface IUserReviewDaoMapper {
     // review 이미지 db에 저장
     public int insertReviewImg(UserReviewDto userReviewDto);
     // 주소 값 db에 저장
-    public int insertReviewAddress(List<String> r_xy_address);
+    public int insertReviewAddress(UserReviewDto userReviewDto);
 
     /*
-     * [마이페이지] 리스트 조회
+     * [숙박시설 상세페이지] 리스트 조회
      */
     // 리뷰 정보 가져오기
     public List<UserReviewDto> selectReviewInfo(int a_acc_no);
@@ -35,6 +36,14 @@ public interface IUserReviewDaoMapper {
     public List<UserReviewDto> selectReviewAddressForList(int r_no);
     // r_no 가져오기
     public List<Integer> selectReviewRno(int a_acc_no);
+
+    /*
+     * [룸 상세페이지] 리스트 조회
+     */
+    // 리뷰 정보 가져오기
+    public List<UserReviewDto> selectReviewInfoInRoom(Map<String, Object> msgData);
+    // r_no 가져오기
+    public List<Integer> selectReviewRnoInRoom(Map<String, Object> msgData);
 
     /*
      * 상세페이지 조회
@@ -60,5 +69,5 @@ public interface IUserReviewDaoMapper {
     // 주소 db에서 삭제하기
     public int deleteReviewAddress(UserReviewDto userReviewDto);
 
-    
+
 }

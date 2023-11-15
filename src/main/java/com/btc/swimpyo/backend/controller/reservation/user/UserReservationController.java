@@ -36,7 +36,7 @@ public class UserReservationController {
      */
     @PostMapping("/ready")
     @Transactional
-    public ReservationDto createRsvReady(@RequestPart ReservationDto reservationDto){
+    public Map<String, Object> createRsvReady(@RequestPart ReservationDto reservationDto){
         log.info("[UserReservationController] createRsvReady()");
         log.info("[UserReservationController] adminReservaitionDto(): " + reservationDto);
 
