@@ -107,6 +107,7 @@
 
     <select id="selectReviewInfo" parameterType="String" resultType="hashmap">
         SELECT
+            DISTINCT
             aa.a_acc_no,
             aa.a_acc_name,
             ar.a_r_name,
@@ -119,11 +120,11 @@
             ri.r_ri_image
         FROM
             tbl_review r
-            join tbl_admin_room ar ON r.a_r_no = ar.a_r_no
-            join tbl_admin_accommodation aa ON ar.a_acc_no = aa.a_acc_no
-            join tbl_review_image ri ON r.r_no = ri.r_no
-            join tbl_review_xy rxy ON r.r_no = ri.r_no
-            join tbl_user_member um ON r.u_m_email = um.u_m_email
+            left join tbl_admin_room ar ON r.a_r_no = ar.a_r_no
+            left join tbl_admin_accommodation aa ON ar.a_acc_no = aa.a_acc_no
+            left join tbl_review_image ri ON r.r_no = ri.r_no
+            left join tbl_review_xy rxy ON r.r_no = ri.r_no
+            left join tbl_user_member um ON r.u_m_email = um.u_m_email
         WHERE
             r.u_m_email = #{u_m_email}
           AND r.use_yn = "Y"
