@@ -6,6 +6,7 @@ import com.btc.swimpyo.backend.utils.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
@@ -177,7 +178,7 @@ public class UserReviewService implements IUserReviewService{
 
     // [마이페이지] 상세페이지 조회
     @Override
-    public Map<String, Object> showDetailMyPage(int r_no, String u_m_email, UserReviewDto userReviewDto) {
+    public Map<String, Object> showDetailMyPage(@RequestParam("r_no") int r_no, @RequestParam("u_m_email") String u_m_email, UserReviewDto userReviewDto) {
         log.info("[userReviewService] showDetail()");
 
         Map<String ,Object> msgData = new HashMap<>();
