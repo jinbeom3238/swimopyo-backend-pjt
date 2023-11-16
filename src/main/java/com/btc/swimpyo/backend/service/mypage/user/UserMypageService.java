@@ -98,8 +98,11 @@ public class UserMypageService implements IUserMypageService {
 //            List<Integer> u_ri_nos = iUserMypageDaoMapper.selectReviewImgNo(r_no);
 //            log.info("u_ri_nos: " + u_ri_nos);
 
-            List<Map<String, Object>> userReviewImgList = iUserMypageDaoMapper.selectReviewImgForList(r_no);
-            ResultUserReviewImgList.addAll(userReviewImgList);
+//            List<Map<String, Object>> userReviewImgList = iUserMypageDaoMapper.selectReviewImgForList(r_no);
+//            ResultUserReviewImgList.addAll(userReviewImgList);
+            ResultUserReviewImgList = iUserMypageDaoMapper.selectReviewImgForList(r_no);
+
+
         }
 
         msgData.put("userReviewList", userReviewList);

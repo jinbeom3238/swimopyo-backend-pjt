@@ -132,7 +132,9 @@
 
     <select id="selectReviewImgForList" parameterType="map" resultType="map">
         SELECT
-            r_ri_image, r_no, u_ri_no
+            DISTINCT(u_ri_no),
+            r_ri_image,
+            r_no
         FROM
             tbl_review_image
         WHERE
