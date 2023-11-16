@@ -80,8 +80,12 @@ public class UserAccmService implements IUserAccmService{
         Map<String, Object> msgData = new HashMap<>();
 
         AdminAccmDto adminAccmDto = iUserAccmDaoMapper.selectAccmDetail(a_acc_no);
+        // 별점 가져오기
+        Double sa_point_avg = iUserAccmDaoMapper.selectReviewStar(a_acc_no);
+        adminAccmDto.setSa_point_avg(sa_point_avg);
         log.info("[UserAccmService] adminAccmDtos: " + adminAccmDto);
         log.info("[UserAccmService] a_acc_no: " + a_acc_no);
+        log.info("[UserAccmService] r_sa_point: " + adminAccmDto.getSa_point_avg());
 
         // 이미지 정보 가져오기
         List<AdminAccmImageDto> a_i_images = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
@@ -93,7 +97,7 @@ public class UserAccmService implements IUserAccmService{
 
         // kakao - getKakaoApiFromAddress매서드를 통해 a_acc_address에 관한 정보 값들을 String 형태로 받아옴
         String jsonString = kakaoMapApiController.getKakaoApiFromAddress(address);
-        log.info("jsonString: " + jsonString);
+//        log.info("jsonString: " + jsonString);
 
         // JSON String -> Map
         ObjectMapper mapper = new ObjectMapper();
@@ -107,7 +111,7 @@ public class UserAccmService implements IUserAccmService{
 
         List<LinkedHashMap<String, Object>> document = (List<LinkedHashMap<String, Object>>) jsonMap.get("documents");
 
-        log.info("docment: " + document.get(0).get("address"));
+//        log.info("docment: " + document.get(0).get("address"));
 
         // document 내의 {} 안에 있는 값들이 배열이 아니라 하나의 String 값으로 되어 있었던 것. 
         // 따라서, split매서드를 통해 "," 문자열을 기준으로 하나씩 뽑아옴
@@ -129,7 +133,7 @@ public class UserAccmService implements IUserAccmService{
         log.info("x : " + adminAccmDto.getA_acc_longitude());
         log.info("y : " + adminAccmDto.getA_acc_latitude());
 
-        log.info("jsonMap:---------->" + jsonMap.get("documents"));
+//        log.info("jsonMap:---------->" + jsonMap.get("documents"));
 
         // db에 넣어줘야 함
         iUserAccmDaoMapper.insertAccmLoc(adminAccmDto);

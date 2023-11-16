@@ -29,5 +29,6 @@ public interface IUserAccmDaoMapper {
 
 
     public List<Integer> selectAccmImgNo(int a_acc_no);
-
+    // 별점 가져오기
+    public Double selectReviewStar(int aAccNo);
 }

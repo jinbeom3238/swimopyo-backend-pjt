@@ -49,40 +49,77 @@
             a_acc_no = #{a_acc_no}
     </select>
 
-    <!-- 상세페이지 보기 -->
     <select id="selectAccmDetail" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
         SELECT
-            aa.a_acc_no,
-            aa.a_m_no,
-            aa.a_acc_name,
-            am.a_m_name,
-            aa.a_acc_intro,
-            aa.a_acc_kind,
-            aa.a_acc_bn,
-            aa.a_acc_address,
-            aa.a_acc_phone,
-            am.a_m_email,
-            aa.a_acc_reg_date,
-            round(avg(rr.r_sa_point),1)
+        aa.a_acc_no,
+        aa.a_m_no,
+        aa.a_acc_name,
+        am.a_m_name,
+        aa.a_acc_intro,
+        aa.a_acc_kind,
+        aa.a_acc_bn,
+        aa.a_acc_address,
+        aa.a_acc_phone,
+        am.a_m_email,
+        aa.a_acc_reg_date
         FROM
-            tbl_admin_accommodation aa
+        tbl_admin_accommodation aa
         JOIN
-            tbl_admin_member am
+        tbl_admin_member am
         ON
-            aa.a_m_no = am.a_m_no
-        JOIN
-            tbl_admin_room ar
-        ON
-            ar.a_acc_no = aa.a_acc_no
-        JOIN
-            tbl_review rr
-        ON
-            rr.a_r_no = ar.a_r_no
+        aa.a_m_no = am.a_m_no
         WHERE
-            aa.a_acc_no = #{a_acc_no}
+        aa.a_acc_no = #{a_acc_no}
         AND
-            aa.use_yn = 'Y'
+        aa.use_yn = 'Y'
     </select>
+
+    <!-- 상세페이지 - 리뷰 별점 가져오기 -->
+    <select id="selectReviewStar" parameterType="Integer" resultType="Double">
+        SELECT
+            ROUND(AVG(rr.r_sa_point),1)
+        FROM
+            tbl_review rr
+        JOIN tbl_admin_room ar ON ar.a_r_no = rr.a_r_no
+        JOIN tbl_admin_accommodation aa ON aa.a_acc_no = ar.a_acc_no
+        WHERE
+            ar.a_acc_no = #{a_acc_no}
+    </select>
+
+    <!-- 상세페이지 보기 -->
+<!--    <select id="selectAccmDetail" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">-->
+<!--        SELECT-->
+<!--            aa.a_acc_no,-->
+<!--            aa.a_m_no,-->
+<!--            aa.a_acc_name,-->
+<!--            am.a_m_name,-->
+<!--            aa.a_acc_intro,-->
+<!--            aa.a_acc_kind,-->
+<!--            aa.a_acc_bn,-->
+<!--            aa.a_acc_address,-->
+<!--            aa.a_acc_phone,-->
+<!--            am.a_m_email,-->
+<!--            aa.a_acc_reg_date,-->
+<!--            round(avg(rr.r_sa_point),1)-->
+<!--        FROM-->
+<!--            tbl_admin_accommodation aa-->
+<!--        JOIN-->
+<!--            tbl_admin_member am-->
+<!--        ON-->
+<!--            aa.a_m_no = am.a_m_no-->
+<!--        JOIN-->
+<!--            tbl_admin_room ar-->
+<!--        ON-->
+<!--            ar.a_acc_no = aa.a_acc_no-->
+<!--        JOIN-->
+<!--            tbl_review rr-->
+<!--        ON-->
+<!--            rr.a_r_no = ar.a_r_no-->
+<!--        WHERE-->
+<!--            aa.a_acc_no = #{a_acc_no}-->
+<!--        AND-->
+<!--            aa.use_yn = 'Y'-->
+<!--    </select>-->
 
     <!-- 주소 값(a_acc_no)을 경도, 위도 값으로 db에 저장 -->
     <insert id="insertAccmLoc" parameterType="HashMap">
