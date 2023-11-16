@@ -40,7 +40,6 @@ public class UserReviewDto {
     private int a_acc_no;
     private String a_acc_name;
     private String u_m_nickname;
-    private String a_acc_adress;
-
+    private String a_acc_address;
 
 }

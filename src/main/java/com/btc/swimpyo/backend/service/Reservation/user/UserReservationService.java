@@ -47,7 +47,6 @@ public class UserReservationService implements IUserReservationService{
             int result = iUserReservationDaoMapper.searchDate(reservationDto);
             log.info("result:" + result);
 
-
             // 예약 불가시
             if(result > 0) {
                 log.info("예약이 불가합니다.");
@@ -59,24 +58,24 @@ public class UserReservationService implements IUserReservationService{
         } else if(reservationDto.getU_r_stay_yn().equals("N")){
             log.info("stay_yn = N !! ");
 
-            Time u_r_check_in_time = reservationDto.getU_r_check_in_time();
-            // front에서 받아온 u_r_check_in_time에 + 4시간 추가한 값을 u_r_check_out_time에 넣어주기
-            Time u_r_check_out_time = new Time(u_r_check_in_time.getTime() + (4 * 60 * 60 * 1000));
-            reservationDto.setU_r_check_out_time(u_r_check_out_time);
-            log.info("u_r_check_out_time:" + reservationDto.getU_r_check_out_time());
-
-            // 대실 - 예약 차있는 방 찾기
-            int result = iUserReservationDaoMapper.searchTime(reservationDto);
-            log.info("result:" + result);
-
-            // 예약 불가시
-            if(result > 0) {
-                log.info("예약 불가능");
-
-                return msgData;
-
-            }
-//            msgData.put("reservationDto", reservationDto);
+//            Time u_r_check_in_time = reservationDto.getU_r_check_in_time();
+//            // front에서 받아온 u_r_check_in_time에 + 4시간 추가한 값을 u_r_check_out_time에 넣어주기
+//            Time u_r_check_out_time = new Time(u_r_check_in_time.getTime() + (4 * 60 * 60 * 1000));
+//            reservationDto.setU_r_check_out_time(u_r_check_out_time);
+//            log.info("u_r_check_out_time:" + reservationDto.getU_r_check_out_time());
+//
+//            // 대실 - 예약 차있는 방 찾기
+//            int result = iUserReservationDaoMapper.searchTime(reservationDto);
+//            log.info("result:" + result);
+//
+//            // 예약 불가시
+//            if(result > 0) {
+//                log.info("예약 불가능");
+//
+//                return msgData;
+//
+//            }
+            msgData.put("reservationDto", reservationDto);
             msgData.put("status", "success");
 
             return msgData;
@@ -149,7 +148,6 @@ public class UserReservationService implements IUserReservationService{
             }
 
         }
-
         log.info("msgData : " + msgData);
 
         // 결제

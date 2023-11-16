@@ -36,30 +36,36 @@ public class UserReviewService implements IUserReviewService{
         // a_r_no 가져오기
         iUserReviewDaoMapper.selectArNo(u_m_email);
 
-            // 1. tbl_review 테이블에 데이터 등록
-            int result = iUserReviewDaoMapper.insertReview(userReviewDto);
-            log.info("result: " + result);
+        // 1. tbl_review 테이블에 데이터 등록
+        int result = iUserReviewDaoMapper.insertReview(userReviewDto);
+        log.info("result: " + result);
 
-            // 2. 등록된 리뷰 테이블 번호 가져오기
-            int r_no = iUserReviewDaoMapper.selectReviewNo(userReviewDto);
-            log.info("r_no: " + r_no);
-            userReviewDto.setR_no(r_no);
-            log.info("r_no: " + userReviewDto.getR_no());
+        // 2. 등록된 리뷰 테이블 번호 가져오기
+        int r_no = iUserReviewDaoMapper.selectReviewNo(userReviewDto);
+        log.info("r_no: " + r_no);
+        userReviewDto.setR_no(r_no);
+        log.info("r_no: " + userReviewDto.getR_no());
 
+        if (address != null) {
             // 3. front에서 입력받은 주소 값 db에 저장
-        for (int i = 0; i < address.size(); i++) {
-            userReviewDto.setR_xy_address(address.get(i).getR_xy_address());
-            userReviewDto.setR_xy_comment(address.get(i).getR_xy_comment());
+            for (int i = 0; i < address.size(); i++) {
+                userReviewDto.setR_xy_address(address.get(i).getR_xy_address());
+                userReviewDto.setR_xy_comment(address.get(i).getR_xy_comment());
 
-            log.info("address:" + userReviewDto.getR_xy_address());
-            log.info("comment:" + userReviewDto.getR_xy_comment());
+                log.info("address:" + userReviewDto.getR_xy_address());
+                log.info("comment:" + userReviewDto.getR_xy_comment());
 
-            int isInsertAddress = iUserReviewDaoMapper.insertReviewAddress(userReviewDto);
-            log.info("isInsertAddress:" + isInsertAddress);
+                int isInsertAddress = iUserReviewDaoMapper.insertReviewAddress(userReviewDto);
+                log.info("isInsertAddress:" + isInsertAddress);
 
+
+
+            }
+            return "success";
         }
-            // 4. tbl_review_image 테이블에 이미지 정보 등록
-        if(reviewImages != null) {
+
+        // 4. tbl_review_image 테이블에 이미지 정보 등록
+        if (reviewImages != null) {
             for (MultipartFile file : reviewImages) {
                 log.info("reviewImages: " + reviewImages);
 
@@ -72,20 +78,25 @@ public class UserReviewService implements IUserReviewService{
                 int isInsertImg = iUserReviewDaoMapper.insertReviewImg(userReviewDto);
                 log.info("isInsertImg:" + isInsertImg);
 
-                if (result <= 0) {
-                    log.info("등록 실패");
-
-                    return "fail";
-
-                }
             }
+//                if (result <= 0) {
+//                    return "image null";
+//
+//                }
 
-            // 모두 insert가 되면 isWrite = 1로  바꿔주는 작업
-            int isUpdate = iUserReviewDaoMapper.updateIsWrite(r_no);
+//            // 모두 insert가 되면 isWrite = 1로  바꿔주는 작업
+//            int isUpdate = iUserReviewDaoMapper.updateIsWrite(r_no);
             return "success";
 
         }
-        return "fail";
+
+        if(result > 0) {
+            return "success";
+
+        } else {
+            return "fail";
+
+        }
 
     }
 
