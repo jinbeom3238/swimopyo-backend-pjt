@@ -114,6 +114,7 @@
             um.u_m_email,
             um.u_m_nickname,
             r.r_no,
+            r.isWrite,
             r.r_reg_date,
             r.r_content,
             r.r_sa_point,
