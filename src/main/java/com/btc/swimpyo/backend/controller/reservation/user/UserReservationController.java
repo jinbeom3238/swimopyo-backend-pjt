@@ -62,19 +62,19 @@ public class UserReservationController {
         log.info("[UserReservationController] registRsv()");
         
         response.sendRedirect("http://localhost:3000/payment/success");
+
         return userReservationService.registRsv(pg_token, partner_order_id);
 
     }
 
-
     // 결제 승인 후 front에 success 메세지
-    @GetMapping("/success")
-    public String success() {
-        log.info("[UserReservationController] success()");
-
-        return userReservationService.success();
-
-    }
+//    @GetMapping("/success")
+//    public String success() {
+//        log.info("[UserReservationController] success()");
+//
+//        return userReservationService.success();
+//
+//    }
 
     /*
      * front에서 받아야 하는 값 : 예약번호(u_r_no), tid, u_m_email 값..?

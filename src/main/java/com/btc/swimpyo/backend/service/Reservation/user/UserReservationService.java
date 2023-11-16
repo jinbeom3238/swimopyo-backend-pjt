@@ -12,6 +12,8 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,6 +45,15 @@ public class UserReservationService implements IUserReservationService{
         // 숙박/대실 분류
         if(reservationDto.getU_r_stay_yn().equals("Y")) {
             log.info("stay_yn = Y !! ");
+
+            // 날짜 파싱 및 일수 계산
+            LocalDate u_r_check_in = LocalDate.parse(reservationDto.getU_r_check_in().toString());
+            LocalDate u_r_check_out = LocalDate.parse(reservationDto.getU_r_check_out().toString());
+//            int days = (int) ChronoUnit.DAYS.between(startDay, endDay);
+
+            reservationDto.setU_r_check_in(u_r_check_in);
+            reservationDto.setU_r_check_out(u_r_check_out);
+
             // 숙박 - 예약 차있는 방 찾기
             int result = iUserReservationDaoMapper.searchDate(reservationDto);
             log.info("result:" + result);
@@ -260,21 +271,21 @@ public class UserReservationService implements IUserReservationService{
     }
 
     // 결제 승인 후 front에 success 메세지
-    @Override
-    public String success() {
-        log.info("[userReservationService] success()");
-
-        String pg_token = iUserReservationDaoMapper.success();
-
-        if(pg_token != null) {
-            log.info("success!!");
-            return "success";
-
-        }
-        log.info("fail!!");
-        return "fail";
-
-    }
+//    @Override
+//    public String success() {
+//        log.info("[userReservationService] success()");
+//
+//        String pg_token = iUserReservationDaoMapper.success();
+//
+//        if(pg_token != null) {
+//            log.info("success!!");
+//            return "success";
+//
+//        }
+//        log.info("fail!!");
+//        return "fail";
+//
+//    }
 
     // 환불
     @Override

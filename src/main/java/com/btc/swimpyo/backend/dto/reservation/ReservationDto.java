@@ -2,8 +2,10 @@ package com.btc.swimpyo.backend.dto.reservation;
 
 import lombok.Data;
 
+import java.sql.Date;
 import java.sql.Time;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 @Data
 public class ReservationDto {
@@ -12,8 +14,8 @@ public class ReservationDto {
     private String use_yn;
     private String u_m_email;
     private int a_r_no;
-    private String u_r_check_in;
-    private String u_r_check_out;
+    private LocalDate u_r_check_in;
+    private LocalDate u_r_check_out;
     private Time u_r_check_in_time;
     private Time u_r_check_out_time;
     private String u_r_car_yn;
