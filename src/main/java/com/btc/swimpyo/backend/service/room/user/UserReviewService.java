@@ -30,6 +30,7 @@ public class UserReviewService implements IUserReviewService{
         log.info("[registReview] userReviewDto : " + userReviewDto);
         log.info("[registReview] reviewImages : " + reviewImages);
         log.info("[registReview] r_xy_address : " + address);
+        log.info("[registReview] reviewImages : " + reviewImages);
 
         String u_m_email = userReviewDto.getU_m_email();
 
@@ -58,14 +59,11 @@ public class UserReviewService implements IUserReviewService{
                 int isInsertAddress = iUserReviewDaoMapper.insertReviewAddress(userReviewDto);
                 log.info("isInsertAddress:" + isInsertAddress);
 
-
-
             }
-            return "success";
         }
 
         // 4. tbl_review_image 테이블에 이미지 정보 등록
-        if (reviewImages != null) {
+        if (reviewImages.length > 0) {
             for (MultipartFile file : reviewImages) {
                 log.info("reviewImages: " + reviewImages);
 
