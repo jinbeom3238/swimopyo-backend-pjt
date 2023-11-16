@@ -41,7 +41,7 @@ public class UserMypageController {
 
         log.info("GetRezDetail uRNo = {}", u_r_no);
 
-        Map<String,Object> GetRezDetail = userMypageService.GetRezDetail(request, u_r_no);
+        List<Map<String, Object>> GetRezDetail = userMypageService.GetRezDetail(request, u_r_no);
         if(GetRezDetail == null){
             return "GetRezDetailFail";
         }

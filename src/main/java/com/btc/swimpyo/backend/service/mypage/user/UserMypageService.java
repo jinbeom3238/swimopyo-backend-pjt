@@ -83,7 +83,7 @@ public class UserMypageService implements IUserMypageService {
     }
 
     @Override
-    public Map<String, Object> GetRezDetail(HttpServletRequest request, int u_r_no) {
+    public List<Map<String, Object>> GetRezDetail(HttpServletRequest request, int u_r_no) {
         log.info("GetRezDetail");
 
         Map<String, Object> map = new HashMap<>();
@@ -105,19 +105,21 @@ public class UserMypageService implements IUserMypageService {
         map.put("userEmail", userEmail);
         map.put("u_r_no", u_r_no);
 
-        map = iUserMypageDaoMapper.selectRezDetail(map);
+        List<Map<String, Object>> maplist = iUserMypageDaoMapper.selectRezDetail(map);
+//        map = iUserMypageDaoMapper.selectRezDetail(map);
+        log.info("maplist = {}", maplist);
 
-        // 날짜 파싱 및 일수 계산
-        LocalDate startDay = LocalDate.parse(map.get("u_r_check_in").toString());
-        LocalDate endDay = LocalDate.parse(map.get("u_r_check_out").toString());
-        int days = (int) ChronoUnit.DAYS.between(startDay, endDay);
+//        // 날짜 파싱 및 일수 계산
+//        LocalDate startDay = LocalDate.parse(map.get("u_r_check_in").toString());
+//        LocalDate endDay = LocalDate.parse(map.get("u_r_check_out").toString());
+//        int days = (int) ChronoUnit.DAYS.between(startDay, endDay);
+//
+//        log.info("days = {}", days);
+//        if(days > 1){
+//            map.put("a_r_pride", Integer.parseInt(map.get("a_r_pride").toString()) * days);
+//        }
 
-        log.info("days = {}", days);
-        if(days > 1){
-            map.put("a_r_pride", Integer.parseInt(map.get("a_r_pride").toString()) * days);
-        }
-
-        return map;
+        return maplist;
 
     }
 }

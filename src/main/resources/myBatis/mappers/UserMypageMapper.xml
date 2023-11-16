@@ -61,6 +61,7 @@
 
     <select id="selectRezDetail" parameterType="map" resultType="map">
         SELECT
+            DISTINCT
             ai.a_i_image,
             aa.a_acc_no,
             aa.a_acc_name,
@@ -93,17 +94,6 @@
             AND ur.u_r_no = #{u_r_no}
         </if>
     </select>
-
-<!--    <select id="selectReviewInfo" parameterType="String" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">-->
-<!--        SELECT-->
-<!--            *-->
-<!--        FROM-->
-<!--            tbl_review-->
-<!--        WHERE-->
-<!--            u_m_email = #{u_m_email}-->
-<!--        AND use_yn = "Y"-->
-
-<!--    </select>-->
 
     <select id="selectReviewInfo" parameterType="String" resultType="hashmap">
         SELECT
