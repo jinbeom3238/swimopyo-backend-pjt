@@ -52,13 +52,32 @@
     <!-- 상세페이지 보기 -->
     <select id="selectAccmDetail" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.accm.admin.AdminAccmDto">
         SELECT
-            aa.a_acc_no, aa.a_m_no, aa.a_acc_name, am.a_m_name, aa.a_acc_intro, aa.a_acc_kind, aa.a_acc_bn, aa.a_acc_address, aa.a_acc_phone, am.a_m_email, aa.a_acc_reg_date
+            aa.a_acc_no,
+            aa.a_m_no,
+            aa.a_acc_name,
+            am.a_m_name,
+            aa.a_acc_intro,
+            aa.a_acc_kind,
+            aa.a_acc_bn,
+            aa.a_acc_address,
+            aa.a_acc_phone,
+            am.a_m_email,
+            aa.a_acc_reg_date,
+            round(avg(rr.r_sa_point),1)
         FROM
             tbl_admin_accommodation aa
         JOIN
             tbl_admin_member am
         ON
             aa.a_m_no = am.a_m_no
+        JOIN
+            tbl_admin_room ar
+        ON
+            ar.a_acc_no = aa.a_acc_no
+        JOIN
+            tbl_review rr
+        ON
+            rr.a_r_no = ar.a_r_no
         WHERE
             aa.a_acc_no = #{a_acc_no}
         AND

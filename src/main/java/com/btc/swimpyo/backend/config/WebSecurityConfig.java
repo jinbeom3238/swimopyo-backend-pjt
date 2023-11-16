@@ -47,8 +47,8 @@ public class WebSecurityConfig {
                         "/api/user/accm/rankAccmList",
                         "/api/user/accm/mapInfoList",
                         "/api/user/accm/search").permitAll()
-                .requestMatchers("/api/user/**").hasRole("USER")
-//                .requestMatchers("/api/user/**").permitAll()
+//                .requestMatchers("/api/user/**").hasRole("USER")
+                .requestMatchers("/api/user/**").permitAll()
                 .anyRequest().authenticated()
                 .and().build();
 

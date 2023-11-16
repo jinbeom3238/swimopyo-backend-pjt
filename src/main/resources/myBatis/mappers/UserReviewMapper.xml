@@ -287,7 +287,7 @@
             rr.u_m_email,
             rr.u_r_no,
             rr.r_content,
-            rr.r_sa_point,
+            AVG(rr.r_sa_point),
             rr.r_reg_date,
             aa.a_acc_no,
             aa.a_acc_name,
