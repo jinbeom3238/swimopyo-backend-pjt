@@ -81,15 +81,19 @@ public class UserAccmService implements IUserAccmService{
 
         AdminAccmDto adminAccmDto = iUserAccmDaoMapper.selectAccmDetail(a_acc_no);
 
-        if(adminAccmDto.getSa_point_avg() > 0) {
+        // tbl_review에 a_r_no가 있는 지 확인
+        List<Integer> a_r_no = iUserAccmDaoMapper.selectReviewArNo(a_acc_no);
+        log.info("a_r_nos:::" + a_r_no);
+
+        if(a_r_no.size() > 0) {
             // 별점 가져오기
             Double sa_point_avg = iUserAccmDaoMapper.selectReviewStar(a_acc_no);
             adminAccmDto.setSa_point_avg(sa_point_avg);
             log.info("[UserAccmService] adminAccmDtos: " + adminAccmDto);
             log.info("[UserAccmService] a_acc_no: " + a_acc_no);
             log.info("[UserAccmService] r_sa_point: " + adminAccmDto.getSa_point_avg());
-        }
 
+        }
 
         // 이미지 정보 가져오기
         List<AdminAccmImageDto> a_i_images = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);

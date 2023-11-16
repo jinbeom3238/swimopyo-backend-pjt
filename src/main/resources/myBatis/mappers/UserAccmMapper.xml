@@ -74,6 +74,20 @@
         aa.use_yn = 'Y'
     </select>
 
+    <select id="selectReviewArNo" parameterType="Integer" resultType="Integer">
+        select
+        rr.a_r_no
+        from
+        tbl_review rr
+        join tbl_admin_room ar
+        on ar.a_r_no = rr.a_r_no
+        where
+        a_acc_no = #{a_acc_no}
+        and
+        r_no is not null
+
+    </select>
+
     <!-- 상세페이지 - 리뷰 별점 가져오기 -->
     <select id="selectReviewStar" parameterType="Integer" resultType="Double">
         SELECT
