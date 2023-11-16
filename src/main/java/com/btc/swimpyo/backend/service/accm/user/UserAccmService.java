@@ -80,12 +80,16 @@ public class UserAccmService implements IUserAccmService{
         Map<String, Object> msgData = new HashMap<>();
 
         AdminAccmDto adminAccmDto = iUserAccmDaoMapper.selectAccmDetail(a_acc_no);
-        // 별점 가져오기
-        Double sa_point_avg = iUserAccmDaoMapper.selectReviewStar(a_acc_no);
-        adminAccmDto.setSa_point_avg(sa_point_avg);
-        log.info("[UserAccmService] adminAccmDtos: " + adminAccmDto);
-        log.info("[UserAccmService] a_acc_no: " + a_acc_no);
-        log.info("[UserAccmService] r_sa_point: " + adminAccmDto.getSa_point_avg());
+
+        if(adminAccmDto.getSa_point_avg() > 0) {
+            // 별점 가져오기
+            Double sa_point_avg = iUserAccmDaoMapper.selectReviewStar(a_acc_no);
+            adminAccmDto.setSa_point_avg(sa_point_avg);
+            log.info("[UserAccmService] adminAccmDtos: " + adminAccmDto);
+            log.info("[UserAccmService] a_acc_no: " + a_acc_no);
+            log.info("[UserAccmService] r_sa_point: " + adminAccmDto.getSa_point_avg());
+        }
+
 
         // 이미지 정보 가져오기
         List<AdminAccmImageDto> a_i_images = iUserAccmDaoMapper.selectAccmImgList(a_acc_no);
