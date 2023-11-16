@@ -78,6 +78,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,10 +94,14 @@ public class AdminSearchAccmService implements IAdminSearchAccmService {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Override
-    public List<Map<String, Object>> rezList(int a_m_no) {
+    public List<Map<String, Object>> rezList(int a_m_no, String date) {
         log.info("rezList");
+        Map<String, Object> msgMap = new HashMap<>();
 
-        List<Map<String, Object>> map = iAdminSearchAccmDaoMapper.selectRezList(a_m_no);
+        msgMap.put("a_m_no", a_m_no);
+        msgMap.put("date", date);
+
+        List<Map<String, Object>> map = iAdminSearchAccmDaoMapper.selectRezList(msgMap);
 
         return map;
     }

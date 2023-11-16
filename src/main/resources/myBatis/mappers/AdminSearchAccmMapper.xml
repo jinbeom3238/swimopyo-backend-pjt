@@ -4,7 +4,7 @@
 
 <mapper namespace="com.btc.swimpyo.backend.mappers.accm.admin.IAdminSearchAccmDaoMapper">
 
-    <select id="selectRezList" parameterType="Integer" resultType="hashmap">
+    <select id="selectRezList" parameterType="map" resultType="hashmap">
         SELECT
             ur.u_r_name,
             ur.u_r_stay_yn,
@@ -24,6 +24,8 @@
         JOIN tbl_admin_accommodation aa ON ar.a_m_no = aa.a_m_no
         WHERE
             aa.a_m_no = #{a_m_no}
+            AND
+            ur.u_r_check_in = #{date}
 
     </select>
 

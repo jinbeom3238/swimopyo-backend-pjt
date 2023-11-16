@@ -21,10 +21,11 @@ public class AdminSearchAccmController {
 
     // 관리자 예약 리스트
     @GetMapping("/rezList")
-    public Object rezList(@RequestParam ("a_m_no") int a_m_no) {
+    public Object rezList(@RequestParam ("a_m_no") int a_m_no,
+                          @RequestParam("date") String date){
         log.info("rezList");
 
-        List<Map<String, Object>> map = iAdminSearchAccmService.rezList(a_m_no);
+        List<Map<String, Object>> map = iAdminSearchAccmService.rezList(a_m_no, date);
 
         return map;
     }
