@@ -46,7 +46,6 @@ public class UserAccmController {
 
         return userAccmService.showAccmDetail(a_acc_no);
 
-
     }
 
 }

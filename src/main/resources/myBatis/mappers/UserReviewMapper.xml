@@ -103,6 +103,7 @@
             ar.a_r_check_in,
             ar.a_r_check_out,
             aa.a_acc_name,
+            ar.a_r_name,
             aa.a_acc_no,
             um.u_m_nickname
         FROM
@@ -178,6 +179,7 @@
             ar.a_r_check_in,
             ar.a_r_check_out,
             aa.a_acc_name,
+            ar.a_r_name,
             aa.a_acc_no,
             um.u_m_nickname
         FROM

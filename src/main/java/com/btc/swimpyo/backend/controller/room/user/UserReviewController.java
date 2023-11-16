@@ -55,7 +55,7 @@ public class UserReviewController {
     }
 
     // [숙박시설 상세페이지] 리스트 조회
-    @GetMapping("showReviewList")
+    @GetMapping("/showReviewList")
     public Map<String, Object> showReviewList(@RequestParam("a_acc_no") int a_acc_no) {
         log.info("[UserReviewController] showReviewList()");
 
@@ -64,7 +64,7 @@ public class UserReviewController {
     }
 
     // [룸 상세페이지] 리스트 조회
-    @GetMapping("showReviewListRoom")
+    @GetMapping("/showReviewListRoom")
     public Map<String, Object> showReviewListRoom(@RequestParam("a_r_no") int a_r_no,
                                                   @RequestParam("a_acc_no") int a_acc_no) {
         log.info("[UserReviewController] showReviewListRoom()");

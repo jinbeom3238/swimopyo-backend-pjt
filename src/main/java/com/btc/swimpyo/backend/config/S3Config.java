@@ -39,9 +39,4 @@ public class S3Config {
                 .build();
     }
 
-    /*@Bean
-    public String getThumbnailPath(String path) {
-        return amazonS3Client().getUrl(bucketName, path).toString();
-    }*/
-
 }
