@@ -53,6 +53,7 @@ public class WebSecurityConfig {
                         "/api/user/reservation/registConfirm",
                         "/api/user/review/showReviewList",
                         "/api/user/review/showReviewListRoom",
+                        "/api/user/review/showDetail",
                         "/api/user/accm/search").permitAll()
                 .requestMatchers("/api/user/**").hasRole("USER")
 //                .requestMatchers("/api/user/**").permitAll()
