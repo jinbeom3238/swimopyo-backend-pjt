@@ -8,8 +8,7 @@ import java.util.Map;
 @Mapper
 public interface IAdminSearchAccmDaoMapper {
 
-
-    List<Map<String, Object>> selectRezList(int a_r_no);
+    List<Map<String, Object>> selectRezList(Map<String, Object> msgMap);
 
     int selectAccmCheck(int a_m_no);
 }

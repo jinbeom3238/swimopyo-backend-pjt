@@ -6,7 +6,7 @@ import java.util.Map;
 public interface IAdminSearchAccmService {
 
 
-    List<Map<String, Object>> rezList(int a_m_no);
+    List<Map<String, Object>> rezList(int a_m_no, String date);
 
     int checkAccm(int a_m_no);
 }
