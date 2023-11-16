@@ -107,19 +107,36 @@
             r.isWrite,
             r.r_reg_date,
             r.r_content,
-            r.r_sa_point,
-            ri.r_ri_image
+            r.r_sa_point
         FROM
             tbl_review r
             left join tbl_admin_room ar ON r.a_r_no = ar.a_r_no
             left join tbl_admin_accommodation aa ON ar.a_acc_no = aa.a_acc_no
-            left join tbl_review_image ri ON r.r_no = ri.r_no
-            left join tbl_review_xy rxy ON r.r_no = ri.r_no
+            left join tbl_review_xy rxy ON r.r_no = rxy.r_no
             left join tbl_user_member um ON r.u_m_email = um.u_m_email
         WHERE
             r.u_m_email = #{u_m_email}
           AND r.use_yn = "Y"
 
+    </select>
+
+    <select id="selectReviewImgNo" parameterType="Integer" resultType="Integer">
+        SELECT
+            u_ri_no, r_no
+        FROM
+            tbl_review_image
+        WHERE
+            r_no = #{r_no}
+
+    </select>
+
+    <select id="selectReviewImgForList" parameterType="map" resultType="map">
+        SELECT
+            r_ri_image, r_no, u_ri_no
+        FROM
+            tbl_review_image
+        WHERE
+            r_no = #{r_no}
     </select>
 
 

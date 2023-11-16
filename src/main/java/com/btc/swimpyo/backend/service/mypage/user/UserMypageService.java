@@ -1,6 +1,7 @@
 package com.btc.swimpyo.backend.service.mypage.user;
 
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
+import com.btc.swimpyo.backend.dto.room.admin.AdminRoomDto;
 import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
 import com.btc.swimpyo.backend.mappers.mypage.user.IUserMypageDaoMapper;
 import com.btc.swimpyo.backend.mappers.review.IUserReviewDaoMapper;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Log4j2
@@ -60,7 +62,7 @@ public class UserMypageService implements IUserMypageService {
     }
 
     @Override
-    public List<Map<String,Object>> showReviewList(HttpServletRequest request) {
+    public Map<String,Object> showReviewList(HttpServletRequest request) {
         log.info("showReviewList");
 
         String refreshToken = null;
@@ -76,9 +78,34 @@ public class UserMypageService implements IUserMypageService {
         final String userEmail;
         userEmail = jwtAuthenticationFilter.getUserEmail(secretKey, refreshToken);
 
-        List<Map<String, Object>> tempList = iUserMypageDaoMapper.selectReviewInfo(userEmail);
+        Map<String, Object> msgData = new HashMap<>();
+        List<Map<String, Object>> ResultUserReviewImgList = new ArrayList<>();
 
-        return tempList;
+        List<Map<String, Object>> userReviewList = iUserMypageDaoMapper.selectReviewInfo(userEmail);
+        ArrayList<Integer> rNoList = new ArrayList<>();
+
+        for (Map<String, Object> review : userReviewList) {
+            if (review.containsKey("r_no")) {
+                rNoList.add((Integer) review.get("r_no"));
+            }
+        }
+        int r_no;
+        for(int i = 0; i< rNoList.size(); i++){
+            r_no = rNoList.get(0);
+            log.info("r_no: " + r_no);
+
+            // u_ri_no 값 가져오기
+//            List<Integer> u_ri_nos = iUserMypageDaoMapper.selectReviewImgNo(r_no);
+//            log.info("u_ri_nos: " + u_ri_nos);
+
+            List<Map<String, Object>> userReviewImgList = iUserMypageDaoMapper.selectReviewImgForList(r_no);
+            ResultUserReviewImgList.addAll(userReviewImgList);
+        }
+
+        msgData.put("userReviewList", userReviewList);
+        msgData.put("userReviewImgList", ResultUserReviewImgList);
+
+        return msgData;
 
     }
 

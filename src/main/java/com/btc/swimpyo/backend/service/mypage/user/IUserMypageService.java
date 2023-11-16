@@ -9,7 +9,7 @@ import java.util.Map;
 public interface IUserMypageService {
     List<Map<String,Object>> GetRezList(HttpServletRequest request, int u_r_no, int period);
 
-    List<Map<String,Object>> showReviewList(HttpServletRequest request);
+    Map<String,Object> showReviewList(HttpServletRequest request);
 
     List<Map<String, Object>> GetRezDetail(HttpServletRequest request, int u_r_no);
 }

@@ -46,6 +46,10 @@ public class WebSecurityConfig {
                         "/api/user/member/signout",
                         "/api/user/accm/rankAccmList",
                         "/api/user/accm/mapInfoList",
+                        "/api/user/accm/showAccmList",
+                        "/api/user/accm/showAccmDetail",
+                        "/api/user/room/showRoomList",
+                        "/api/user/room/showRoomDetail",
                         "/api/user/accm/search").permitAll()
                 .requestMatchers("/api/user/**").hasRole("USER")
 //                .requestMatchers("/api/user/**").permitAll()
