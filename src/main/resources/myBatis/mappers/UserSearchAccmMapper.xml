@@ -36,7 +36,7 @@
                 AND a.a_acc_kind = #{accmValue}
             </if>
             <!-- 지역별 검색 조건 -->
-            <if test="region != null">
+            <if test="region != null and region != 'all'">
                 AND a.a_acc_address LIKE CONCAT('%', #{region}, '%')
             </if>
             <!-- 대실/숙박 조건 -->
