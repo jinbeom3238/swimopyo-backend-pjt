@@ -44,7 +44,8 @@
 
     <select id="selectRefToken" parameterType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity" resultType="com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity">
         SELECT
-            *
+            DISTINCT
+            ref_token
         FROM
             tokens
         WHERE

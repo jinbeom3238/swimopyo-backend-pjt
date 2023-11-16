@@ -316,17 +316,20 @@ public class UserMemberService implements IUserMemberService {
         Cookie[] authHeader = request.getCookies();
         if (authHeader != null) {
             for (Cookie cookie : authHeader) {
-                log.info("str => {}", cookie.getName());
+                log.info("str ==> {}", cookie.getName());
                 if ("authorization".equals(cookie.getName())) {
+                    log.info("tp1");
                     checkingRefToken = cookie.getValue();
                 }
             }
         }
-
+        log.info("tp2");
         if (authHeader != null) {
+            log.info("tp3");
 
             refTokenEntity.setRef_token(checkingRefToken);
             RefTokenEntity checkedRefToken = iUserMemberDaoMapper.selectRefToken(refTokenEntity);
+            log.info("tp4");
             if (checkedRefToken != null) {
                 int result = iUserMemberDaoMapper.deleteDupRefToken(checkedRefToken);
                 if (result > 0) {
