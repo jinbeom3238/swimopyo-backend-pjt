@@ -65,6 +65,7 @@
             ai.a_i_image,
             aa.a_acc_no,
             aa.a_acc_name,
+            ar.a_r_no,
             ar.a_r_name,
             ar.a_r_content,
             ar.a_r_check_in,
