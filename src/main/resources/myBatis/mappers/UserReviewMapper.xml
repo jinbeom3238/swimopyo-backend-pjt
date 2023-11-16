@@ -80,25 +80,6 @@
             r_no = #{r_no}
     </update>
 
-    <!-- [마이페이지]리스트 조회 - 리뷰 정보 가져오기(이미지 제외) -->
-<!--    <select id="selectReviewInfo" parameterType="String" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">-->
-<!--        SELECT-->
-<!--            r_no,-->
-<!--            a_r_no,-->
-<!--            u_m_email,-->
-<!--            u_r_no,-->
-<!--            r_title,-->
-<!--            r_content,-->
-<!--            r_sa_point,-->
-<!--            r_reg_date-->
-<!--        FROM-->
-<!--            tbl_review-->
-<!--        WHERE-->
-<!--            u_m_email = #{u_m_email}-->
-<!--        AND-->
-<!--            use_yn = 'Y'-->
-<!--    </select>-->
-
     <!-- [마이페이지]리스트 조회 - 이미지 번호 가져오기 -->
     <select id="selectReviewImgNo" parameterType="Integer" resultType="Integer">
         SELECT
@@ -108,26 +89,6 @@
         WHERE
             r_no = #{r_no}
     </select>
-
-    <!-- [마이페이지]리스트 조회 - 이미지 정보 가져오기 -->
-<!--    <select id="selectReviewImgForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">-->
-<!--    SELECT-->
-<!--        r_no, u_ri_no, r_ri_image,-->
-<!--    FROM-->
-<!--        tbl_review_image ri-->
-<!--    WHERE-->
-<!--        r_no = #{r_no}-->
-<!--    </select>-->
-
-    <!-- [마이페이지]리스트 조회 - 주소 정보 가져오기 -->
-<!--    <select id="selectReviewAddressForList" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">-->
-<!--        SELECT-->
-<!--            r_no, r_xy_no, r_xy_address-->
-<!--        FROM-->
-<!--            tbl_review_xy-->
-<!--        WHERE-->
-<!--            r_no = #{r_no}-->
-<!--    </select>-->
 
     <!-- [숙박시설 상세페이지] 리스트 조회 - 리뷰 정보 가져오기 -->
     <select id="selectReviewInfo" parameterType="Integer" resultType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
@@ -160,6 +121,10 @@
                 um.u_m_email = rr.u_m_email
         WHERE
             ar.a_acc_no = #{a_acc_no}
+        AND
+            rr.isWrite = 1
+        AND
+            rr.use_yn = 'Y'
         ORDER BY
             rr.r_reg_date desc
 
@@ -234,7 +199,9 @@
         AND
             ar.a_r_no = #{a_r_no}
         AND
-            isWrite = 1
+            rr.isWrite = 1
+        AND
+            rr.use_yn = 'Y'
         ORDER BY
             rr.r_reg_date desc
     </select>
@@ -287,7 +254,9 @@
         AND
             rr.u_m_email = #{u_m_email}
         AND
-            isWrite = 1
+            rr.isWrite = 1
+        AND
+            rr.use_yn = 'Y'
     </select>
 
     <!-- 상세페이지 조회 - 리뷰 이미지 정보 가져오기 -->
@@ -327,22 +296,15 @@
             um.u_m_nickname
         FROM
             tbl_review rr
-            JOIN
-                tbl_admin_room ar
-            ON
-                ar.a_r_no = rr.a_r_no
-            JOIN
-                tbl_admin_accommodation aa
-            ON
-                ar.a_acc_no = aa.a_acc_no
-            JOIN
-                tbl_user_member um
-            ON
-                um.u_m_email = rr.u_m_email
+            JOIN tbl_admin_room ar ON ar.a_r_no = rr.a_r_no
+            JOIN tbl_admin_accommodation aa  ON ar.a_acc_no = aa.a_acc_no
+            JOIN tbl_user_member um ON um.u_m_email = rr.u_m_email
         WHERE
             rr.r_no = #{r_no}
         AND
-            isWrite = 1
+            rr.isWrite = 1
+        AND
+            rr.use_yn = 'Y'
     </select>
 
     <!-- [숙박업소] a_acc_no 뽑아오기 -->
