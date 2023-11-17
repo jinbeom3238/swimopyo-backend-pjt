@@ -1,6 +1,7 @@
 package com.btc.swimpyo.backend.service.room.user;
 
 import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -20,7 +21,7 @@ public interface IUserReviewService {
     public Map<String, Object> showDetailMyPage(int r_no, String u_m_email, UserReviewDto userReviewDto);
 
     // [숙박업소] 상세페이지 조회
-    public Map<String, Object> showDetail(int r_no);
+    public Map<String, Object> showDetail(int r_no) throws JsonProcessingException;
 
     // 삭제
     public int deleteConfirm(UserReviewDto userReviewDto);
