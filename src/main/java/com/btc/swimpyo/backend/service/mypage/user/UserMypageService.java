@@ -89,21 +89,18 @@ public class UserMypageService implements IUserMypageService {
                 rNoList.add((Integer) review.get("r_no"));
             }
         }
+        log.info("rNoList: = {} ", rNoList);
+
         int r_no;
         for(int i = 0; i< rNoList.size(); i++){
-            r_no = rNoList.get(0);
+            r_no = rNoList.get(i);
             log.info("r_no: " + r_no);
 
-            // u_ri_no 값 가져오기
-//            List<Integer> u_ri_nos = iUserMypageDaoMapper.selectReviewImgNo(r_no);
-//            log.info("u_ri_nos: " + u_ri_nos);
-
-//            List<Map<String, Object>> userReviewImgList = iUserMypageDaoMapper.selectReviewImgForList(r_no);
-//            ResultUserReviewImgList.addAll(userReviewImgList);
-            ResultUserReviewImgList = iUserMypageDaoMapper.selectReviewImgForList(r_no);
+            ResultUserReviewImgList.addAll(iUserMypageDaoMapper.selectReviewImgForList(r_no));
 
 
         }
+        log.info("ResultUserReviewImgList: " + ResultUserReviewImgList);
 
         msgData.put("userReviewList", userReviewList);
         msgData.put("userReviewImgList", ResultUserReviewImgList);

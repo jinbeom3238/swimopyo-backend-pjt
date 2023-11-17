@@ -100,13 +100,12 @@
 
     <select id="selectReviewInfo" parameterType="String" resultType="hashmap">
         SELECT
-            DISTINCT
+            DISTINCT(r.r_no),
             aa.a_acc_no,
             aa.a_acc_name,
             ar.a_r_name,
             um.u_m_email,
             um.u_m_nickname,
-            r.r_no,
             r.isWrite,
             r.r_reg_date,
             r.r_content,
