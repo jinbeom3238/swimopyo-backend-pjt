@@ -3,6 +3,7 @@ package com.btc.swimpyo.backend.controller.room.user;
 import com.btc.swimpyo.backend.dto.reservation.ReservationDto;
 import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
 import com.btc.swimpyo.backend.service.room.user.UserReviewService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +76,7 @@ public class UserReviewController {
 
     // [숙박업소] 상세페이지 조회
     @GetMapping("/showDetail")
-    public Map<String, Object> showDetail(@RequestParam("r_no") int r_no) {
+    public Map<String, Object> showDetail(@RequestParam("r_no") int r_no) throws JsonProcessingException {
         log.info("[UserReviewController] showDetail()");
 
         return userReviewService.showDetail(r_no);

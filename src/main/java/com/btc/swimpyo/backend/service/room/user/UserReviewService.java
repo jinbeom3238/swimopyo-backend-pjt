@@ -1,10 +1,15 @@
 package com.btc.swimpyo.backend.service.room.user;
 
+import com.btc.swimpyo.backend.controller.api.KakaoMapApiController;
 import com.btc.swimpyo.backend.dto.room.user.UserReviewDto;
 import com.btc.swimpyo.backend.mappers.review.IUserReviewDaoMapper;
 import com.btc.swimpyo.backend.utils.S3Uploader;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.catalina.User;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,6 +23,7 @@ public class UserReviewService implements IUserReviewService{
 
     private final IUserReviewDaoMapper iUserReviewDaoMapper;
     private final S3Uploader s3Uploader;
+    private final KakaoMapApiController kakaoMapApiController;
 
     /*
      * 리뷰 등록
@@ -230,14 +236,15 @@ public class UserReviewService implements IUserReviewService{
 
     // [숙박업소] 상세페이지 조회
     @Override
-    public Map<String, Object> showDetail(int r_no) {
+    public Map<String, Object> showDetail(int r_no) throws JsonProcessingException {
         log.info("[userReviewService] showDetail()");
 
         Map<String ,Object> msgData = new HashMap<>();
 
         UserReviewDto userReviewDto = new UserReviewDto();
 
-        log.info("r_no:" + userReviewDto.getR_no());
+//        log.info("r_no:" + userReviewDto.getR_no());
+        log.info("r_no:" + r_no);
 
         int a_acc_no = iUserReviewDaoMapper.selectReviewAccNo(r_no);
         userReviewDto.setR_no(r_no);
@@ -261,6 +268,50 @@ public class UserReviewService implements IUserReviewService{
         // 주소 정보 가져오기
         List<UserReviewDto> r_xy_address = iUserReviewDaoMapper.selectReviewXYForDetail(r_no);
         log.info("r_xy_address:" + r_xy_address);
+
+        for (int i = 0; i < r_xy_address.size(); i++) {
+            List<String> r_xy_addresss = Collections.singletonList(r_xy_address.get(i).getR_xy_address());
+
+            log.info("r_xy_addresss:" + r_xy_addresss);
+            log.info("r_xy_addresss:" + r_xy_addresss.size());
+
+            // 경도 위도
+            for (int k = 0; k < r_xy_addresss.size(); k++) {
+                String address = r_xy_addresss.get(i);
+                log.info("ad: " + address);
+
+                String jsonString = kakaoMapApiController.getKakaoApiFromAddress(address);
+
+                ObjectMapper mapper = new ObjectMapper();
+                TypeReference<Map<String, Object>> typeRef = new TypeReference<Map<String, Object>>(){};
+
+                Map<String, Object> jsonMap = mapper.readValue(jsonString, typeRef);
+
+                List<LinkedHashMap<String, Object>> document = (List<LinkedHashMap<String, Object>>) jsonMap.get("documents");
+
+                String [] list = String.valueOf(document.get(0).get("address")).split(",");
+                for(int j =10; j< list.length; j++) {
+                    log.info("list " + j + "" + list[j]);
+                }
+
+                String r_xy_longitude = list[10].substring(3, list[10].length());
+                String r_xy_latitude = list[11].substring(3, list[11].length()-1);
+                userReviewDto.setR_xy_longitude(r_xy_longitude);
+                userReviewDto.setR_xy_latitude(r_xy_latitude);
+
+                log.info("x : " + userReviewDto.getR_xy_latitude());
+                log.info("x : " + userReviewDto.getR_xy_longitude());
+
+                iUserReviewDaoMapper.insertReviewLoc(userReviewDto);
+                reviewDto.setR_xy_latitude(r_xy_latitude);
+                reviewDto.setR_xy_longitude(r_xy_longitude);
+
+            }
+
+        }
+
+
+
 
         msgData.put("reviewDto", reviewDto);
 //        msgData.put("u_ri_nos", u_ri_nos);

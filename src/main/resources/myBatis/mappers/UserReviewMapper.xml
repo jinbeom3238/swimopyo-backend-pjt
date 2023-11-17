@@ -414,4 +414,14 @@
             rr.r_reg_date desc
     </select>
 
+    <update id="insertReviewLoc" parameterType="com.btc.swimpyo.backend.dto.room.user.UserReviewDto">
+        update
+            tbl_review_xy
+        set
+            r_xy_longitude = #{r_xy_longitude},
+            r_xy_latitude = #{r_xy_latitude}
+        where
+            r_no = #{r_no}
+    </update>
+
 </mapper>
