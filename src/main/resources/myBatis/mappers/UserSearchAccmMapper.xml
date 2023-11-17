@@ -32,7 +32,7 @@
 
               </if>
             <!-- 업소 종류별 검색 조건 -->
-            <if test="accmValue != null">
+            <if test="accmValue != null and accmValue != 'all'">
                 AND a.a_acc_kind = #{accmValue}
             </if>
             <!-- 지역별 검색 조건 -->

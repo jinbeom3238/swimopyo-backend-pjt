@@ -80,6 +80,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
@@ -119,26 +120,41 @@ public class SearchAccmService implements ISearchAccmService {
         // Days가 2 이상일 때
         if (selectAccms != null && (days > 1)) {
             // 동일한 이름을 가진 숙박 시설의 가격을 합산
-            return new ArrayList<>(selectAccms.stream()
+            List<Map<String, Object>> sortedList = new ArrayList<>(selectAccms.stream()
                     .collect(Collectors.toMap(
-                            accm -> (String) accm.get("a_acc_name"), // 키로 사용할 숙박 시설 이름
-                            Function.identity(), // 값으로 사용할 원래 객체
-                            (accm1, accm2) -> { // 동일한 키를 가진 객체들을 병합하는 로직
-                                accm1.put("a_r_price", Integer.parseInt(accm2.get("a_r_price").toString()) * days);
-                                return accm1; // 가격을 합산한 객체 반환
-                            }))
-                    .values()); // Map의 값들을 리스트로 변환
+                            accm -> (String) accm.get("a_acc_name"),
+                            Function.identity(),
+                            (accm1, accm2) -> {
+                                accm1.put("a_r_price", Integer.parseInt(accm1.get("a_r_price").toString())
+                                        + Integer.parseInt(accm2.get("a_r_price").toString()) * days);
+                                return accm1;})).values());
+            if (Integer.parseInt(msgMap.get("priceOrder").toString()) == 0) {
+                sortedList.sort((accm1, accm2) -> ((Integer) accm2.get("a_r_price")).compareTo((Integer) accm1.get("a_r_price")));
+            } else if (Integer.parseInt(msgMap.get("priceOrder").toString()) == 1) {
+                sortedList.sort(Comparator.comparingInt(accm -> (Integer) accm.get("a_r_price")));
+            }
+
+            return sortedList;
 
         }
 
         // Days가 1 일 때
-        return new ArrayList<>(selectAccms.stream()
+        List<Map<String, Object>> sortedList = new ArrayList<>(selectAccms.stream()
                 .collect(Collectors.toMap(
-                        accm -> (String) accm.get("a_acc_name"), // 키로 사용할 숙박 시설 이름
-                        Function.identity(), // 값으로 사용할 원래 객체
-                        (accm1, accm2) -> accm1 // 동일한 키를 가진 객체가 여러 개 있을 경우, 첫 번째 객체를 유지
+                        accm -> (String) accm.get("a_acc_name"),
+                        Function.identity(),
+                        (accm1, accm2) -> accm1
                 ))
-                .values()); // Map의 값들을 리스트로 변환
+                .values());
+
+        if (Integer.parseInt(msgMap.get("priceOrder").toString()) == 1) {
+            sortedList.sort((accm1, accm2) -> ((Integer) accm2.get("a_r_price")).compareTo((Integer) accm1.get("a_r_price")));
+        } else if (Integer.parseInt(msgMap.get("priceOrder").toString()) == 0) {
+            sortedList.sort(Comparator.comparingInt(accm -> (Integer) accm.get("a_r_price")));
+        }
+
+        return sortedList;
+
     }
 
     @Override
