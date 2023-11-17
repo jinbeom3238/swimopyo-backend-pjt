@@ -40,6 +40,7 @@
             <if test="period != 0">
                 AND ur.u_r_reg_date >= DATE_SUB(NOW(), INTERVAL #{period} MONTH)
             </if>
+        ORDER BY ur.u_r_reg_date DESC
 
 
     </select>
@@ -94,6 +95,7 @@
         <if test="u_r_no != 0">
             AND ur.u_r_no = #{u_r_no}
         </if>
+
     </select>
 
     <select id="selectReviewInfo" parameterType="String" resultType="hashmap">
@@ -118,6 +120,7 @@
         WHERE
             r.u_m_email = #{u_m_email}
           AND r.use_yn = "Y"
+        ORDER BY r.r_reg_date DESC
 
     </select>
 
