@@ -73,9 +73,13 @@
     <!-- 등록 - isWrite = 1로 UPDATE -->
     <update id="updateIsWrite" parameterType="Integer">
         update
-            tbl_review
+            tbl_user_reservation ur
+        join
+            tbl_review rr
+        on
+            rr.u_r_no = ur.u_r_no
         set
-            isWrite = 1
+            ur.isWrite = 1
         where
             r_no = #{r_no}
     </update>

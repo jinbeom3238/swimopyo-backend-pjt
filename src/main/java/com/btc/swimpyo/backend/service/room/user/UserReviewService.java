@@ -59,12 +59,13 @@ public class UserReviewService implements IUserReviewService{
 
                 int isInsertAddress = iUserReviewDaoMapper.insertReviewAddress(userReviewDto);
                 log.info("isInsertAddress:" + isInsertAddress);
+                iUserReviewDaoMapper.updateIsWrite(r_no);
 
             }
         }
 
         // 4. tbl_review_image 테이블에 이미지 정보 등록
-        if (reviewImages.length > 0) {
+        if (reviewImages != null) {
             for (MultipartFile file : reviewImages) {
                 log.info("reviewImages: " + reviewImages);
 
@@ -76,8 +77,15 @@ public class UserReviewService implements IUserReviewService{
 
                 int isInsertImg = iUserReviewDaoMapper.insertReviewImg(userReviewDto);
                 log.info("isInsertImg:" + isInsertImg);
+                iUserReviewDaoMapper.updateIsWrite(r_no);
+
+                return "success";
 
             }
+
+            } else {
+            log.info(" \"reviewImages\" is null");
+
 //                if (result <= 0) {
 //                    return "image null";
 //
@@ -89,7 +97,11 @@ public class UserReviewService implements IUserReviewService{
 
         }
 
+        // 리뷰 작성이 완료되면 reservation 테이블의 isWrite 값 변경하기
+
+
         if(result > 0) {
+            iUserReviewDaoMapper.updateIsWrite(r_no);
             return "success";
 
         } else {
