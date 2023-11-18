@@ -269,17 +269,10 @@ public class UserReviewService implements IUserReviewService{
         List<UserReviewDto> r_xy_address = iUserReviewDaoMapper.selectReviewXYForDetail(r_no);
         log.info("r_xy_address:" + r_xy_address);
 
+        // 경도, 위도 바꾸기
         for (int i = 0; i < r_xy_address.size(); i++) {
-            List<String> r_xy_addresss = Collections.singletonList(r_xy_address.get(i).getR_xy_address());
-
-            log.info("r_xy_addresss:" + r_xy_addresss);
-            log.info("r_xy_addresss:" + r_xy_addresss.size());
-
-            // 경도 위도
-            for (int k = 0; k < r_xy_addresss.size(); k++) {
-                String address = r_xy_addresss.get(i);
-                log.info("ad: " + address);
-
+            String address = r_xy_address.get(i).getR_xy_address();
+            
                 String jsonString = kakaoMapApiController.getKakaoApiFromAddress(address);
 
                 ObjectMapper mapper = new ObjectMapper();
@@ -307,10 +300,6 @@ public class UserReviewService implements IUserReviewService{
                 reviewDto.setR_xy_longitude(r_xy_longitude);
 
             }
-
-        }
-
-
 
 
         msgData.put("reviewDto", reviewDto);

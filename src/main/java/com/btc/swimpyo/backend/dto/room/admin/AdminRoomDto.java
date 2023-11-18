@@ -16,7 +16,6 @@ public class AdminRoomDto {
     private int a_r_price;
     private String a_r_check_in;
     private String a_r_check_out;
-    private String a_r_count;
     private String a_r_content;
     private String a_r_reg_date;
     private String a_r_mod_date;
