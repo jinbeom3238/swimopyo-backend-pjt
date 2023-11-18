@@ -1,7 +1,6 @@
 package com.btc.swimpyo.backend.service.member.user;
 
 import com.btc.swimpyo.backend.config.Constant;
-import com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto;
 import com.btc.swimpyo.backend.dto.member.user.UserMemberDto;
 import com.btc.swimpyo.backend.mappers.member.user.IUserMemberDaoMapper;
 import com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity;
@@ -12,16 +11,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -148,10 +144,26 @@ public class UserMemberService implements IUserMemberService {
     }
 
     @Override
-    public int modify(Map<String, Object> msgMap, UserMemberDto userMemberDto) {
+    public int modify(Map<String, Object> msgMap, UserMemberDto userMemberDto, HttpServletRequest request) {
 
         log.info("modify");
-        userMemberDto.setU_m_email(msgMap.get("email").toString());
+
+        String refreshToken = null;
+        Cookie[] authHeader = request.getCookies();
+        if (authHeader != null) {
+            for (Cookie cookie : authHeader) {
+                log.info("str => {}", cookie.getName());
+                if ("authorization".equals(cookie.getName())) {
+                    refreshToken = cookie.getValue();
+                }
+            }
+        }
+
+        final String userEmail;
+        // ref token에서 userEmail 추출
+        userEmail = jwtAuthenticationFilter.getUserEmail(secretKey, refreshToken);
+
+        userMemberDto.setU_m_email(userEmail);
         userMemberDto.setU_m_name(msgMap.get("name").toString());
         userMemberDto.setU_m_phone(msgMap.get("phone").toString());
         userMemberDto.setU_m_nickname(msgMap.get("nickname").toString());

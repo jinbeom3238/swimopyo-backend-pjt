@@ -37,7 +37,7 @@
             tbl_user_member
         SET
             u_m_name = #{u_m_name},
-            a_m_phone = #{a_m_phone},
+            u_m_phone = #{u_m_phone},
             u_m_nickname = #{u_m_nickname}
         WHERE
             u_m_email = #{u_m_email}

@@ -1,6 +1,5 @@
 package com.btc.swimpyo.backend.service.member.user;
 
-import com.btc.swimpyo.backend.dto.member.admin.AdminMemberDto;
 import com.btc.swimpyo.backend.dto.member.user.UserMemberDto;
 import com.btc.swimpyo.backend.utils.jwt.entity.RefTokenEntity;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +14,7 @@ public interface IUserMemberService {
 
     Map<String, Object> signIn(Map<String, Object> msgMap, UserMemberDto userMemberDto, RefTokenEntity refTokenEntity, HttpServletRequest request, HttpServletResponse response);
 
-    int modify(Map<String, Object> msgMap, UserMemberDto userMemberDto);
+    int modify(Map<String, Object> msgMap, UserMemberDto userMemberDto, HttpServletRequest request);
 
     UserMemberDto userInfo(HttpServletRequest request, UserMemberDto userMemberDto);
 

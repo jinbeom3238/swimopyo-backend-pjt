@@ -79,11 +79,11 @@ public class UserMemberController {
 
     // 사용자 회원수정
     @PostMapping("/modify")
-    public Object modify(@RequestBody Map<String, Object> msgMap, UserMemberDto userMemberDto){
+    public Object modify(@RequestBody Map<String, Object> msgMap, UserMemberDto userMemberDto, HttpServletRequest request){
         log.info("modify");
 
         int result;
-        result = iUserMemberService.modify(msgMap, userMemberDto);
+        result = iUserMemberService.modify(msgMap, userMemberDto, request);
         if(result == 0){
             return "MemberUserModifyFail";
         } else if (result == 1) {
