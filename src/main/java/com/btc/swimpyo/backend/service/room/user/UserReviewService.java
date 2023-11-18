@@ -85,26 +85,13 @@ public class UserReviewService implements IUserReviewService{
                 log.info("isInsertImg:" + isInsertImg);
                 iUserReviewDaoMapper.updateIsWrite(r_no);
 
-                return "success";
-
             }
-
-            } else {
+        } else {
             log.info(" \"reviewImages\" is null");
 
-//                if (result <= 0) {
-//                    return "image null";
-//
-//                }
-
-//            // 모두 insert가 되면 isWrite = 1로  바꿔주는 작업
-//            int isUpdate = iUserReviewDaoMapper.updateIsWrite(r_no);
             return "success";
 
         }
-
-        // 리뷰 작성이 완료되면 reservation 테이블의 isWrite 값 변경하기
-
 
         if(result > 0) {
             iUserReviewDaoMapper.updateIsWrite(r_no);
