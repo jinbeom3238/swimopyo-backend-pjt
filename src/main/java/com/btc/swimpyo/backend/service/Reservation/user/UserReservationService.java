@@ -10,6 +10,7 @@ import com.btc.swimpyo.backend.mappers.reservation.user.IUserReservationDaoMappe
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Time;
 import java.time.LocalDate;
@@ -122,6 +123,7 @@ public class UserReservationService implements IUserReservationService{
 
     /* 예약 & 결제 페이지 */
     @Override
+    @Transactional
     public Map<String, Object> createRsvApproval(ReservationDto reservationDto) {
         log.info("[UserReservationService] createRsvApproval()");
 
@@ -205,6 +207,7 @@ public class UserReservationService implements IUserReservationService{
 
     // 결제 승인
     @Override
+    @Transactional
     public Map<String, Object> registRsv(String pg_token, String partner_order_id) {
         log.info("[userReservationService] registRsv()");
 

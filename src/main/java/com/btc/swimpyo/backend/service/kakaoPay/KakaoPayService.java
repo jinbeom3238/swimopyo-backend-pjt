@@ -22,7 +22,6 @@ import java.util.UUID;
 @Log4j2
 @Service
 @RequiredArgsConstructor
-@Transactional
 public class KakaoPayService {
 
     private final IKakaoPayDaoMapper iKakaoPayDaoMapper;
